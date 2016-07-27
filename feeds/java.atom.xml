@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="http://www.burakisikli.com/" rel="alternate"></link><link href="http://www.burakisikli.com/feeds/java.atom.xml" rel="self"></link><id>http://www.burakisikli.com/</id><updated>2009-08-14T02:50:00+03:00</updated><entry><title>Google App Engine Java İpuçları</title><link href="http://www.burakisikli.com/google-app-engine-java-ipuclari.html" rel="alternate"></link><published>2009-08-14T02:50:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-08-14:google-app-engine-java-ipuclari.html</id><summary type="html">&lt;p&gt;ğını bulmanız mümkün. Ben de ayrıca java programcıları ve teknolojileri
+derneği tarafından yayınlanmış sitenin &lt;a href="http://burakisikli.files.wordpress.com/2009/08/google-app-engine.pdf"&gt;pdf
+dosyasını&lt;/a&gt;veriyorum.&lt;/p&gt;
+&lt;p&gt;Kurulumu yapıp örnek bir proje oluşturduktan sonra uygulamanın nasıl
+çalıştığını anlayalım. Öncelikle deploy yapmadan projeniz web'e atılmaz.
+Bu nedenle de yerel alanda istediğiniz kadar değişiklik yaparken asıl
+sayfanız(belirttiğinizad.appspot.com) herhangi bir değişiklik olmaz.&lt;/p&gt;
+&lt;p&gt;Her zaman belirttiğiniz proje isminin servlet'i oluşturuluyor. Örneğin
+deneme diye proje oluşturuyorsanız servlet'inizin adı otomatik olarak
+denemeServlet oluyor. Peki bunu nasıl değiştireceğiz? Refactor
+kullanmanız ismini değiştirmek için yeterli gelmiyor. Bunu deneyip
+deploy ederseniz karşınıza boş bir sayfa çıkacaktır. Bildiğiniz üzere bu
+servlet'imizin bağlı olduğu web.xml dosyası olması gerekiyor. İşte bu
+dosya war klasörünün altındaki web-inf klasöründedir. Aşağıdakine benzer
+bir dosya karşınıza gelecektir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;web.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="xml"]&lt;/p&gt;
+&lt;p&gt;
+
+&lt;web-app xsi="http://www.w3.org/2001/XMLSchema-instance" &lt;br&gt;&lt;/web-app&gt;
+xmlns="http://java.sun.com/xml/ns/javaee"  
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
+http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd" version="2.5"&amp;gt;  
+&lt;servlet&gt;  
+&lt;servlet-name&gt;Deneme&lt;/servlet-name&gt;  
+&lt;servlet-class&gt;edu.burakkk.google.app.DenemeServlet&lt;/servlet-class&gt;  
+&lt;/servlet&gt;  
+&lt;servlet-mapping&gt;  
+&lt;servlet-name&gt;Deneme&lt;/servlet-name&gt;  
+&lt;url-pattern&gt;/deneme&lt;/url-pattern&gt;  
+&lt;/servlet-mapping&gt;  
+&lt;welcome-file-list&gt;  
+&lt;welcome-file&gt;index.html&lt;/welcome-file&gt;  
+&lt;/welcome-file-list&gt;  
+&lt;/web-app&gt;
+
+&lt;/p&gt;
+
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Buradan servlet-class ismini de değiştirerek servlet isminde kolayca
+değişiklik yapabilirsiniz. Ayrıca url-pattern ile servletinizin
+çalışacağı uzantıyı da değiştirebilirsiniz. deneme yerine deneme.do
+yapabilirsiniz. Başlangıçta google app engine tarafından oluşturulan
+index.html yerine de welcome-file değiştirerek de kendi istediğiniz
+dosyayı hatta çalıştıracağınız servlet'i yapabilirsiniz. Bunun anlamı
+xxx.appspot.com sayfasını açtığınızda kendi tarafından oluşturulmuş
+index sayfası yerine sizin sayfanız çıkabilir.&lt;/p&gt;
+&lt;p&gt;Eğer uygulama ismini veya versiyonu değiştirmek istiyorsanız aynı
+dizindeki(war/web-inf) appengine-web.xml dosyasından yapacaksınız.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;appengine-web.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="xml"]&lt;/p&gt;
+&lt;p&gt;
+
+&lt;appengine-web-app xmlns="http://appengine.google.com/ns/1.0"&gt;  
+&lt;application&gt;bisikli&lt;/application&gt;  
+&lt;version&gt;1&lt;/version&gt;
+
+&lt;/p&gt;
+
+&lt;!-- Configure java.util.logging --&gt;
+
+&lt;p&gt;&lt;system-properties&gt;&lt;/p&gt;
+&lt;p&gt;&lt;property name="java.util.logging.config.file" value="WEB-INF/logging.properties"&gt;&lt;/property&gt;
+&lt;/system-properties&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/appengine-web-app&gt;&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Application kısmından uygulama ismini versiyon kısmından da versiyonunu
+değiştirebilirsiniz.&lt;/p&gt;
+&lt;p&gt;Bunları dikkate alarak anasayfamızda gerçek ip'nizi çıkaran bir servlet
+yapalım.&lt;/p&gt;
+&lt;p&gt;edu.burakkk.google.app isimli paket ipAlma isimli servlet yaratıyoruz.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ipAlma.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.google.app;&lt;/p&gt;
+&lt;p&gt;import java.io.IOException;&lt;br /&gt;
+import java.io.PrintWriter;&lt;/p&gt;
+&lt;p&gt;import javax.servlet.http.*;&lt;/p&gt;
+&lt;p&gt;@SuppressWarnings("serial")&lt;br /&gt;
+public class ipAlma extends HttpServlet {&lt;br /&gt;
+public void doGet(HttpServletRequest req, HttpServletResponse resp)&lt;br /&gt;
+throws IOException {&lt;br /&gt;
+resp.setContentType("text/html");&lt;br /&gt;
+PrintWriter out = resp.getWriter();&lt;br /&gt;
+out.println("IP: " + req.getRemoteHost());&lt;br /&gt;
+out.flush();&lt;br /&gt;
+out.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;web.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="xml"]&lt;/p&gt;
+&lt;p&gt;
+
+&lt;web-app xsi="http://www.w3.org/2001/XMLSchema-instance" &lt;br&gt;&lt;/web-app&gt;
+xmlns="http://java.sun.com/xml/ns/javaee"  
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
+http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd" version="2.5"&amp;gt;  
+&lt;servlet&gt;  
+&lt;servlet-name&gt;ipAlma&lt;/servlet-name&gt;  
+&lt;servlet-class&gt;edu.burakkk.google.app.ipAlma&lt;/servlet-class&gt;  
+&lt;/servlet&gt;  
+&lt;servlet-mapping&gt;  
+&lt;servlet-name&gt;ipAlma&lt;/servlet-name&gt;  
+&lt;url-pattern&gt;/ipAlma&lt;/url-pattern&gt;  
+&lt;/servlet-mapping&gt;  
+&lt;welcome-file-list&gt;  
+&lt;welcome-file&gt;ipAlma&lt;/welcome-file&gt;  
+&lt;/welcome-file-list&gt;  
+&lt;/web-app&gt;
+
+&lt;/p&gt;
+
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu projeyi deploy ettiğinizde anasayfanızda IP: XXXXX şeklinde ip'nizi
+yazan bir web sayfası çıkacaktır. Örnek sayfaya
+&lt;a href="http://bisikli.appspot.com/"&gt;http://bisikli.appspot.com/&lt;/a&gt;(sizinUygulamaAdınız.appspot.com)
+adresinden ulaşabilirsiniz. Ayrıca aynı sayfaya servlet'mize
+&lt;a href="http://bisikli.appspot.com/ipAlma"&gt;http://bisikli.appspot.com/ipAlma&lt;/a&gt; bu adresle de ulaşabiliriz.&lt;/p&gt;</summary><category term="App"></category><category term="Engine"></category><category term="Google"></category><category term="Google App Engine"></category><category term="Java"></category></entry><entry><title>Java Bean</title><link href="http://www.burakisikli.com/java-bean.html" rel="alternate"></link><published>2009-06-21T02:09:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-21:java-bean.html</id><summary type="html">&lt;p&gt;Java Bean'ler reusable(yeniden kullanılabilir) yazılım bileşenidir. Java
+Bean'ler bir serializable(serileştirebilir), herhangi bir argümanı
+olmayan constructor'a sahip ve getter-setter metodunun kullanıldığı java
+objesidir. Bunun için bazı şartları sağlaması gerekmektedir:&lt;/p&gt;
+&lt;p&gt;* Sınıfın public default constructor'ı olmalıdır.&lt;br /&gt;
+* Sınıf properties(özellikleri) set-get metodlarını kullanarak
+erişilmelidir.&lt;br /&gt;
+* Sınıf serializable(serileştirebilir) olmalıdır.&lt;/p&gt;
+&lt;p&gt;Java Bean'ler Enterprise Java Bean'lerden farklıdır,
+karıştırılmamalıdır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PersonBean.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+package edu.burakkk.bean;&lt;br /&gt;
+import java.io.Serializable;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+* Java Bean&lt;br /&gt;
+*&lt;br /&gt;
+*@version 1.0 Release 1&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;public class Bean implements Serializable {&lt;br /&gt;
+static final long serialVersionUID = 102755394728345L;&lt;br /&gt;
+private String name;&lt;br /&gt;
+private boolean happiness;&lt;/p&gt;
+&lt;p&gt;/** No-arg constructor (takes no arguments). */&lt;br /&gt;
+public Bean() {&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public String getName() {&lt;br /&gt;
+return this.name;&lt;br /&gt;
+}&lt;br /&gt;
+public void setName(final String name) {&lt;br /&gt;
+this.name = name;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public boolean isHappiness() {&lt;br /&gt;
+return this.happiness;&lt;br /&gt;
+}&lt;br /&gt;
+public void setHappiness(final boolean happiness) {&lt;br /&gt;
+this.happiness = happiness;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TestPersonBean.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+package edu.burakkk.bean;&lt;/p&gt;
+&lt;p&gt;public class TestBean {&lt;br /&gt;
+public static void main(String[] args) {&lt;br /&gt;
+Bean person = new Bean();&lt;br /&gt;
+person.setName("Burakkk");&lt;br /&gt;
+person.setHappiness(true);&lt;/p&gt;
+&lt;p&gt;// Output: "Burakkk [Mutlu]"&lt;br /&gt;
+System.out.print(person.getName());&lt;br /&gt;
+System.out.println(person.isHappiness() ? " [Mutlu]" : " [Mutlu
+Değil]");&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;testPersonBean.jsp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+&amp;lt;% // Use of PersonBean in a JSP. %&amp;gt;&lt;br /&gt;
+&lt;usebean id="person" scope="page"&gt;&lt;/usebean&gt;&lt;br /&gt;
+&lt;setproperty name="person" property="*"&gt;&lt;/setproperty&gt;&lt;/p&gt;
+&lt;p&gt;
+
+
+
+Isim: &lt;getproperty name="person" property="name"&gt;&lt;/getproperty&gt;  
+Secenek: &lt;getproperty name="person" property="happiness"&gt;&lt;/getproperty&gt;
+
+&lt;/p&gt;
+
+&lt;form name="beanTest" method="POST" action="testPersonBean.jsp"&gt;
+Isim: &lt;input type="text" name="name" size="50"&gt;  
+Secenek:
+
+&lt;/p&gt;
+&lt;select name="happiness"&gt; &lt;option value="false"&gt;Mutlu&lt;/option&gt;
+&lt;option value="true"&gt;Mutlu Degil&lt;/option&gt; &lt;/select&gt;
+
+&lt;p&gt;
+&lt;input type="submit" value="Test et"&gt;  
+
+&lt;/form&gt;
+
+&lt;p&gt;
+
+
+
+\[/sourcecode\]
+
+&lt;/p&gt;
+
+&lt;p&gt;Bu örnekte isminizi ve mutlu olup olmadığınızı soran bir java bean
+yaptık. Bu java bean'i hem java'da derleyerek hem de jsp aracılığıyla
+ulaşabiliriz. Java'da derlediğiniz takdirde "Burakkk [Mutlu]" ekranda
+yazacaktır. JSP'de ise bir form ekrana gelerek form girdiğimiz
+değerlerle sayfayı sürekli güncelleyecektir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kaynaklar:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/JavaBeans"&gt;http://en.wikipedia.org/wiki/JavaBeans&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://java.sun.com/docs/books/tutorial/javabeans/whatis/index.html"&gt;http://java.sun.com/docs/books/tutorial/javabeans/whatis/index.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.roseindia.net/ejb/introduction/javabean.shtml"&gt;http://www.roseindia.net/ejb/introduction/javabean.shtml&lt;/a&gt;&lt;/p&gt;</summary><category term="Bean"></category><category term="Java"></category><category term="Java Bean"></category></entry><entry><title>Design Patterns(Tasarım Şablonları)-1</title><link href="http://www.burakisikli.com/design-patternstasarim-sablonlari-1.html" rel="alternate"></link><published>2009-06-18T02:35:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-18:design-patternstasarim-sablonlari-1.html</id><summary type="html">&lt;p&gt;şablonları aşağıda yeralan ortak özelliklere sahiptir:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+Edinilen tecrübeler sonunda ortaya çıkmışlardır.
+
+&lt;/li&gt;
+&lt;li&gt;
+Tekerin tekrar icat edilmesini önlerler.
+
+&lt;/li&gt;
+&lt;li&gt;
+Tekrar kullanılabilir kalıplardır.
+
+&lt;/li&gt;
+&lt;li&gt;
+Ortak kullanılarak daha büyük problemlerin çözülmesinım şablonları ve
+kullanım alanları hakkında ihtisas yapmış olmak gerekmektedir.
+
+Tasarım şablonları değişik kategorilere ayrılır. Bunlar:
+
+-   Oluşturucu tasarım şablonları (**creational patterns**)
+-   Yapısal tasarım şablonları (**structual patterns**)
+-   Davranışsal tasarım şablonlar (**behavioral patterns**)
+
++--------------------------+--------------------------+--------------------------+
+| Oluşturucu               | Yapısal                  | Davranışsal              |
++--------------------------+--------------------------+--------------------------+
+| - Abstract Factory       | - Adapter                | - Command (komut)        |
+| (soyut fabrika)          | &lt;/p&gt;                     | &lt;/p&gt;                     |
+| &lt;/p&gt;                     | - Bridge (köprü)         | - Memento (hatıra)       |
+| - Builder (inşaatçi)     |                          |                          |
+|                          | - Facade (cephe)         | - Strategy (strateji)    |
+| - Factory Method         |                          |                          |
+| (fabrika)                | - Decorator (dekotatör)  | - Iterator               |
+|                          |                          | (tekrarlayıcı)           |
+| - Prototype  (prototip)  | - Composite (kompozit)   |                          |
+|                          |                          | - State (durum)          |
+| &lt;p&gt;                      | - Flyweight (sinek       |                          |
+| - Singleton (yalnızlık)  | siklet)                  | - Chain Of               |
+|                          |                          | Responsibility           |
+|                          | - Proxy (vekil)          | (sorumluluk zinciri)     |
+|                          |                          |                          |
+|                          | &lt;p&gt;                      | - Mediator (aracı)       |
+|                          |                          |                          |
+|                          |                          | - Observer (gözlemci)    |
+|                          |                          |                          |
+|                          |                          | - Template Method        |
+|                          |                          | (şablon metot)           |
+|                          |                          |                          |
+|                          |                          | &lt;p&gt;                      |
+|                          |                          | - Visitor (ziyaretçi)    |
++--------------------------+--------------------------+--------------------------+
+
+**1-) SINGLETON PATTERN(YALNIZLIK TASARIM ŞABLONU)**
+
+Bazı durumlarda bir sınıftan sadece bir nesnenin oluşturulması ve
+oluşturulan bu nesnenin tüm sistemde kullanılması gerekebilir. Örneğin
+bilgibankası için bir connection pool (bilgibankası bağlantı havuzu)
+sadece bir defa oluşturulmalı ve kullanılmalıdır veya oluşturulacak
+properties nesnesinin bir kere ve proses(process) çalışmaya başladığı
+anda(constructor) oluşturulmalıdır. Bu durumda Singleton tasarım şablonu
+kullanılarak, bir sınıftan sadece bir nesnenin oluşturulması
+sağlanabilir.
+
+![Singleton Pattern UML
+Diagram](http://burakisikli.files.wordpress.com/2009/06/singletonuml.gif "Singleton Pattern UML Diagram"){.aligncenter
+.size-full .wp-image-152 width="237" height="172"}
+
+Singleton tasarım şablonunu iki farklı yöntemle yapabiliriz. Yapacağımız
+değişiklik senkronizasyonu yapacağımız aracı değiştirmektir.
+Senkronizasyonu kilit objesiyle veya komple sınıfı kilitleyerek
+yapabiliriz.
+
+Bir singleton sınıfın taşıması gereken bazı özellikler vardır. Bunlar:  
+·Sınıf konstruktörlerinin(constructor) private olması gerekiyor.
+Konstruktörleri private olan bir sınıftan, başka bir sınıf new operatörü
+ile nesne oluşturamaz.  
+·Singleton sınıfından sadece bir tane nesne oluşturulması gerektiği
+için, oluşturulması gereken nesneyi sınıfın static değişkeni olarak
+tanımlamamız gerekiyor. Örnekte "private static Singleton instance =
+null" şeklinde bu tanımlamayı yapıyoruz.  
+·Singleton sınıfında instance() isminde static bir metodun olması ve bu
+metodun static olarak tanımlanmış nesneyi geri vermesi gerekiyor.
+instance() metodu içinde sınıfın tek nesnesi olacak değişken
+oluşturulur.
+
+**Singleton.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* Singleton Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/  
+public class Singleton {  
+/\*  
+\* Singleton sinifindan olusturulabilecek tek nesne static sinif
+degiskeni  
+\* olarak tanimlaniyor.  
+\*/  
+private static volatile Singleton instance = null;
+
+/\*  
+\* Sınıf yerine kullanılacak obje tanımı(synchronized(lock)) Double
+check  
+\* locking yapabilmek icin kullanilan nesne. private static Object lock
+=  
+\* new Object();  
+\*  
+\*  
+\* \* Baska siniflarin new Singleton() seklinde nesne olusturmalarini,
+sinif  
+\* konstruktorünü private yaparak engellemis oluyoruz.  
+\*/  
+private Singleton() {  
+System.out.println("Constructor");  
+}
+
+/\*\*  
+\* Singleton sinifindan olusturulabilen tek nesneye ulasmak icin
+instance()  
+\* metodu kullanilir.  
+\*  
+\* @return Singleton static Singleton nesnesi  
+\*/  
+public static Singleton getInstance() {  
+if (instance == null) {  
+// Double checked locking  
+synchronized (Singleton.class) {  
+if (instance == null) {  
+instance = new Singleton();  
+}  
+}  
+}  
+return instance;  
+}
+
+/\*\*  
+\* Singleton sinifinda bulunan bir metod. Buraya kendi metotlarınızı  
+\* ekleyebilirsiniz  
+\*/  
+public void printIt() {  
+System.out.println(this);  
+}  
+}
+
+\[/sourcecode\]
+
+**Main.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* Main Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Main {  
+public static void main(String\[\] args) {  
+Singleton.getInstance().printIt();  
+}  
+}
+
+\[/sourcecode\]
+
+Main sınıfımızı çalıştırdığımızda ekrana şunlar gelecektir:
+
+Constructor  
+edu.burakkk.patterns.singleton.Singleton@9304b1
+
+Yukarıda yazdığımız kod ise multithread'e karşı güvenli bir koddur. Yine
+de bunu test etmek için de bir sınıf oluşturalım:
+
+**Test.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* MultiThread Test Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Test {  
+private static Singleton singletona, singletonb;  
+public static void main(String\[\] args) {  
+// getInstance() iki ayrı thread ile çağırılsın.  
+Thread threada = new Thread() {  
+@Override  
+public void run() {  
+singletona = Singleton.getInstance();  
+}  
+};  
+threada.start();
+
+Thread threadb = new Thread() {  
+@Override  
+public void run() {  
+singletonb = Singleton.getInstance();  
+}  
+};  
+threadb.start();
+
+// Her iki thread tamamlanana kadar beklensin  
+while (!(threada.getState() == Thread.State.TERMINATED &amp;&amp; threadb  
+.getState() == Thread.State.TERMINATED))  
+;
+
+System.out.println(singletona == singletonb);  
+}  
+}
+
+\[/sourcecode\]
+
+Eğer test başarılı olursa ekran çıktısı şu şekilde olacaktır:
+
+Constructor  
+true
+
+*Notlar:*
+
+Abstract Factory, Builder ve Prototype tasarım şablonlarında olabileceği
+gibi birçok tasarım şablonu Singleton tasarım şablonu kullanılarak
+implemente edilir.
+[](http://en.wikipedia.org/wiki/Facade_pattern "Facade pattern")
+
+[Facade](http://en.wikipedia.org/wiki/Facade_pattern "Facade pattern")
+objeleri genellik Singleton'dır çünkü sadece bir tane Facade objesi
+gereklidir.
+
+State(Durum) objeleri genellikle Singleton'dır.
+
+Daha detaylı bilgi için:
+
+&lt;http://www.ibm.com/developerworks/library/j-dcl.html&gt;
+
+&lt;http://www.kurumsaljava.com&gt;
+
+&lt;div id="_mcePaste"
+style="overflow:hidden;position:absolute;left:-10000px;top:3852px;width:1px;height:1px;"&gt;
+
+package edu.burakkk.patterns.singleton;
+&lt;/p&gt;
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* MultiThread Test Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Test {  
+private static Singleton singletona, singletonb;  
+public static void main(String\[\] args) {  
+// getInstance() iki ayrı thread ile çağırılsın.  
+Thread threada = new Thread() {  
+@Override  
+public void run() {  
+singletona = Singleton.getInstance();  
+}  
+};  
+threada.start();
+
+Thread threadb = new Thread() {  
+@Override  
+public void run() {  
+singletonb = Singleton.getInstance();  
+}  
+};  
+threadb.start();
+
+// Her iki thread tamamlanana kadar beklensin  
+while (!(threada.getState() == Thread.State.TERMINATED &amp;&amp; threadb  
+.getState() == Thread.State.TERMINATED))  
+;
+
+System.out.println(singletona == singletonb);  
+}  
+}
+
+&lt;/div&gt;</summary><category term="Design"></category><category term="Design Pattern"></category><category term="Pattern"></category><category term="Patterns"></category><category term="Singleton"></category><category term="Tasarım"></category><category term="Tasarım Şablonları"></category><category term="Yalnızlık"></category><category term="Yalnızlık Tasarım Şablonu"></category><category term="Şablonu"></category></entry><entry><title>Serialization(Serileştirme)</title><link href="http://www.burakisikli.com/serializationserilestirme.html" rel="alternate"></link><published>2009-06-17T18:05:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-17:serializationserilestirme.html</id><summary type="html">&lt;p&gt;Bir nesne herhangi stream'a (örneğin bir file'a ) yazılabilir ve bir
+stream'den okunabilir. Programın çalışması esnasında hafızada bulunan
+nesneler program bitince (kapatılınca) yok olur. Ancak serialization
+tekniğiyle bir nesne diske veya herhangi bir yere kaydedilebilir. Bir
+program, kapanmadan önce bir dosyayaya sakladığı bir nesneyi daha sonra
+tekrar çalıştırıldığında dosyadan okuyabilir. Hatta bir programın
+yazdığı nesneyi aynı dosyadan başka bir program da okuyabilir. Bu
+şekilde nesnelerin network'te bir yerden diğerine gönderilmesi,
+veritabanına normal bir veri gibi kaydedilebilmesi mümkün
+olabilmektedir.&lt;/p&gt;
+&lt;h2&gt;Serializable&lt;/h2&gt;
+&lt;p&gt;Bir class'ın serialization'a tabi tutulabilmesi için bazı koşulları
+sağlaması gerekir.&lt;/p&gt;
+&lt;p&gt;1. Class public olmalı.&lt;/p&gt;
+&lt;p&gt;2. Serializable' interface'ini implement etmeli. Bu interface'de
+implement edilecek herhangi bir method yoktur. Sadece class'ın serialize
+edilebilemesine class yazarının izin verdiği anlamına gelir. Bazı
+classlar güvenlik v.s. nedenlerle buna izin vermek istemeyebilir.
+Nesnenin içerisindeki bütün veri serializable olmalıdır. Bir tane bile
+serializable olmayan nesne varsa işlem başarısız olur.&lt;/p&gt;
+&lt;p&gt;3. Default (parametresiz) bir constructor'ı olmalıdır. Hiç bir
+constructor yazılmaması durumunda da default contructor'un geçerli
+olduğu için yine sorun olmaz.&lt;/p&gt;
+&lt;p&gt;Öncelikle yaratacağımız objeyi  &lt;code&gt;Serializable&lt;/code&gt;yapmalıyız. Bunun için 
+&lt;code&gt;Serializable&lt;/code&gt; implement etmeliyiz.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PersistentTime.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.sun;&lt;/p&gt;
+&lt;p&gt;import java.io.Serializable;&lt;br /&gt;
+import java.util.Date;&lt;br /&gt;
+import java.util.Calendar;&lt;/p&gt;
+&lt;p&gt;public class PersistentTime implements Serializable {&lt;br /&gt;
+static final long serialVersionUID = 10275539472837495L;&lt;br /&gt;
+private Date time;&lt;/p&gt;
+&lt;p&gt;public PersistentTime() {&lt;br /&gt;
+time = Calendar.getInstance().getTime();&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public Date getTime() {&lt;br /&gt;
+return time;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FlattenTime.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.sun;&lt;/p&gt;
+&lt;p&gt;import java.io.ObjectOutputStream;&lt;br /&gt;
+import java.io.FileOutputStream;&lt;br /&gt;
+import java.io.IOException;&lt;/p&gt;
+&lt;p&gt;public class FlattenTime {&lt;br /&gt;
+public static void main(String[] args) {&lt;br /&gt;
+String filename = "time.ser";&lt;br /&gt;
+if (args.length &amp;gt; 0) {&lt;br /&gt;
+filename = args[0];&lt;br /&gt;
+}&lt;br /&gt;
+PersistentTime time = new PersistentTime();&lt;br /&gt;
+FileOutputStream fos = null;&lt;br /&gt;
+ObjectOutputStream out = null;&lt;br /&gt;
+try {&lt;br /&gt;
+fos = new FileOutputStream(filename);&lt;br /&gt;
+out = new ObjectOutputStream(fos);&lt;br /&gt;
+out.writeObject(time);&lt;br /&gt;
+out.close();&lt;br /&gt;
+} catch (IOException ex) {&lt;br /&gt;
+ex.printStackTrace();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;InflateTime.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.sun;&lt;/p&gt;
+&lt;p&gt;import java.io.ObjectInputStream;&lt;br /&gt;
+import java.io.FileInputStream;&lt;br /&gt;
+import java.io.IOException;&lt;br /&gt;
+import java.util.Calendar;&lt;/p&gt;
+&lt;p&gt;public class InflateTime {&lt;br /&gt;
+public static void main(String[] args) {&lt;br /&gt;
+String filename = "time.ser";&lt;br /&gt;
+if (args.length &amp;gt; 0) {&lt;br /&gt;
+filename = args[0];&lt;br /&gt;
+}&lt;br /&gt;
+PersistentTime time = null;&lt;br /&gt;
+FileInputStream fis = null;&lt;br /&gt;
+ObjectInputStream in = null;&lt;br /&gt;
+try {&lt;br /&gt;
+fis = new FileInputStream(filename);&lt;br /&gt;
+in = new ObjectInputStream(fis);&lt;br /&gt;
+time = (PersistentTime) in.readObject();&lt;br /&gt;
+in.close();&lt;br /&gt;
+} catch (IOException ex) {&lt;br /&gt;
+ex.printStackTrace();&lt;br /&gt;
+} catch (ClassNotFoundException ex) {&lt;br /&gt;
+ex.printStackTrace();&lt;br /&gt;
+}&lt;br /&gt;
+// print out restored time&lt;br /&gt;
+System.out.println("Flattened time: " + time.getTime());&lt;br /&gt;
+System.out.println();&lt;br /&gt;
+// print out the current time&lt;br /&gt;
+System.out.println("Current time: " +
+Calendar.getInstance().getTime());&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu programda FlattenTime execute ettiğimizde o andaki saati objeye
+alarak time.ser adıyla kaydediyor. Daha sonra InflateTime sınıfıyla da
+bu kaydedilmiş objeyi okuyabiliriz. Aynı zamanda programı derlerken
+argüman olarak dosya adını verdiğimiz takdirde obje verdiğimizle adla
+kaydedilip okunacaktır. Dikkati çeken diğer bir konu
+&lt;code&gt;static final long serialVersionUID = 10275539472837495L&lt;/code&gt;kod satırıdır.
+Aslında bu serilize ettiğimiz objeyi daha sonra tanımlada
+kullanabileceğimiz bir anahtar değerdir.  Fakat olması şart değildir.
+&lt;code&gt;ObjectOutputStream&lt;/code&gt; veya&lt;code&gt;ObjectInputStream&lt;/code&gt; ile obje dosyasını yazma
+ve okumayı sağlıyoruz. Serialization özellikle network(ağ) programlamada
+çok kullanılan bir özelliktir.&lt;/p&gt;</summary><category term="Serializable"></category><category term="Serialization"></category><category term="Serileştirme"></category><category term="Serilize"></category></entry><entry><title>Multi-Threaded(Çok Kanallı) Programlama</title><link href="http://www.burakisikli.com/multi-threadedcok-kanalli-programlama.html" rel="alternate"></link><published>2009-06-16T01:30:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-16:multi-threadedcok-kanalli-programlama.html</id><summary type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal (thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir takım kütüphanelerle eklenmemiştir. Aslında her Java
+programı bir kanalda (thread'te) çalışır. Örneğin application'ların main
+method'unun çalıştırılmasıyla adı 'main' olan bir ana thread
+çalıştırılır. Ancak tek bir kanal olunca programcı yazdığı kodun bir
+thread'in içerisinde çalıştığını farketmez.  Thread bize eş zamanlı
+birden fazla işi yapma fırsatını yani multitasking sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thread’in faydaları:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kaynak paylaşımı&lt;/li&gt;
+&lt;li&gt;Daha az bekleme süresi&lt;/li&gt;
+&lt;li&gt;Daha verimli donanım kullanımı(Multiprocessor kullanımı)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni bir thread yaratıldığında biz start komutu vermedikçe thread
+çalışmaya başlamıyor hazır durumda bekliyor. Biz start komutunu
+verdiğimizde çalışmaya başlıyor. Ayrıca thread’i sleep komutu ile belli
+süre bekletebiliyor, stop komutu ile öldürebiliyoruz.  Peki ama thread
+ile multithread arasında ne fark vardır?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="multithread" class="size-medium
+.wp-image-144 aligncenter" height="179" src="http://burakisikli.files.wordpress.com/2009/06/multithread.jpg?w=300" title="multithread" width="300" /&gt;&lt;/p&gt;
+&lt;p&gt;Resimde gördüğümüz gibi threadler aynı kodu, veriyi ve dosyaları
+kullanmasına rağmen farklı register ve stack’leri vardır. Bu sayede aynı
+kod içinde farklı işler yapıp farklı şeyleri hafızada tutabiliyor.
+Java’da thread yaratmanın iki yolu var. Ben implement ederek kullandım.
+Ancak extend ederek de thread yaratılabilir. Thread pool diye bir kavram
+da var. Siz belirli bir thread sayısı veriyorsunuz. Thread pool boşta
+olan thread’i kullandırıyor. Multihreading yaşanabilecek en önemli
+sorunlardan biri, concurrent(eş zamanlılık) ve senkronizasyon sorunu.
+Siz aynı anda hem ekleme hem de silme yapmamınız gerekiyor. Aksi
+takdirde istediğinizi eklemeden hangi elemanı almaya çalışırsanız
+hangisini alacaksınız gibi bir soru karşımıza çıkıyor. Bunu çözmenin 3
+yolu var:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Producer-consumer problemi:&lt;/strong&gt; İşletim sistemleri dersinde
+    öğrendiğimiz aynı mantık üretici-tüketici problemiyle çözebiliriz.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Circular buffer:&lt;/strong&gt; Producer-consumer problemi benzer bir çözüm.
+    Farkı kendiniz bir dizi oluşturuyorsunuz ve kilit kontrolü bu
+    dizide oluyor.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Java collections:&lt;/strong&gt; Kendimiz kilitlerle uğraşmadan bu işi
+    java’ya bırakabiliriz. Java’nın bu konulara kendi çözüm getirdiği
+    collections sınıfını kullanabiliriz.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basit bir thread örneği(ThreadTest.java):&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;import java.util.*;&lt;/p&gt;
+&lt;p&gt;public class ThreadTest implements Runnable {&lt;br /&gt;
+public void run() {&lt;br /&gt;
+while (true) {&lt;br /&gt;
+try {&lt;br /&gt;
+Thread.sleep(1000);&lt;br /&gt;
+System.out.println("Other thread time : " + new Date());&lt;br /&gt;
+} catch (Exception e) {&lt;br /&gt;
+e.printStackTrace();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public static void main(String[] args) {&lt;br /&gt;
+ThreadTest test = new ThreadTest();&lt;br /&gt;
+Thread thread = new Thread(test);&lt;br /&gt;
+thread.start();&lt;br /&gt;
+System.out.println("Main thread");&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu programda ekrana "main thread" yazdıktan sonra  threadimiz
+başlatılarak 1 saniye aralıklarla tarihi ekrana yazıdırıyor.&lt;/p&gt;</summary><category term="Çok Kanallı"></category><category term="Multi-Thread"></category><category term="Multi-Threaded"></category><category term="Programlama"></category><category term="Thread"></category></entry><entry><title>Client-Server(İstemci-Sunucu) Programlama-2</title><link href="http://www.burakisikli.com/client-serveristemci-sunucu-programlama-2.html" rel="alternate"></link><published>2009-06-11T03:05:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-11:client-serveristemci-sunucu-programlama-2.html</id><summary type="html">&lt;p&gt;UDP&lt;/p&gt;
+&lt;p&gt;Bu protokolde iletişimde güvenlik önemli değildir. UDP'nin en önemli
+özelliği ise Datagram kullanılmasıdır. Bağlantı yaparken DatagramSocket
+ve DatagramPacket kullanılmaktadır.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.udp;&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Server {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+DatagramSocket aSocket = null;&lt;br /&gt;
+try {&lt;br /&gt;
+aSocket = new DatagramSocket(6789);&lt;br /&gt;
+// create socket at agreed port&lt;br /&gt;
+byte[] buffer = new byte[1000];&lt;br /&gt;
+while (true) {&lt;br /&gt;
+DatagramPacket request = new DatagramPacket(buffer,&lt;br /&gt;
+buffer.length);&lt;br /&gt;
+aSocket.receive(request);&lt;br /&gt;
+DatagramPacket reply = new DatagramPacket(request.getData(),&lt;br /&gt;
+request.getLength(), request.getAddress(), request&lt;br /&gt;
+.getPort());&lt;br /&gt;
+aSocket.send(reply);&lt;br /&gt;
+}&lt;br /&gt;
+} catch (SocketException e) {&lt;br /&gt;
+System.out.println("Socket: " + e.getMessage());&lt;br /&gt;
+} catch (IOException e) {&lt;br /&gt;
+System.out.println("IO: " + e.getMessage());&lt;br /&gt;
+} finally {&lt;br /&gt;
+if (aSocket != null)&lt;br /&gt;
+aSocket.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Sunucu sınıfımızda aynen TCP protokolünde olduğu gibi uygun olan portu
+açıyoruz ve yayına başlıyoruz.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.udp;&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Client {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+// args give message contents and destination hostname&lt;br /&gt;
+DatagramSocket aSocket = null;&lt;br /&gt;
+try {&lt;br /&gt;
+aSocket = new DatagramSocket();&lt;br /&gt;
+byte[] m = args[0].getBytes();&lt;br /&gt;
+InetAddress aHost = InetAddress.getByName(args[1]);&lt;br /&gt;
+int serverPort = 6789;&lt;br /&gt;
+DatagramPacket request = new DatagramPacket(m, args[0].length(),&lt;br /&gt;
+aHost, serverPort);&lt;br /&gt;
+aSocket.send(request);&lt;br /&gt;
+byte[] buffer = new byte[1000];&lt;br /&gt;
+DatagramPacket reply = new DatagramPacket(buffer, buffer.length);&lt;br /&gt;
+aSocket.receive(reply);&lt;br /&gt;
+System.out.println("Reply: " + new String(reply.getData()));&lt;br /&gt;
+} catch (SocketException e) {&lt;br /&gt;
+System.out.println("Socket: " + e.getMessage());&lt;br /&gt;
+} catch (IOException e) {&lt;br /&gt;
+System.out.println("IO: " + e.getMessage());&lt;br /&gt;
+} finally {&lt;br /&gt;
+if (aSocket != null)&lt;br /&gt;
+aSocket.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Client ise tcp'den farklı olarak argüman olarak bağlanacağımız adresi
+veriyoruz. Yani süreci(process) çalıştırırken arg olarak ip adresini
+veriyoruz.&lt;/p&gt;
+&lt;p&gt;MULTICAST&lt;/p&gt;
+&lt;p&gt;UDP'ye benzer olarak multicast olarak yayın yapabiliriz. Ancak bu bir
+protokol değildir. UDP yöntemini kullanmaktadır ancak burada önemli olan
+bir tek istemci değil birden fazla istemci(yani bir grup)'tur. Yani
+gruba bağlı yayın yapılmaktadır.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+package edu.burakkk.cliser.multicast;&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Multicastpeer {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+// args give message contents and destination multicast group (e.g.&lt;br /&gt;
+// "228.5.6.7")&lt;br /&gt;
+MulticastSocket s = null;&lt;br /&gt;
+try {&lt;br /&gt;
+InetAddress group = InetAddress.getByName(args[1]);&lt;br /&gt;
+s = new MulticastSocket(6789);&lt;br /&gt;
+s.joinGroup(group);&lt;br /&gt;
+byte[] m = args[0].getBytes();&lt;br /&gt;
+DatagramPacket messageOut = new DatagramPacket(m, m.length, group,&lt;br /&gt;
+6789);&lt;br /&gt;
+s.send(messageOut);&lt;br /&gt;
+byte[] buffer = new byte[1000];&lt;br /&gt;
+for (int i = 0; i &amp;lt; 3; i++) { // get messages from others in group&lt;br /&gt;
+DatagramPacket messageIn = new DatagramPacket(buffer,&lt;br /&gt;
+buffer.length);&lt;br /&gt;
+s.receive(messageIn);&lt;br /&gt;
+System.out.println("Received:"&lt;br /&gt;
++ new String(messageIn.getData()));&lt;br /&gt;
+}&lt;br /&gt;
+s.leaveGroup(group);&lt;br /&gt;
+} catch (SocketException e) {&lt;br /&gt;
+System.out.println("Socket: " + e.getMessage());&lt;br /&gt;
+} catch (IOException e) {&lt;br /&gt;
+System.out.println("IO: " + e.getMessage());&lt;br /&gt;
+} finally {&lt;br /&gt;
+if (s != null)&lt;br /&gt;
+s.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[/sourcecode]
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Client"></category><category term="Client-Server"></category><category term="Server"></category><category term="Sunucu"></category><category term="İstemci"></category><category term="İstemci-Sunucu"></category></entry><entry><title>Client-Server(İstemci-Sunucu) Programlama-1</title><link href="http://www.burakisikli.com/client-serveristemci-sunucu-programlama-1.html" rel="alternate"></link><published>2009-06-11T01:50:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-11:client-serveristemci-sunucu-programlama-1.html</id><summary type="html">&lt;p&gt;Client-Server(Sunucu-İstemci) programlama yaparken bilmemiz gereken bazı
+kavramlar var. Programlama yaparken network(ağ) altyapısını iyi bilmemiz
+gerekiyor. Ağ'da her katmanın özelliğini anlamamız gerekiyor. Eğer
+bilmiyorsanız OSI katmanlarını öğrenmenizi tavsiye ederim. Biz
+kullanacağımız katman orta katmandır. Haberleşme türü olarak Socket
+Communication(Soket İletişimi)'i kullanacağız. Soket iletişimi  TCP ve
+UDP iletişimi olmak üzere iki farklı protokölle sağlanır.   TCP ile UDP
+protokolünün farkı; UDP protokolünü güvenlik olmaksızın iletişim
+sağlanacağında örneğin online radyo(streaming) gibi, TCP protokolünü ise
+güvenliğin ön planda olduğu iletişimde kullanıyoruz. Öncelikle TCP
+protokolünü kullanarak programımızı yapacağız.&lt;/p&gt;
+&lt;p&gt;TCP&lt;/p&gt;
+&lt;p&gt;Bir istemci bir de sunucumuz olacaktır. Sunucumuz istemcilere yayın
+yaparak gönderilmesi gereken bilgileri gönderecektir. Ancak bunu güvenli
+bir iletişim yoluyla yapacaktır.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.tcp;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+*&lt;br /&gt;
+* A Simple Client-Server&lt;br /&gt;
+* Server&lt;br /&gt;
+*  &lt;br /&gt;
+*@version 1.0&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*@date July 09, 2009&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;br /&gt;
+import java.util.*;&lt;/p&gt;
+&lt;p&gt;public class Server {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+try {&lt;br /&gt;
+ServerSocket sock = new ServerSocket(5000);&lt;br /&gt;
+// Listen for connections&lt;br /&gt;
+while (true) {&lt;br /&gt;
+System.out.println("Waiting for client");&lt;br /&gt;
+Socket client = sock.accept();&lt;/p&gt;
+&lt;p&gt;// We have a connection&lt;br /&gt;
+System.out.println("Connected with client");&lt;br /&gt;
+PrintWriter pout = new PrintWriter(client.getOutputStream(),&lt;br /&gt;
+true);&lt;/p&gt;
+&lt;p&gt;// Write the Date to the socket&lt;br /&gt;
+System.out.println("Sent data to client");&lt;br /&gt;
+pout.println(new Date().toString());&lt;/p&gt;
+&lt;p&gt;// Close the socket&lt;br /&gt;
+// and resume listening for more connections&lt;/p&gt;
+&lt;p&gt;client.close();&lt;br /&gt;
+pout.close();&lt;br /&gt;
+}&lt;br /&gt;
+} catch (Exception e) {&lt;br /&gt;
+System.err.println(e);&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Sunucunun yayın yapacağı portun seçimi bu konuda en önemli konudur.
+0-1023 arasındaki portlar başka uygulamalarda kullanıldığı için bu
+portlar dışında bir portu seçerseniz bir sorun çıkacağını sanmıyorum.
+Ben örneğimde 5000 portunu seçtim. ServerSocket objesini yaratılırken
+bunu yaptığımı görebilirsiniz. PrintWriter objesiyle istemciye
+gönderilecek ögeler yazılacaktır(pipeline edilecek) Yani istemci her
+istekte bulunduğunda sunucu kendi tarihini karşı tarafa gönderecektir.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.tcp;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+*&lt;br /&gt;
+* A Simple Client-Server&lt;br /&gt;
+* Dummy Client&lt;br /&gt;
+*  &lt;br /&gt;
+*@version 1.0&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*@date July 09, 2009&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Client implements Runnable {&lt;br /&gt;
+public void connect() {&lt;br /&gt;
+try {&lt;br /&gt;
+Socket sock = new Socket("127.0.0.1", 5000);&lt;br /&gt;
+InputStream in = sock.getInputStream();&lt;br /&gt;
+BufferedReader bin = new BufferedReader(new InputStreamReader(in));&lt;br /&gt;
+String line;&lt;br /&gt;
+while ((line = bin.readLine()) != null)&lt;br /&gt;
+System.out.println(line);&lt;br /&gt;
+sock.close();&lt;br /&gt;
+} catch (IOException ioe) {&lt;br /&gt;
+System.err.println(ioe);&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public void run() {&lt;br /&gt;
+while (true) {&lt;br /&gt;
+try {&lt;br /&gt;
+Thread.sleep(1000);&lt;br /&gt;
+connect();&lt;br /&gt;
+} catch (Exception e) {&lt;br /&gt;
+System.out.println("Error : " + e);&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public static void main(String[] args) throws Exception {&lt;br /&gt;
+Thread Debugger = new Thread(new Client());&lt;br /&gt;
+Debugger.start();&lt;br /&gt;
+Debugger.join();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;İstemciyi yaparken thread mantığıyla yaptığımız dikkatinizi çekmiştir.
+Bunun nedeni eğer thread mantığıyla yapmazsak istemci bir sefer istekte
+bulunacak ve program sonlandırılacaktır. Bu nedenle sürekli hale
+getirerek 1 saniye arayla istekte bulunacaktır. Socket objesine
+yaratırken ip adresini ve portunu yazmamız gerekiyor. Biz kendi kendine
+sanal bağlantı yapılacağı için(dummy client) 127.0.0.1 adresine verdik
+ancak buraya gerçek ip adresini yazmanız gerekecektir. Port ise sunucuya
+verdiğimiz port ile aynı olmak zorundadır. Biz 5000 'ni vermiştik.
+Inputstream ve bufferedreader ise gönderilen cevapları okumak için
+yaratıyoruz.&lt;/p&gt;</summary><category term="Client"></category><category term="Client-Server"></category><category term="Server"></category><category term="Sunucu"></category><category term="İstemci"></category><category term="İstemci-Sunucu"></category></entry></feed>

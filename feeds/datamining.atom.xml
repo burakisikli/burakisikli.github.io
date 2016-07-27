@@ -1,0 +1,497 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="http://www.burakisikli.com/" rel="alternate"></link><link href="http://www.burakisikli.com/feeds/datamining.atom.xml" rel="self"></link><id>http://www.burakisikli.com/</id><updated>2009-02-16T01:17:00+02:00</updated><entry><title>Veri Madenciliği(Data Mining) Nedir ve Nerelerde Kullanılır-3</title><link href="http://www.burakisikli.com/veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-3.html" rel="alternate"></link><published>2009-02-16T01:17:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-16:veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-3.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;**2. Veri
+Madenciliğinin Kullanım Alanları**
+&lt;/p&gt;
+Veri Madenciliği kullanım alanı olarak çok geniş bir yelpazeye sahiptir.
+Örnek uygulama alanları aşağıda belirtilmiştir:
+
+**2.1. Finans Sektörü**  
+Finans ve sigorta sektörü günümüzde sundukları hizmet, ürün ve
+servislerle bilgiye dayalı yönetime en fazla ihtiyaç duyan
+kuruluşlardır. Bu sektörde bilgiye dayalı yönetim özellikle ekonomik
+krizin yaşattığı sonuçlar göz önüne alındığında tartışmasız önemli ve
+zorunludur. Finans sektöründe en temel uygulamalar çapraz satış, risk
+derecelendirme, mevcut müşteriyi elde tutma, yeni müşteriler kazanma,
+maliyetleri azaltma, kayıp ve kaçakları engelleme, alternatif kanallar
+oluşturma, müşteri memnuniyetini sağlama olarak özetlenebilir. Hangi
+müşteri profilinin neyi, ne zaman ve neden tercih ettiğini anlayabilen
+bir kuruluş hem talep yaratma, hem de doğru zamanda doğru talebi
+karşılama ve sunma avantajına sahip olacaktır. Kuruluşun karlılığı
+artarken, müşterinin memnuniyeti de artacağından, aynı zamanda müşteri
+sadakati de sağlanmış olacaktır ki, ağ ekonomisinin en büyük kaosu
+budur. Mevcut müşteri kaybı, finans ve sigorta sektörlerinde en önemli
+problemi teşkil etmektedir. Yeni bir müşteri kazanmanın maliyetinin
+müşteriyi elde tutma maliyetinden daha yüksek olduğu, kaybedilen bir
+müşteriyi yeniden kazanma maliyetinin yeni müşteriler edinme
+maliyetinden daha fazla olduğu göz önüne alındığında şirketler müşteri
+odaklı gitmek ve mevcut müşteriyi ellerinde tutmak zorundadır. Bankalar,
+mevcut müşterilerden rakip bankaya geçme ihtimali olan müşterileri,
+profillerini ve kaybettikleri müşterilerin hangi sebepler yüzünden
+sistemden ayrıldıklarını tespit etmek istemektedir.
+
+**2.2. Haberleşme Sektörü**  
+Telekom sektöründe en önemli sorun müşteri kaybıdır. Kuruluşlar hangi
+müşterilerini kaybedebileceklerini önceden belirleyebildikleri taktirde
+bu müşterilerini elde tutma amaçlı stratejiler geliştirebilir, düşük
+maliyetli ve etkili kampanyalar düzenleyebilirler. Kaybetme olasılığı
+olmayan bir müşteriye kalıcılığını sağlama amaçlı bir mesaj göndermek
+hem müşterinin kendisine verilmek istenen mesajın ne olduğunu
+algılamasını zorlaştıracak hem de maliyetleri artıracaktır. Örneğin
+Amerika’nın en büyük kablosuz iletişim sağlayıcısı olan Verizon kaybetme
+olasılığı yüksek olan müşterilerini ve müşteri kaybına neden olan
+faktörleri belirleme amaçlı bir Veri Madenciliği çalışması yapmıştır.
+
+**2.3. Sağlık Sektörü**  
+Doğru ve zamanında karar almanın hasta sağlığı üzerindeki etkisi
+tartışmasız çok önemlidir. Hastane bünyesinde toplanan operasyonel
+veriler, hasta verileri, uygulanan tedavi yöntemi ve tedavi sürecine
+dair veriler yöneticiler açısından bakıldığında; hastanedeki servislerin
+ve programların başarısının görüntülenmesi, kaynakların maliyetlerle
+göreceli olarak kullanımı, kaynak kullanımı ve hasta sayıları ile ilgili
+trendlerin tahmini, harcamalarla ilgili normal olmayan durumların anlık
+tespiti ve yolsuzlukların engellenmesi, hastanede uygulanan tedavi
+yöntemlerinin başarısının irdelenmesi açısından önemli bilgileri
+içermektedir. Bu veriler başarılı tedavi sonuçları almada etken
+faktörlerin belirlenmesi, ameliyatlarda yüksek risk faktörlerinin
+sınanması, hasta verilerinin yaş, cinsiyet, ırk ve tedavi yöntemi gibi
+faktörlere göre sınıflanması, hasta sağlığı açısından geriye dönük
+faktörlerin sınanması, tedavi yöntemi geliştirme vb. amaçlarla
+kullanılmaktadır. Dünya çapında çok sayıda başarılı uygulama örneği
+mevcuttur. Örneğin, San Francisco Hearth Institute; hasta sonuçlarının
+iyileştirilmesi, hastanın hastanede kalma süresinin azaltılması, vb
+amaçlarla bir çalışma başlatmış ve kurum bünyesinde toplanan verilerden
+hastanın geçmişine ait veriler, laboratuar verileri, kollestrol
+verileri, diğer medikal verileri bilgiye dönüştürmüştür.
+
+**2.4. Devlet Uygulamaları**  
+Kamu yöneticileri günümüzde verinin ve bilginin önemini kavramışlardır.
+Müşteriye özel hizmet sunan ticari kuruluşlarda olduğu gibi devlet
+kurumları da vatandaşlarının ihtiyaçlarına özel hizmet sunabilmenin
+önemini kavramışlardır. Kamu yöneticileri için en önemli uygulamalar
+kaynakların doğru olarak kullanımını sağlama ve planlama; kamu
+güvenliğini sağlama amacı ile güvenlik problemlerini önceden tahmin
+etmek, rastlantısal olaylardaki sorunların çözümüne dair izleri keşfetme
+ve olası güvenlik sorunlarını eş zamanlı olarak tespit edebilme ve çözüm
+üretebilme; vergi ile ilgili yolsuzlukları ve izlerini belirleme,
+yolsuzlukları eş zamanlı olarak belirleme, sağlık ödemeleri,
+programların uygulanması vb. konularda şüpheli durumların tespiti,
+suiistimal ve israfları belirleme ve milyonlarca dolarlık zararı
+engelleme, örnekleri artırmak mümkündür. Kamuda enformasyon ve bilgi
+ihtiyacı sonsuzdur. Emniyet birimleri için suç istatistiklerine dair
+online raporlama, hangi profildeki insanların ne tür suçlara meyilli
+olduklarını belirleme, eş zamanlı suç engelleme politikaları oluşturmak
+ancak ileri analitik uygulamalar ile mümkündür. Günümüzde e-devlet
+kavramı oldukça kritiktir. E-devlet uzmanlarının en önemli hedefi
+bilgiye eş zamanlı olarak ulaşmak ve daha iyi hizmet vermektir. E-devlet
+uygulaması gerçekleştirilen ülkelerde kamu kuruluşları ziyaretçilerin
+sayfalarını nasıl kullandığı, ihtiyaç duyulan formlara kolayca ulaşılıp
+ulaşılamadığı, web sayfa tasarımın nasıl en iyi kullanılabilir hale
+getirilebileceği, hangi sayfaların hangi sıra ile ziyaret edildiğinin
+anlaşılması, geçmişteki ziyaretçi davranışlarına göre kurumun web
+sayfasını vatandaşın ihtiyacına daha iyi yanıt verecek şekilde yeniden
+düzenlemek mümkündür.
+
+&lt;p&gt;
+&lt;/span&gt;
+
+&lt;/div&gt;</summary><category term="Data"></category><category term="Datamining"></category><category term="Madenciliği"></category><category term="Mining"></category><category term="Veri"></category><category term="Veri Madenciliği"></category></entry><entry><title>Veri Madenciliği(Data Mining) Nedir ve Nerelerde Kullanılır-2</title><link href="http://www.burakisikli.com/veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-2.html" rel="alternate"></link><published>2009-02-15T16:46:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-2.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Daha önceden
+belirtildiği gibi veri madenciliği, eldeki verilerden üstü kapalı, çok
+net olmayan, önceden bilinmeyen ancak potansiyel olarak kullanışlı
+bilginin çıkarılmasıdır. Bu da; kümeleme, veri özetleme, değişikliklerin
+analizi, sapmaların tespiti gibi belirli sayıda teknik yaklaşımları
+içerir (William J. Frawley, Gregory Piatetsky – Shapiro, Cristopher J.
+Matheus). Başka bir deyişle, veri madenciliği, verilerin içerisindeki
+desenlerin, ilişkilerin, değişimlerin, düzensizliklerin, kuralların ve
+istatistiksel olarak önemli olan yapıların yarı otomatik olarak
+keşfedilmesidir.
+&lt;/p&gt;
+Temel olarak veri madenciliği, veri setleri arasındaki desenlerin ya da
+düzenin, verinin analizi ve yazılım tekniklerinin kullanılması ile
+ilgilidir. Veriler arasındaki ilişkiyi, kuralları ve özellikleri
+belirlemekten bilgisayar sorumludur. Amaç, daha önceden fark edilmemiş
+veri desenlerini tespit edebilmektir. Veri madenciliğini istatistiksel
+bir yöntemler serisi olarak görmek mümkün olabilir. Ancak veri
+madenciliği, geleneksel istatistikten birkaç yönde farklılık gösterir.
+Veri madenciliğinde amaç, kolaylıkla mantıksal kurallara ya da görsel
+sunumlara çevrilebilecek nitel modellerin çıkarılmasıdır. Bu bağlamda,
+veri madenciliği insan merkezlidir ve bazen insan – bilgisayar arayüzü
+birleştirilir. Veri madenciliği sahası, istatistik, makine bilgisi, veri
+tabanları ve yüksek performanslı işlem gibi temelleri de içerir.
+
+Veri madenciliği, günlük yaşamda birçok şekilde kullanılabilmektedir.
+Bunlardan bazıları aşağıdaki gibi sıralanabilir:
+
+Hastanelere yapılan tedavi taleplerinin bölgelere, zamana ve ihtiyaca
+göre değerlendirmesi salgın hastalık riskinin ilk aşamada tespiti,
+kontrolü ve kaynak planlama açısından faydalı olur.  
+Kaçak enerji kullananların profillerini tespit eden bir model, olası
+kaçak enerji kullanıcılarını tahmin etmeyi sağlayacak, düşük maliyet ile
+kaçaklarla etkin mücadele edilmesine olanak tanıyacaktır.  
+Karayollarının bölgelere ve zamana göre yoğunluklarını öngörme amaçlı
+bir çalışma doğru zamanda doğru kaynak planlaması ile örneğin kaza
+oranlarının asgariye indirilmesini sağlayacaktır.  
+Kamu kurumları destek programlarını uygularken, verilecek desteğin doğru
+miktarda ve doğru hedefleri olan kuruluşlara verilmesini sağlayacak
+kurumsal risk skorlaması yapılmasıyla uygulanan programların başarısı
+artar. Kredileri tahsis ederken ödememe riski olan profillerin tespit
+edilmiş olması batık kredi miktarlarını azaltır.
+
+&lt;p&gt;
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;div&gt;
+
+**1.1. Örnek Uygulamalar**
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+Veri Madenciliğinde kullanılan yaklaşımları aşağıda belirtildiği gibi
+sıralayabiliriz:
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Algoritma:** Verideki ilişki ya da örgüleri belirlemekte kullanılan
+programatik tekniklerdir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Model:** Algoritma tarafından belirlenen ilişkilerin tanımıdır. Bu
+tanım genelde kurallar kümesi, karar ağacı, denklemler ya da ilişkiler
+ağı şeklinde ifade edilir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Vaka:** Tekil bir nesneyle ilişkilendirilen özellikler ve ilişkiler
+koleksiyonudur. Gözlem olarak da adlandırılır. Vaka kümesi, aynı
+özellikleri paylaşan vakalar grubudur. Bunu bir tablo gibi
+düşünebilirsiniz, tablonun her satırında bir vaka yer alır. Tek tablo
+yerine birbiriyle ilişkili iki ayrı tablo kullanılması da sözkonusu
+olabilir. Bu durumda ana tablodaki her satır için yavru tabloda birden
+fazla satır bağlantılı olarak eklenebilir. Gözlem kümesi olarak da
+adlandırılır.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Bağımlı değişken (ya da tahmin edilen özellik):** Algoritmanın tahmin
+etmek ya da gruplamak için model inşa edeceği değişken.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Bağımsız değişken (ya da tahmin eden özellik):** Modeli inşa ederken
+kullanılan ve tarif edici bilgilere sahip olan değişkenlere denir.
+Bağımsız değişkenlerin içlerindeki çeşitli kombinasyonlar ele alınarak
+algoritma tarafından gruplamalar ve tahminler oluşturulur.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Kesikli ya da sürekli değişkenler:** Kesikli ya da sürekli değerlere
+sahip olan sayısal kolonlar. Mesela maaşlarla ilgili gerçek değerleri
+içeren bir kolon süreklidir. Ama maaş aralıkları belirler ve gerçek
+değerleri bu aralıklara karşılık gelen 0, 1, 2... gibi bir sayı
+dizisiyle ifade ederseniz, kesikli bir kolon elde etmiş olursunuz. Daha
+yeni araçlarda, kesikli kolonlar için sayısal değerler yerine tarif
+edici karakter ifadelerine de izin verilmektedir. Kolon tipinin kesikli
+ya da sürekli olması, kullanılan veri madenciliği algoritmaları için
+önemli olabilmektedir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Bağıntı:** "Çocuk bezi alan müşterilerin %30’u bira da satın alır."
+Sepet analizinde (basket analysis) müşterilerin beraber satın aldığı
+malların analizi yapılır. Buradaki amaç mallar arasındaki pozitif veya
+negatif korelâsyonları bulmaktır.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+Korelasyon, [olasılık
+kuramı](http://tr.wikipedia.org/wiki/Olas%C4%B1l%C4%B1k_kuram%C4%B1 "Olasılık kuramı")
+ve
+[istatistikte](http://tr.wikipedia.org/wiki/%C4%B0statistik "İstatistik")
+iki bağımsız değişken arasındaki doğrusal ilişkinin yönünü ve gücünü
+belirtir. Genel istatistiksel kullanımda korelasyon, bağımsızlık
+durumundan ne kadar uzaklaşıldığını gösterir.Korelasyon, [olasılık
+kuramı](http://tr.wikipedia.org/wiki/Olas%C4%B1l%C4%B1k_kuram%C4%B1 "Olasılık kuramı")
+ve
+[istatistikte](http://tr.wikipedia.org/wiki/%C4%B0statistik "İstatistik")
+iki bağımsız değişken arasındaki doğrusal ilişkinin yönünü ve gücünü
+belirtir. Genel istatistiksel kullanımda korelasyon, bağımsızlık
+durumundan ne kadar uzaklaşıldığını gösterir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+Çocuk bezi alan müşterilerin mama da satın alacağını veya bira satın
+alanların cips de alacağını tahmin edebiliriz ama ancak otomatik bir
+analiz bütün olasılıkları göz önüne alır ve kolay düşünülemeyecek,
+örneğin çocuk bezi ve bira arasındaki bağıntıları da bulur.
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Sınıflandırma:&lt;/strong&gt; "Genç kadınlar küçük araba satın alır; yaşlı, zengin
+erkekler büyük, lüks araba satın alır." Amaç bir malın özellikleri ile
+müşteri özelliklerini eşlemektir. Böylece bir müşteri için ideal ürün
+veya bir ürün için ideal müşteri profili çıkarılabilir. Örneğin bir
+otomobil satıcısı şirket geçmiş müşteri hareketlerinin analizi ile
+yukarıdaki gibi iki kural bulursa genç kadınların okuduğu bir dergiye
+reklâm verirken küçük modelinin reklâmını verir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Regresyon:&lt;/strong&gt; "Ev sahibi olan, evli, aynı iş yerinde beş yıldan
+fazladır çalışan, geçmiş kredilerinde geç ödemesi bir ayı geçmemiş bir
+erkeğin kredi skoru 825’dir." Başvuru skorlamada (application scoring)
+bir finans kurumuna kredi için başvuran kişi ile ilgili finansal
+güvenilirliğini notlayan örneğin 0 ile 1000 arasında bir skor
+hesaplanır. Bu skor kişinin özellikleri ve geçmiş kredi hareketlerine
+dayanılarak hesaplanır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Zaman İçinde Sıralı Örüntüler:&lt;/strong&gt; "İlk üç taksitinden iki veya daha
+fazlasını geç ödemiş olan müşteriler %60 olasılıkla kanuni takibe
+gidiyor." Davranış skoru (behavioral score), başvuru skorundan farklı
+olarak kredi almış ve taksitleri ödeyen bir kişinin sonraki taksitlerini
+ödeme/geciktirme davranışını notlamayı amaçlar.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benzer Zaman Sıraları:&lt;/strong&gt; "X şirketinin hisse fiyatları ile Y
+şirketinin hisse fiyatları benzer hareket ediyor." Amaç zaman içindeki
+iki hareket serisi arasında bağıntı kurmaktır. Bunlar örneğin iki malın
+zaman içindeki satış miktarları olabilir. Örneğin dondurma satışları ile
+kola satışları arasında pozitif, dondurma satışları ile salep satışları
+arasında negatif bir bağıntı beklenebilir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fark Saptanması:&lt;/strong&gt; "Normalden farklı davranış gösteren müşterilerim
+var mı?" Amaç önceki uygulamaların aksine kural bulmak değil, kurala
+uymayan istisnai hareketleri bulmaktır. Bu da örneğin olası
+sahtekârlıkların saptanmasını (fraud detection) sağlar. Örneğin Visa
+kredi kartı için yapılan CRIS sisteminde bir yapay sinir ağı kredi kartı
+hareketlerini takip ederek müşterinin normal davranışına uymayan
+hareketler için müşterinin bankası ile temasa geçerek müşteri onayı
+istenmesini sağlar.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Doküman Madenciliği:&lt;/strong&gt; "Arşivimde (veya internet üzerinde) bu dokümana
+benzer hangi dokümanlar var?" Amaç dokümanlar arasında ayrıca elle bir
+tasnif gerekmeden benzerlik hesaplayabilmektir (text mining). Bu genelde
+otomatik olarak çıkarılan anahtar sözcüklerin tekrar sayısı sayesinde
+yapılır.&lt;/p&gt;
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Madencilik Yapısı(Mining Structure):** Microsoft tarafından kullanılan
+bir tanımdır. Analysis Services'daki bir vaka kümesini temsil eder.
+Aslında alttaki veri yapısı üzerinde yer alan bir metadata katmanıdır.
+Verilerin temel özellikleri yanısıra veri madenciliği açısından çeşitli
+özelliklerini de barındırır. Bu yapı üzerine modeller kurulur.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Madencilik modeli:** Belirli bir algoritmanın belirli bir madencilik
+çatısı üzerine uygulanmış halidir. Aynı çatı üzerine farklı algoritmalar
+ya da farklı parametrelerle birden fazla model oluşturabilirsiniz.
+
+&lt;/div&gt;</summary><category term="Data"></category><category term="Datamining"></category><category term="Madenciliği"></category><category term="Mining"></category><category term="Veri"></category><category term="Veri Madenciliği"></category></entry><entry><title>Veri Madenciliği(Data Mining) Nedir ve Nerelerde Kullanılır-1</title><link href="http://www.burakisikli.com/veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-1.html" rel="alternate"></link><published>2009-02-15T03:22:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-1.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Gelişen ve değişen
+çevre koşulları, sınırların kalkması ile küreselleşen dünya, farklı
+pazarlama ve ar-ge(araştırma geliştirme) yöntemleri “veri”nin değil
+“bilgi”nin önemini her geçen gün daha da artacak şekilde ortaya
+koymaktadır. İnternetin yaygınlaşması ve kolaylaşması ar-ge ekiplerinin
+“bilgi”ye erişmelerini zorlaştırmaktadır. İnternette arama motorları
+kullanılarak yapılan araştırmalar çoğu zaman istenilenden farklı bir
+şekilde sonuçlanmaktadır. Tıbbi bir araştırma sonucunda “veri”nin
+“bilgi”ye dönüşme işleminin vurgulandığı görülecektir. Bilginin kimi
+yöntemler ile analiz edilmesi ve çıkan sonuçların bir uzman gözüyle
+yorumlanmasıyla geçmiş verilerden gelecek tahminleri yapma işlemi veri
+madenciliği(data mining) olarak belirtilebilir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-size:85%;"&gt;&lt;span style="font-family:verdana;"&gt;**1.
+Veri Madenciliği Nedir?**  
+Basit bir tanım yapmak gerekir ise veri madenciliği, büyük ölçekli
+veriler arasından bilgiye ulaşma, bilgiyi madenleme işidir. Ya da bir
+anlamda büyük veri yığınları içerisinden gelecek ile ilgili tahminde
+bulunabilmemizi sağlayabilecek bağıntıların bilgisayar programı
+kullanarak aranmasıdır. Veri madenciliği deyimi yanlış kullanılan bir
+deyim olabileceğinden buna eş değer başka kullanımlar da literatüre
+geçmiştir. Veritabanlarında bilgi madenciliği (knowledge mining from
+databases), Bilgi çıkarımı(knowledge extraction), data/pattern anaysis
+(veri ve örüntü analizi), veri arkeolojisi gibi.  
+Bunların arasındaki en popüler kullanım Veritabanlarında Bilgi Keşfi
+(VBK - Knowledge Discovery From Databases - KDD) ‘dir. Alternatif olarak
+veri madenciliği aslında bilgi keşfi sürecinin bir parçası şeklinde
+kabul görmektedir. Bu adımlar:  
+1-) Veri Temizleme (gürültülü ve tutarsız verileri çıkarmak)  
+2-) Veri Bütünleştirme (birçok veri kaynağını birleştirebilmek)  
+3-) Veri Seçme (Yapılacak olan analiz ile ilgili olan verileri
+belirlemek )  
+4-) Veri Dönüşümü (Verinin veri madenciliği tekniğinden kullanılabilecek
+hale dönüşümünü gerçekleştirmek)  
+5-) Veri Madenciliği (Veri örüntülerini yakalayabilmek için akıllı
+metotları uygulamak)  
+6-) Örüntü Değerlendirme (Bazı ölçümlere göre elde edilmiş bilgiyi
+temsil eden ilginç örüntüleri tanımlamak)  
+7-) Bilgi Sunumu (Madenciliği yapılmış olan elde edilmiş bilginin
+kullanıcıya sunumunu gerçekleştirmek),  
+Veri madenciliği adımı, kullanıcı ve bilgi tabanı ile etkileşim
+halindedir. İlginç örüntüler kullanıcıya gösterilir, ve bunun ötesinde
+istenir ise bilgi tabanına da kaydedilebilir. Buna göre, veri
+madenciliği işlemi, gizli kalmış örüntüler bulunana kadar devam eder.
+Bir veri madenciliği sistemi, aşağıdaki temel bileşenlere
+sahiptir:&lt;/span&gt;&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Veritabanı, veri
+ambarı ve diğer depolama teknikleri&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Veritabanı ya da veri
+ambarı Sunucusu&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Bilgi Tabanı&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Veri Madenciliği
+Motoru&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Örüntü
+Değerlendirme&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Kullanıcı
+Arayüzü&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;"&gt;Veri madenciliği, eldeki verilerden
+üstü kapalı, çok net olmayan, önceden bilinmeyen ancak potansiyel olarak
+kullanışlı bilginin çıkarılmasıdır. Bu da; kümeleme, veri özetleme,
+değişikliklerin analizi, sapmaların tespiti gibi belirli sayıda teknik
+yaklaşımları içerir.  
+Başka bir deyişle, veri madenciliği, verilerin içerisindeki desenlerin,
+ilişkilerin, değişimlerin, düzensizliklerin, kuralların ve istatistiksel
+olarak önemli olan yapıların yarı otomatik olarak keşfedilmesidir.  
+Temel olarak veri madenciliği, veri setleri arasındaki desenlerin ya da
+düzenin, verinin analizi ve yazılım tekniklerinin kullanılması ile
+ilgilidir. Veriler arasındaki ilişkiyi, kuralları ve özellikleri
+belirlemekten bilgisayar sorumludur. Amaç, daha önceden fark edilmemiş
+veri desenlerini tespit edebilmektir.  
+Veri madenciliğini istatistiksel bir yöntemler serisi olarak görmek
+mümkün olabilir. Ancak veri madenciliği, geleneksel istatistikten birkaç
+yönde farklılık gösterir. Veri madenciliğinde amaç, kolaylıkla mantıksal
+kurallara ya da görsel sunumlara çevrilebilecek nitel modellerin
+çıkarılmasıdır. Bu bağlamda, veri madenciliği insan merkezlidir ve bazen
+insan – bilgisayar arayüzü birleştirilir. Veri madenciliği sahası,
+istatistik, makine bilgisi, veritabanları ve yüksek performanslı işlem
+gibi temelleri de içerir.  
+Veri madenciliği konusunda bahsi geçen geniş verideki geniş kelimesi,
+tek bir iş istasyonunun belleğine sığamayacak kadar büyük veri
+kümelerini ifade etmektedir. Yüksek hacimli veri ise, tek bir iş
+istasyonundaki ya da bir grup iş istasyonundaki disklere sığamayacak
+kadar fazla veri anlamındadır. Dağıtık veri ise, farklı coğrafi
+konumlarda bulunan verileri anlatır.&lt;/span&gt;
+
+&lt;/div&gt;</summary><category term="Data"></category><category term="Datamining"></category><category term="Madenciliği"></category><category term="Mining"></category><category term="Veri"></category><category term="Veri Madenciliği"></category></entry></feed>

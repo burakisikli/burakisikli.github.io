@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+            <link href="http://www.burakisikli.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Full Atom Feed" />
+            <link href="http://www.burakisikli.com/feeds/java.atom.xml" type="application/atom+xml" rel="alternate" title=" Categories Atom Feed" />
+
+        <!-- Bootstrap Core CSS -->
+        <link href="http://www.burakisikli.com/theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="http://www.burakisikli.com/theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="http://www.burakisikli.com/theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+
+        <meta name="tags" contents="Design" />
+        <meta name="tags" contents="Design Pattern" />
+        <meta name="tags" contents="Pattern" />
+        <meta name="tags" contents="Patterns" />
+        <meta name="tags" contents="Singleton" />
+        <meta name="tags" contents="Tasarım" />
+        <meta name="tags" contents="Tasarım Şablonları" />
+        <meta name="tags" contents="Yalnızlık" />
+        <meta name="tags" contents="Yalnızlık Tasarım Şablonu" />
+        <meta name="tags" contents="Şablonu" />
+
+
+			<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="">
+
+	<meta property="og:type" content="article">
+	<meta property="article:author" content="">
+	<meta property="og:url" content="http://www.burakisikli.com/design-patternstasarim-sablonlari-1.html">
+	<meta property="og:title" content="Design Patterns(Tasarım Şablonları)-1">
+	<meta property="og:description" content="">
+	<meta property="og:image" content="http://www.burakisikli.com/">
+	<meta property="article:published_time" content="2009-06-18 02:35:00+03:00">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.burakisikli.com/"></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('http://www.burakisikli.com/theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Design Patterns(Tasarım Şablonları)-1</h1>
+                        <span class="meta">Posted by
+                                <a href="http://www.burakisikli.com/author/burakisikli.html">burakisikli</a>
+                             on Thu 18 June 2009
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p>şablonları aşağıda yeralan ortak özelliklere sahiptir:</p>
+<ul>
+<li>
+Edinilen tecrübeler sonunda ortaya çıkmışlardır.
+
+</li>
+<li>
+Tekerin tekrar icat edilmesini önlerler.
+
+</li>
+<li>
+Tekrar kullanılabilir kalıplardır.
+
+</li>
+<li>
+Ortak kullanılarak daha büyük problemlerin çözülmesinım şablonları ve
+kullanım alanları hakkında ihtisas yapmış olmak gerekmektedir.
+
+Tasarım şablonları değişik kategorilere ayrılır. Bunlar:
+
+-   Oluşturucu tasarım şablonları (**creational patterns**)
+-   Yapısal tasarım şablonları (**structual patterns**)
+-   Davranışsal tasarım şablonlar (**behavioral patterns**)
+
++--------------------------+--------------------------+--------------------------+
+| Oluşturucu               | Yapısal                  | Davranışsal              |
++--------------------------+--------------------------+--------------------------+
+| - Abstract Factory       | - Adapter                | - Command (komut)        |
+| (soyut fabrika)          | </p>                     | </p>                     |
+| </p>                     | - Bridge (köprü)         | - Memento (hatıra)       |
+| - Builder (inşaatçi)     |                          |                          |
+|                          | - Facade (cephe)         | - Strategy (strateji)    |
+| - Factory Method         |                          |                          |
+| (fabrika)                | - Decorator (dekotatör)  | - Iterator               |
+|                          |                          | (tekrarlayıcı)           |
+| - Prototype  (prototip)  | - Composite (kompozit)   |                          |
+|                          |                          | - State (durum)          |
+| <p>                      | - Flyweight (sinek       |                          |
+| - Singleton (yalnızlık)  | siklet)                  | - Chain Of               |
+|                          |                          | Responsibility           |
+|                          | - Proxy (vekil)          | (sorumluluk zinciri)     |
+|                          |                          |                          |
+|                          | <p>                      | - Mediator (aracı)       |
+|                          |                          |                          |
+|                          |                          | - Observer (gözlemci)    |
+|                          |                          |                          |
+|                          |                          | - Template Method        |
+|                          |                          | (şablon metot)           |
+|                          |                          |                          |
+|                          |                          | <p>                      |
+|                          |                          | - Visitor (ziyaretçi)    |
++--------------------------+--------------------------+--------------------------+
+
+**1-) SINGLETON PATTERN(YALNIZLIK TASARIM ŞABLONU)**
+
+Bazı durumlarda bir sınıftan sadece bir nesnenin oluşturulması ve
+oluşturulan bu nesnenin tüm sistemde kullanılması gerekebilir. Örneğin
+bilgibankası için bir connection pool (bilgibankası bağlantı havuzu)
+sadece bir defa oluşturulmalı ve kullanılmalıdır veya oluşturulacak
+properties nesnesinin bir kere ve proses(process) çalışmaya başladığı
+anda(constructor) oluşturulmalıdır. Bu durumda Singleton tasarım şablonu
+kullanılarak, bir sınıftan sadece bir nesnenin oluşturulması
+sağlanabilir.
+
+![Singleton Pattern UML
+Diagram](http://burakisikli.files.wordpress.com/2009/06/singletonuml.gif "Singleton Pattern UML Diagram"){.aligncenter
+.size-full .wp-image-152 width="237" height="172"}
+
+Singleton tasarım şablonunu iki farklı yöntemle yapabiliriz. Yapacağımız
+değişiklik senkronizasyonu yapacağımız aracı değiştirmektir.
+Senkronizasyonu kilit objesiyle veya komple sınıfı kilitleyerek
+yapabiliriz.
+
+Bir singleton sınıfın taşıması gereken bazı özellikler vardır. Bunlar:  
+·Sınıf konstruktörlerinin(constructor) private olması gerekiyor.
+Konstruktörleri private olan bir sınıftan, başka bir sınıf new operatörü
+ile nesne oluşturamaz.  
+·Singleton sınıfından sadece bir tane nesne oluşturulması gerektiği
+için, oluşturulması gereken nesneyi sınıfın static değişkeni olarak
+tanımlamamız gerekiyor. Örnekte "private static Singleton instance =
+null" şeklinde bu tanımlamayı yapıyoruz.  
+·Singleton sınıfında instance() isminde static bir metodun olması ve bu
+metodun static olarak tanımlanmış nesneyi geri vermesi gerekiyor.
+instance() metodu içinde sınıfın tek nesnesi olacak değişken
+oluşturulur.
+
+**Singleton.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* Singleton Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/  
+public class Singleton {  
+/\*  
+\* Singleton sinifindan olusturulabilecek tek nesne static sinif
+degiskeni  
+\* olarak tanimlaniyor.  
+\*/  
+private static volatile Singleton instance = null;
+
+/\*  
+\* Sınıf yerine kullanılacak obje tanımı(synchronized(lock)) Double
+check  
+\* locking yapabilmek icin kullanilan nesne. private static Object lock
+=  
+\* new Object();  
+\*  
+\*  
+\* \* Baska siniflarin new Singleton() seklinde nesne olusturmalarini,
+sinif  
+\* konstruktorünü private yaparak engellemis oluyoruz.  
+\*/  
+private Singleton() {  
+System.out.println("Constructor");  
+}
+
+/\*\*  
+\* Singleton sinifindan olusturulabilen tek nesneye ulasmak icin
+instance()  
+\* metodu kullanilir.  
+\*  
+\* @return Singleton static Singleton nesnesi  
+\*/  
+public static Singleton getInstance() {  
+if (instance == null) {  
+// Double checked locking  
+synchronized (Singleton.class) {  
+if (instance == null) {  
+instance = new Singleton();  
+}  
+}  
+}  
+return instance;  
+}
+
+/\*\*  
+\* Singleton sinifinda bulunan bir metod. Buraya kendi metotlarınızı  
+\* ekleyebilirsiniz  
+\*/  
+public void printIt() {  
+System.out.println(this);  
+}  
+}
+
+\[/sourcecode\]
+
+**Main.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* Main Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Main {  
+public static void main(String\[\] args) {  
+Singleton.getInstance().printIt();  
+}  
+}
+
+\[/sourcecode\]
+
+Main sınıfımızı çalıştırdığımızda ekrana şunlar gelecektir:
+
+Constructor  
+edu.burakkk.patterns.singleton.Singleton@9304b1
+
+Yukarıda yazdığımız kod ise multithread'e karşı güvenli bir koddur. Yine
+de bunu test etmek için de bir sınıf oluşturalım:
+
+**Test.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* MultiThread Test Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Test {  
+private static Singleton singletona, singletonb;  
+public static void main(String\[\] args) {  
+// getInstance() iki ayrı thread ile çağırılsın.  
+Thread threada = new Thread() {  
+@Override  
+public void run() {  
+singletona = Singleton.getInstance();  
+}  
+};  
+threada.start();
+
+Thread threadb = new Thread() {  
+@Override  
+public void run() {  
+singletonb = Singleton.getInstance();  
+}  
+};  
+threadb.start();
+
+// Her iki thread tamamlanana kadar beklensin  
+while (!(threada.getState() == Thread.State.TERMINATED && threadb  
+.getState() == Thread.State.TERMINATED))  
+;
+
+System.out.println(singletona == singletonb);  
+}  
+}
+
+\[/sourcecode\]
+
+Eğer test başarılı olursa ekran çıktısı şu şekilde olacaktır:
+
+Constructor  
+true
+
+*Notlar:*
+
+Abstract Factory, Builder ve Prototype tasarım şablonlarında olabileceği
+gibi birçok tasarım şablonu Singleton tasarım şablonu kullanılarak
+implemente edilir.
+[](http://en.wikipedia.org/wiki/Facade_pattern "Facade pattern")
+
+[Facade](http://en.wikipedia.org/wiki/Facade_pattern "Facade pattern")
+objeleri genellik Singleton'dır çünkü sadece bir tane Facade objesi
+gereklidir.
+
+State(Durum) objeleri genellikle Singleton'dır.
+
+Daha detaylı bilgi için:
+
+<http://www.ibm.com/developerworks/library/j-dcl.html>
+
+<http://www.kurumsaljava.com>
+
+<div id="_mcePaste"
+style="overflow:hidden;position:absolute;left:-10000px;top:3852px;width:1px;height:1px;">
+
+package edu.burakkk.patterns.singleton;
+</p>
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* MultiThread Test Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Test {  
+private static Singleton singletona, singletonb;  
+public static void main(String\[\] args) {  
+// getInstance() iki ayrı thread ile çağırılsın.  
+Thread threada = new Thread() {  
+@Override  
+public void run() {  
+singletona = Singleton.getInstance();  
+}  
+};  
+threada.start();
+
+Thread threadb = new Thread() {  
+@Override  
+public void run() {  
+singletonb = Singleton.getInstance();  
+}  
+};  
+threadb.start();
+
+// Her iki thread tamamlanana kadar beklensin  
+while (!(threada.getState() == Thread.State.TERMINATED && threadb  
+.getState() == Thread.State.TERMINATED))  
+;
+
+System.out.println(singletona == singletonb);  
+}  
+}
+
+</div>
+    </article>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'design-patternstasarim-sablonlari-1.html';
+                var disqus_url = 'http://www.burakisikli.com/design-patternstasarim-sablonlari-1.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="http://twitter.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="http://www.burakisikli.com/theme/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/clean-blog.min.js"></script>
+
+<script type="text/javascript">
+    var disqus_shortname = 'burakisikli-com';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+
+</html>

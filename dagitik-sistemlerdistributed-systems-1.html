@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+            <link href="http://www.burakisikli.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Full Atom Feed" />
+            <link href="http://www.burakisikli.com/feeds/distributed-systems.atom.xml" type="application/atom+xml" rel="alternate" title=" Categories Atom Feed" />
+
+        <!-- Bootstrap Core CSS -->
+        <link href="http://www.burakisikli.com/theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="http://www.burakisikli.com/theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="http://www.burakisikli.com/theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+
+        <meta name="tags" contents="Dağıtık" />
+        <meta name="tags" contents="Distributed" />
+        <meta name="tags" contents="Hadoop" />
+        <meta name="tags" contents="Sistemler" />
+        <meta name="tags" contents="Systems" />
+
+
+			<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="">
+
+	<meta property="og:type" content="article">
+	<meta property="article:author" content="">
+	<meta property="og:url" content="http://www.burakisikli.com/dagitik-sistemlerdistributed-systems-1.html">
+	<meta property="og:title" content="Dağıtık Sistemler(Distributed Systems)-1">
+	<meta property="og:description" content="">
+	<meta property="og:image" content="http://www.burakisikli.com/">
+	<meta property="article:published_time" content="2009-06-11 16:23:00+03:00">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.burakisikli.com/"></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('http://www.burakisikli.com/theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Dağıtık Sistemler(Distributed Systems)-1</h1>
+                        <span class="meta">Posted by
+                                <a href="http://www.burakisikli.com/author/burakisikli.html">burakisikli</a>
+                             on Thu 11 June 2009
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p>Dağıtık sistemlerde en çok kullanılan program Hadoop'tur. Hadoop, Java
+programlama dilinde yazılmış framework’tür. Amacı Google Dosya Sistemi
+teknolojisi olan Map-Reduce algoritmasını birçok bilgisayara dağıtarak
+uygulayı sağlamaktır.</p>
+<p>Google, Yahoo ve Facebook gibi şirketler devasa boyutlarda veriyi analiz
+etmek için artık SQL, RDBMS kullanmıyorlar. Hadoop adlı  anahtar-değer
+tekniğini kullanan bir ürünü kullanıyorlar. Arama motoru pazarında
+başarılı olmak öncelikle <em>teknolojik altyapının dağıtımlı çalışması</em>ndan
+geçiyor. Yani bütün arama, depolama, ve indeksleme gibi işleri birden
+fazla bilgisayara dağıtarak yapmak. Hatta böyle bir altyapısı olduğu
+için Google’dan <em>aslında bir dağıtımlı bilgisayar şirketi</em> diye
+bahsedilir. Yani herkes internetten bilgileri toplayıp depolayabilir ama
+bunu yüksek performansta yapmak yükü bir bilgisayar tarlasına
+dağıtabilmekten geçiyor. Bilgisayarlar arasındaki bu iş bölümünü Google
+kendi geliştirdiği MapReduce denilen bir yazılım platformu ile yapıyor.
+Ancak MapReduce ile aynı işi yapan ve açık kaynaklı olan bir yazılım
+platformu daha var: Hadoop.</p>
+<p>Hadoop'un temelindeki teknik "eşle/indirge (map/reduce)" adindaki bir
+tekniktir. Bu teknik Apache tarafindan open source ortama getirildi ve
+Hadoop bu şekilde dünyaya geldi. Teknolojinin çıkış noktası Google; bu
+şirketin Web'den çektiği terabaytlarca veriyi analiz etmesi gerektiği
+için eşle/indirge teknolojisini geliştirdiler, geliştirmeye mecbur
+oldular.</p>
+<p>Eşle/indirge nedir? Online tabanlarda anahtar değeri belli bir makinaya
+yönlendirmek için kullanılıyor. Eşle/indirge tabanlarında ise, anahtar
+değeri eşle sürecinde her node(düğüm) üzerindeki veriye bakılarak bir
+"özet" çıkarmak için kullanılıyor. Indirge sürecinde ise her ayrı
+node'daki anahtar-deger çiftleri alınarak uyuşan anahtarlar bir daha
+birleştiriliyor. Bu son birleşim bize nihai sonucu veriyor.</p>
+<p>Hadoop, yatay olarak ölçeklenebilen bir teknoloji, bu sebeple kümedeki
+her makina kendi verisine sahip, yani tüm işlem o makinaya yerel. Aynı
+online dünyada oldugu gibi (mesela Voldemort) her node kendi verisini
+çöküşten kurtulmak amacıyla kümede birkaç diger bilgisayara yedek olarak
+gönderebilmekte. Hadoop'ta değişik olan bir "idare edici" yani "görev
+verici" makinanın olması. Burada bir mahsur yok; Eşle/indirge arka
+planda çalışan bir teknoloji olduğu için dağıtıcı kondüktör sistem, eger
+iyi tasarlanmışsa, bir hassas nokta haline gelmez. İşin en ağır kısmı
+zaten kümedeki işlemci nodelar tarafindan üstlenmekte. Hadoop'ta
+yapılacak işlemler tipik olarak bir "Job" olarak yazılıyor. Job'ınızı
+yazıyorsunuz, ve Hadoop kümenize veriyorsunuz.</p>
+<p>Bir örnek düşünelim: Elimizde koca bir dosya var, bu dosyada her satırda
+bir meyve ismi, ve o meyve satın alındığında ne kadar para ödenmiş
+olduğu yazılı olsun (alttaki koca bir dosya değil ama olduğunu
+düşünelim). Amacımız her meyve için toplam ne kadar harcandığını
+bulmak.<br />
+armut 10<br />
+portakal 3<br />
+incir 9<br />
+armut 9<br />
+armut 10<br />
+incir 3<br />
+mandalin 2<br />
+erik 29</p>
+<p>Burada anahtar değerleri meyve isimleri olacak. Diyelim ki Hadoop
+kümemizde 2 node var, ve üstteki dosyayı Hadoop'a verdik.</p>
+<p>Hadoop bu dosyayı iki eşit parcaya bölecektir (anahtar değerlerine hiç
+bakmadan, burası online'dan farklı), ve diyelim ki bölünme tam ortadan
+yapıldı:<br />
+armut 10<br />
+portakal 3<br />
+incir 9<br />
+armut 9  </p>
+<hr />
+<p>armut 10<br />
+incir 3<br />
+mandalin 2<br />
+incir 29</p>
+<p>Her node, kendi içinde "eşle" yaparken, benzer anahtar degerlerini aynı
+toplama yazacak. Bölüm 1) armut = 19, portakal = 3, incir = 9. Bolum 2)
+armut 10, incir = 32, mandalin = 2.</p>
+<p>Her bölümün işi böylece bitiyor, yani eşle sahfası sona eriyor. Bundan
+sonra "indirge" kısmında her bölümdeki anahtarlar bir de kendi
+aralarında toplanıyorlar. Böylece armut = 29, portakal = 3, incir = 41,
+mandalin = 2. Bu en son sonuç.</p>
+<p>Aktarılan bilgilere göre, saşırtıcı derecede çok sayıdaki analiz işlemi,
+üstteki eşle/indirge mentalitesine uyarlanabilmektedir.</p>
+<p>Haberdar olunması gereken müthiş örneklerden biri, makina ögrenimi
+algoritmalarının aynı eşle/indirge sistemine uyarlanabilmiş olmasıdır.
+Mahout projesi bunu open source ortamına taşımaya aday oldu. Rapor
+edilen sonuçlara göre eklenen her mikroişlemci core'u (Hadoop node'u
+gibi) eşle/indirge ile kodlanmış makina ögrenimi algoritmasını bir o
+kadar hızlandırmaktadır. Yani performans kazanımı "lineer" şekilde
+artabilmektedir. Her eklenen core bir o kadar hızlanma getirmektedir.</p>
+<p>Hadoop’un Google’un MapReduce’undan en büyük farkı tabii ki açık
+kaynaklı olması. Dolayısıyla Hadoop kullanarak isteyen herkes Google
+kadar hızlı çalışabilen bir arama motoru yapabilir, tabii bir miktar
+bütçeyle bir bilgisayar tarlası kurabiliyorsanız. Burada durup bir kere
+daha düşünün. Hadoop açık kaynaklı olduğundan Google’a bir değil
+binlerce rakip çıkabilir.<br />
+<em>MapReduce işlemleri küçük parçalara bölüyor ve farklı bilgisayarlara
+dağıtıyor, sonra işlenenleri toplayıp sonucu veriyor.</em></p>
+<p>Hadoop giderek bir endüstri standardı olmaya başlıyor. Mesela Facebook
+Hadoop kullanarak kullanıcı davranışlarının analizini yapıyor (50 milyon
+kişi ve ilişkileri) ve sosyal reklamların etkisini ölçüyor. Geçtiğimiz
+aylarda New York Times bilgi işlem ekibi Hadoop kullanarak 150 yıllık
+arşivindeki 11 milyon makaleyi dijitalleştirdi ve aranabilir hale
+getirdi. Normalde aylar sürebilecek bilgi işleme bir kaç günde
+bitirildi. Amazon ile Hadoop kullanarak EC2 (dağııtmlı işlemci) ve S3
+(dağıtımlı depolama) servislerinden faydalanabilirsiniz.</p>
+<p>Hadoop projesini başlatan Doug Cutting aynı zamanda Yahoo ArGe bölümünde
+çalışmaya başladı, haliyle Yahoo içinde arama dahil bir çok başka bilgi
+işleme sisteminin performansını geliştiriyor. Daha fazla geliştiricinin
+katılmasıyla Hadoop giderek daha da iyileşiyor ve tabii üniversitelerde
+de yayılmaya başlıyor. Hadoop kullanabilmek / programlayabilmek önemli
+bir beceri haline geliyor. Sonuçta Hadoop kullanabilen yeni mezunlar
+piyasaya çıktıkça sadece Google gibi şirketler değil daha fazla kişi
+veya şirket yüksek performanslı iş yapabilecek.</p>
+<p>Bir zamanlar dağıtımlı bilgisayar sistemlerine <em>bilgisayar tarlası</em>
+denilmekteydi, bugünlerde ise <em>bilgisayar bulutu</em> (“cloud computing”)
+diyoruz. Çok daha dinamik bir dünyanın tasviri bu. Nasıl bugün herkesin
+kişisel bilgisayarı varsa yakında hepimiz günlük hayatımızdaki bilgileri
+düzenleyebilmek için bilgisayar bulutu kullanıyor olabiliriz. Aslında
+yaptığımız her Google aramasında kullanıyoruz bile.</p>
+    </article>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'dagitik-sistemlerdistributed-systems-1.html';
+                var disqus_url = 'http://www.burakisikli.com/dagitik-sistemlerdistributed-systems-1.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="http://twitter.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="http://www.burakisikli.com/theme/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/clean-blog.min.js"></script>
+
+<script type="text/javascript">
+    var disqus_shortname = 'burakisikli-com';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+
+</html>

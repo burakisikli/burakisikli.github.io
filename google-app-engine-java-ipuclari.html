@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+            <link href="http://www.burakisikli.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Full Atom Feed" />
+            <link href="http://www.burakisikli.com/feeds/java.atom.xml" type="application/atom+xml" rel="alternate" title=" Categories Atom Feed" />
+
+        <!-- Bootstrap Core CSS -->
+        <link href="http://www.burakisikli.com/theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="http://www.burakisikli.com/theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="http://www.burakisikli.com/theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+
+        <meta name="tags" contents="App" />
+        <meta name="tags" contents="Engine" />
+        <meta name="tags" contents="Google" />
+        <meta name="tags" contents="Google App Engine" />
+        <meta name="tags" contents="Java" />
+
+
+			<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="">
+
+	<meta property="og:type" content="article">
+	<meta property="article:author" content="">
+	<meta property="og:url" content="http://www.burakisikli.com/google-app-engine-java-ipuclari.html">
+	<meta property="og:title" content="Google App Engine Java İpuçları">
+	<meta property="og:description" content="">
+	<meta property="og:image" content="http://www.burakisikli.com/">
+	<meta property="article:published_time" content="2009-08-14 02:50:00+03:00">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.burakisikli.com/"></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('http://www.burakisikli.com/theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Google App Engine Java İpuçları</h1>
+                        <span class="meta">Posted by
+                                <a href="http://www.burakisikli.com/author/burakisikli.html">burakisikli</a>
+                             on Fri 14 August 2009
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p>ğını bulmanız mümkün. Ben de ayrıca java programcıları ve teknolojileri
+derneği tarafından yayınlanmış sitenin <a href="http://burakisikli.files.wordpress.com/2009/08/google-app-engine.pdf">pdf
+dosyasını</a>veriyorum.</p>
+<p>Kurulumu yapıp örnek bir proje oluşturduktan sonra uygulamanın nasıl
+çalıştığını anlayalım. Öncelikle deploy yapmadan projeniz web'e atılmaz.
+Bu nedenle de yerel alanda istediğiniz kadar değişiklik yaparken asıl
+sayfanız(belirttiğinizad.appspot.com) herhangi bir değişiklik olmaz.</p>
+<p>Her zaman belirttiğiniz proje isminin servlet'i oluşturuluyor. Örneğin
+deneme diye proje oluşturuyorsanız servlet'inizin adı otomatik olarak
+denemeServlet oluyor. Peki bunu nasıl değiştireceğiz? Refactor
+kullanmanız ismini değiştirmek için yeterli gelmiyor. Bunu deneyip
+deploy ederseniz karşınıza boş bir sayfa çıkacaktır. Bildiğiniz üzere bu
+servlet'imizin bağlı olduğu web.xml dosyası olması gerekiyor. İşte bu
+dosya war klasörünün altındaki web-inf klasöründedir. Aşağıdakine benzer
+bir dosya karşınıza gelecektir.</p>
+<p><strong>web.xml</strong></p>
+<p>[sourcecode language="xml"]</p>
+<p>
+
+<web-app xsi="http://www.w3.org/2001/XMLSchema-instance" <br></web-app>
+xmlns="http://java.sun.com/xml/ns/javaee"  
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
+http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd" version="2.5"&gt;  
+<servlet>  
+<servlet-name>Deneme</servlet-name>  
+<servlet-class>edu.burakkk.google.app.DenemeServlet</servlet-class>  
+</servlet>  
+<servlet-mapping>  
+<servlet-name>Deneme</servlet-name>  
+<url-pattern>/deneme</url-pattern>  
+</servlet-mapping>  
+<welcome-file-list>  
+<welcome-file>index.html</welcome-file>  
+</welcome-file-list>  
+</web-app>
+
+</p>
+
+<p>[/sourcecode]</p>
+<p>Buradan servlet-class ismini de değiştirerek servlet isminde kolayca
+değişiklik yapabilirsiniz. Ayrıca url-pattern ile servletinizin
+çalışacağı uzantıyı da değiştirebilirsiniz. deneme yerine deneme.do
+yapabilirsiniz. Başlangıçta google app engine tarafından oluşturulan
+index.html yerine de welcome-file değiştirerek de kendi istediğiniz
+dosyayı hatta çalıştıracağınız servlet'i yapabilirsiniz. Bunun anlamı
+xxx.appspot.com sayfasını açtığınızda kendi tarafından oluşturulmuş
+index sayfası yerine sizin sayfanız çıkabilir.</p>
+<p>Eğer uygulama ismini veya versiyonu değiştirmek istiyorsanız aynı
+dizindeki(war/web-inf) appengine-web.xml dosyasından yapacaksınız.</p>
+<p><strong>appengine-web.xml</strong></p>
+<p>[sourcecode language="xml"]</p>
+<p>
+
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">  
+<application>bisikli</application>  
+<version>1</version>
+
+</p>
+
+<!-- Configure java.util.logging -->
+
+<p><system-properties></p>
+<p><property name="java.util.logging.config.file" value="WEB-INF/logging.properties"></property>
+</system-properties></p>
+<p></p>
+</appengine-web-app></p>
+<p>[/sourcecode]</p>
+<p>Application kısmından uygulama ismini versiyon kısmından da versiyonunu
+değiştirebilirsiniz.</p>
+<p>Bunları dikkate alarak anasayfamızda gerçek ip'nizi çıkaran bir servlet
+yapalım.</p>
+<p>edu.burakkk.google.app isimli paket ipAlma isimli servlet yaratıyoruz.</p>
+<p><strong>ipAlma.java</strong></p>
+<p>[sourcecode language="java"]</p>
+<p>package edu.burakkk.google.app;</p>
+<p>import java.io.IOException;<br />
+import java.io.PrintWriter;</p>
+<p>import javax.servlet.http.*;</p>
+<p>@SuppressWarnings("serial")<br />
+public class ipAlma extends HttpServlet {<br />
+public void doGet(HttpServletRequest req, HttpServletResponse resp)<br />
+throws IOException {<br />
+resp.setContentType("text/html");<br />
+PrintWriter out = resp.getWriter();<br />
+out.println("IP: " + req.getRemoteHost());<br />
+out.flush();<br />
+out.close();<br />
+}<br />
+}</p>
+<p>[/sourcecode]</p>
+<p><strong>web.xml</strong></p>
+<p>[sourcecode language="xml"]</p>
+<p>
+
+<web-app xsi="http://www.w3.org/2001/XMLSchema-instance" <br></web-app>
+xmlns="http://java.sun.com/xml/ns/javaee"  
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
+http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd" version="2.5"&gt;  
+<servlet>  
+<servlet-name>ipAlma</servlet-name>  
+<servlet-class>edu.burakkk.google.app.ipAlma</servlet-class>  
+</servlet>  
+<servlet-mapping>  
+<servlet-name>ipAlma</servlet-name>  
+<url-pattern>/ipAlma</url-pattern>  
+</servlet-mapping>  
+<welcome-file-list>  
+<welcome-file>ipAlma</welcome-file>  
+</welcome-file-list>  
+</web-app>
+
+</p>
+
+<p>[/sourcecode]</p>
+<p>Bu projeyi deploy ettiğinizde anasayfanızda IP: XXXXX şeklinde ip'nizi
+yazan bir web sayfası çıkacaktır. Örnek sayfaya
+<a href="http://bisikli.appspot.com/">http://bisikli.appspot.com/</a>(sizinUygulamaAdınız.appspot.com)
+adresinden ulaşabilirsiniz. Ayrıca aynı sayfaya servlet'mize
+<a href="http://bisikli.appspot.com/ipAlma">http://bisikli.appspot.com/ipAlma</a> bu adresle de ulaşabiliriz.</p>
+    </article>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'google-app-engine-java-ipuclari.html';
+                var disqus_url = 'http://www.burakisikli.com/google-app-engine-java-ipuclari.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="http://twitter.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="http://www.burakisikli.com/theme/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/clean-blog.min.js"></script>
+
+<script type="text/javascript">
+    var disqus_shortname = 'burakisikli-com';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+            <link href="http://www.burakisikli.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Full Atom Feed" />
+            <link href="http://www.burakisikli.com/feeds/java.atom.xml" type="application/atom+xml" rel="alternate" title=" Categories Atom Feed" />
+
+        <!-- Bootstrap Core CSS -->
+        <link href="http://www.burakisikli.com/theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="http://www.burakisikli.com/theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="http://www.burakisikli.com/theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+
+        <meta name="tags" contents="Client" />
+        <meta name="tags" contents="Client-Server" />
+        <meta name="tags" contents="Server" />
+        <meta name="tags" contents="Sunucu" />
+        <meta name="tags" contents="İstemci" />
+        <meta name="tags" contents="İstemci-Sunucu" />
+
+
+			<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="">
+
+	<meta property="og:type" content="article">
+	<meta property="article:author" content="">
+	<meta property="og:url" content="http://www.burakisikli.com/client-serveristemci-sunucu-programlama-1.html">
+	<meta property="og:title" content="Client-Server(İstemci-Sunucu) Programlama-1">
+	<meta property="og:description" content="">
+	<meta property="og:image" content="http://www.burakisikli.com/">
+	<meta property="article:published_time" content="2009-06-11 01:50:00+03:00">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.burakisikli.com/"></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('http://www.burakisikli.com/theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Client-Server(İstemci-Sunucu) Programlama-1</h1>
+                        <span class="meta">Posted by
+                                <a href="http://www.burakisikli.com/author/burakisikli.html">burakisikli</a>
+                             on Thu 11 June 2009
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p>Client-Server(Sunucu-İstemci) programlama yaparken bilmemiz gereken bazı
+kavramlar var. Programlama yaparken network(ağ) altyapısını iyi bilmemiz
+gerekiyor. Ağ'da her katmanın özelliğini anlamamız gerekiyor. Eğer
+bilmiyorsanız OSI katmanlarını öğrenmenizi tavsiye ederim. Biz
+kullanacağımız katman orta katmandır. Haberleşme türü olarak Socket
+Communication(Soket İletişimi)'i kullanacağız. Soket iletişimi  TCP ve
+UDP iletişimi olmak üzere iki farklı protokölle sağlanır.   TCP ile UDP
+protokolünün farkı; UDP protokolünü güvenlik olmaksızın iletişim
+sağlanacağında örneğin online radyo(streaming) gibi, TCP protokolünü ise
+güvenliğin ön planda olduğu iletişimde kullanıyoruz. Öncelikle TCP
+protokolünü kullanarak programımızı yapacağız.</p>
+<p>TCP</p>
+<p>Bir istemci bir de sunucumuz olacaktır. Sunucumuz istemcilere yayın
+yaparak gönderilmesi gereken bilgileri gönderecektir. Ancak bunu güvenli
+bir iletişim yoluyla yapacaktır.</p>
+<p>[sourcecode language="java"]</p>
+<p>package edu.burakkk.cliser.tcp;</p>
+<p>/**<br />
+*<br />
+* A Simple Client-Server<br />
+* Server<br />
+*  <br />
+*@version 1.0<br />
+*@author Burak ISIKLI<br />
+*@date July 09, 2009<br />
+*<br />
+**/</p>
+<p>import java.net.*;<br />
+import java.io.*;<br />
+import java.util.*;</p>
+<p>public class Server {<br />
+public static void main(String args[]) {<br />
+try {<br />
+ServerSocket sock = new ServerSocket(5000);<br />
+// Listen for connections<br />
+while (true) {<br />
+System.out.println("Waiting for client");<br />
+Socket client = sock.accept();</p>
+<p>// We have a connection<br />
+System.out.println("Connected with client");<br />
+PrintWriter pout = new PrintWriter(client.getOutputStream(),<br />
+true);</p>
+<p>// Write the Date to the socket<br />
+System.out.println("Sent data to client");<br />
+pout.println(new Date().toString());</p>
+<p>// Close the socket<br />
+// and resume listening for more connections</p>
+<p>client.close();<br />
+pout.close();<br />
+}<br />
+} catch (Exception e) {<br />
+System.err.println(e);<br />
+}<br />
+}<br />
+}</p>
+<p>[/sourcecode]</p>
+<p>Sunucunun yayın yapacağı portun seçimi bu konuda en önemli konudur.
+0-1023 arasındaki portlar başka uygulamalarda kullanıldığı için bu
+portlar dışında bir portu seçerseniz bir sorun çıkacağını sanmıyorum.
+Ben örneğimde 5000 portunu seçtim. ServerSocket objesini yaratılırken
+bunu yaptığımı görebilirsiniz. PrintWriter objesiyle istemciye
+gönderilecek ögeler yazılacaktır(pipeline edilecek) Yani istemci her
+istekte bulunduğunda sunucu kendi tarihini karşı tarafa gönderecektir.</p>
+<p>[sourcecode language="java"]</p>
+<p>package edu.burakkk.cliser.tcp;</p>
+<p>/**<br />
+*<br />
+* A Simple Client-Server<br />
+* Dummy Client<br />
+*  <br />
+*@version 1.0<br />
+*@author Burak ISIKLI<br />
+*@date July 09, 2009<br />
+*<br />
+**/</p>
+<p>import java.net.*;<br />
+import java.io.*;</p>
+<p>public class Client implements Runnable {<br />
+public void connect() {<br />
+try {<br />
+Socket sock = new Socket("127.0.0.1", 5000);<br />
+InputStream in = sock.getInputStream();<br />
+BufferedReader bin = new BufferedReader(new InputStreamReader(in));<br />
+String line;<br />
+while ((line = bin.readLine()) != null)<br />
+System.out.println(line);<br />
+sock.close();<br />
+} catch (IOException ioe) {<br />
+System.err.println(ioe);<br />
+}<br />
+}</p>
+<p>public void run() {<br />
+while (true) {<br />
+try {<br />
+Thread.sleep(1000);<br />
+connect();<br />
+} catch (Exception e) {<br />
+System.out.println("Error : " + e);<br />
+}<br />
+}<br />
+}</p>
+<p>public static void main(String[] args) throws Exception {<br />
+Thread Debugger = new Thread(new Client());<br />
+Debugger.start();<br />
+Debugger.join();<br />
+}<br />
+}</p>
+<p>[/sourcecode]</p>
+<p>İstemciyi yaparken thread mantığıyla yaptığımız dikkatinizi çekmiştir.
+Bunun nedeni eğer thread mantığıyla yapmazsak istemci bir sefer istekte
+bulunacak ve program sonlandırılacaktır. Bu nedenle sürekli hale
+getirerek 1 saniye arayla istekte bulunacaktır. Socket objesine
+yaratırken ip adresini ve portunu yazmamız gerekiyor. Biz kendi kendine
+sanal bağlantı yapılacağı için(dummy client) 127.0.0.1 adresine verdik
+ancak buraya gerçek ip adresini yazmanız gerekecektir. Port ise sunucuya
+verdiğimiz port ile aynı olmak zorundadır. Biz 5000 'ni vermiştik.
+Inputstream ve bufferedreader ise gönderilen cevapları okumak için
+yaratıyoruz.</p>
+    </article>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'client-serveristemci-sunucu-programlama-1.html';
+                var disqus_url = 'http://www.burakisikli.com/client-serveristemci-sunucu-programlama-1.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="http://twitter.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="http://www.burakisikli.com/theme/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/clean-blog.min.js"></script>
+
+<script type="text/javascript">
+    var disqus_shortname = 'burakisikli-com';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+
+</html>

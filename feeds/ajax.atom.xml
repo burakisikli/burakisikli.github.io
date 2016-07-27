@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="http://www.burakisikli.com/" rel="alternate"></link><link href="http://www.burakisikli.com/feeds/ajax.atom.xml" rel="self"></link><id>http://www.burakisikli.com/</id><updated>2009-02-05T03:05:00+02:00</updated><entry><title>ASP ile Ajax Programlamada Div'de Karakter Sorunu</title><link href="http://www.burakisikli.com/asp-ile-ajax-programlamada-divde-karakter-sorunu.html" rel="alternate"></link><published>2009-02-05T03:05:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-05:asp-ile-ajax-programlamada-divde-karakter-sorunu.html</id><summary type="html">&lt;p&gt;Sitemle ilgili bir asp sayfasını ajax ile yapıyordum.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="javascript"]&lt;br /&gt;
+function GetXmlHttpObject() {&lt;br /&gt;
+var xmlHttp = null;&lt;br /&gt;
+try {&lt;br /&gt;
+xmlHttp = new XMLHttpRequest();&lt;br /&gt;
+} catch (e) {&lt;br /&gt;
+try {&lt;br /&gt;
+xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");&lt;br /&gt;
+} catch (e) {&lt;br /&gt;
+xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+return xmlHttp;&lt;br /&gt;
+}&lt;br /&gt;
+var http;&lt;br /&gt;
+function git(url) {&lt;br /&gt;
+http = GetXmlHttpObject();&lt;br /&gt;
+if (http == null) {&lt;br /&gt;
+alert("Tarayıcınızın AJAX desteği bulunmamaktadır...");&lt;br /&gt;
+return;&lt;br /&gt;
+}&lt;br /&gt;
+http.open("GET", url, true);&lt;br /&gt;
+http.onreadystatechange = updatePage;&lt;br /&gt;
+http.send(null);&lt;br /&gt;
+}&lt;br /&gt;
+function updatePage() {&lt;br /&gt;
+if (http.readyState == 4) {&lt;br /&gt;
+var response = http.responseText;&lt;br /&gt;
+document.getElementById("deneme").innerHTML = response;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Sayfada belirli(yukarıdaki git('x.asp')şeklinde) fonksiyonla istenen
+sayfayı alıyor ve deneme adlı div'de gösteriliyor. Fakat türkçe
+karakterlerde sorun çıkıyordu. Ancak aynı sayfayı tarayıcı ile ayrı yeni
+bir sayfa olarak açtığımızda bu sorun meydana gelmiyordu. Sorun aldığım
+örneğin x.asp sayfasında meydana geliyor. div'de göstermek istediğimiz
+bu sayfanın kodlarken başına aşağıdaki kodu ekleyince sorun düzeldi:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="php"]&lt;br /&gt;
+Response.Charset="windows-1254" Response.ContentType = "text/html"&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Uzun uğraşlarım sonucunda bu sorun da böylece çözülmüş oldu.&lt;/p&gt;</summary><category term="Ajax"></category><category term="ASP"></category><category term="Div"></category><category term="Hata"></category><category term="Sorun"></category></entry></feed>

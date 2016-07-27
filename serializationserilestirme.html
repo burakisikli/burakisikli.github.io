@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+            <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <title></title>
+
+            <link href="http://www.burakisikli.com/feeds/all.atom.xml" type="application/atom+xml" rel="alternate" title=" Full Atom Feed" />
+            <link href="http://www.burakisikli.com/feeds/java.atom.xml" type="application/atom+xml" rel="alternate" title=" Categories Atom Feed" />
+
+        <!-- Bootstrap Core CSS -->
+        <link href="http://www.burakisikli.com/theme/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- Custom CSS -->
+        <link href="http://www.burakisikli.com/theme/css/clean-blog.min.css" rel="stylesheet">
+
+        <!-- Code highlight color scheme -->
+            <link href="http://www.burakisikli.com/theme/css/code_blocks/darkly.css" rel="stylesheet">
+
+        <!-- Custom Fonts -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href='http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+
+
+        <meta name="tags" contents="Serializable" />
+        <meta name="tags" contents="Serialization" />
+        <meta name="tags" contents="Serileştirme" />
+        <meta name="tags" contents="Serilize" />
+
+
+			<meta property="og:locale" content="en">
+		<meta property="og:site_name" content="">
+
+	<meta property="og:type" content="article">
+	<meta property="article:author" content="">
+	<meta property="og:url" content="http://www.burakisikli.com/serializationserilestirme.html">
+	<meta property="og:title" content="Serialization(Serileştirme)">
+	<meta property="og:description" content="">
+	<meta property="og:image" content="http://www.burakisikli.com/">
+	<meta property="article:published_time" content="2009-06-17 18:05:00+03:00">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.burakisikli.com/"></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Header -->
+        <header class="intro-header" style="background-image: url('http://www.burakisikli.com/theme/images/post-bg.jpg')">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <div class="post-heading">
+                        <h1>Serialization(Serileştirme)</h1>
+                        <span class="meta">Posted by
+                                <a href="http://www.burakisikli.com/author/burakisikli.html">burakisikli</a>
+                             on Wed 17 June 2009
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+    <!-- Post Content -->
+    <article>
+        <p>Bir nesne herhangi stream'a (örneğin bir file'a ) yazılabilir ve bir
+stream'den okunabilir. Programın çalışması esnasında hafızada bulunan
+nesneler program bitince (kapatılınca) yok olur. Ancak serialization
+tekniğiyle bir nesne diske veya herhangi bir yere kaydedilebilir. Bir
+program, kapanmadan önce bir dosyayaya sakladığı bir nesneyi daha sonra
+tekrar çalıştırıldığında dosyadan okuyabilir. Hatta bir programın
+yazdığı nesneyi aynı dosyadan başka bir program da okuyabilir. Bu
+şekilde nesnelerin network'te bir yerden diğerine gönderilmesi,
+veritabanına normal bir veri gibi kaydedilebilmesi mümkün
+olabilmektedir.</p>
+<h2>Serializable</h2>
+<p>Bir class'ın serialization'a tabi tutulabilmesi için bazı koşulları
+sağlaması gerekir.</p>
+<p>1. Class public olmalı.</p>
+<p>2. Serializable' interface'ini implement etmeli. Bu interface'de
+implement edilecek herhangi bir method yoktur. Sadece class'ın serialize
+edilebilemesine class yazarının izin verdiği anlamına gelir. Bazı
+classlar güvenlik v.s. nedenlerle buna izin vermek istemeyebilir.
+Nesnenin içerisindeki bütün veri serializable olmalıdır. Bir tane bile
+serializable olmayan nesne varsa işlem başarısız olur.</p>
+<p>3. Default (parametresiz) bir constructor'ı olmalıdır. Hiç bir
+constructor yazılmaması durumunda da default contructor'un geçerli
+olduğu için yine sorun olmaz.</p>
+<p>Öncelikle yaratacağımız objeyi  <code>Serializable</code>yapmalıyız. Bunun için 
+<code>Serializable</code> implement etmeliyiz.</p>
+<p><strong>PersistentTime.java</strong></p>
+<p>[sourcecode language="java"]</p>
+<p>package edu.burakkk.sun;</p>
+<p>import java.io.Serializable;<br />
+import java.util.Date;<br />
+import java.util.Calendar;</p>
+<p>public class PersistentTime implements Serializable {<br />
+static final long serialVersionUID = 10275539472837495L;<br />
+private Date time;</p>
+<p>public PersistentTime() {<br />
+time = Calendar.getInstance().getTime();<br />
+}</p>
+<p>public Date getTime() {<br />
+return time;<br />
+}<br />
+}</p>
+<p>[/sourcecode]</p>
+<p><strong>FlattenTime.java</strong></p>
+<p>[sourcecode language="java"]</p>
+<p>package edu.burakkk.sun;</p>
+<p>import java.io.ObjectOutputStream;<br />
+import java.io.FileOutputStream;<br />
+import java.io.IOException;</p>
+<p>public class FlattenTime {<br />
+public static void main(String[] args) {<br />
+String filename = "time.ser";<br />
+if (args.length &gt; 0) {<br />
+filename = args[0];<br />
+}<br />
+PersistentTime time = new PersistentTime();<br />
+FileOutputStream fos = null;<br />
+ObjectOutputStream out = null;<br />
+try {<br />
+fos = new FileOutputStream(filename);<br />
+out = new ObjectOutputStream(fos);<br />
+out.writeObject(time);<br />
+out.close();<br />
+} catch (IOException ex) {<br />
+ex.printStackTrace();<br />
+}<br />
+}<br />
+}</p>
+<p>[/sourcecode]</p>
+<p><strong>InflateTime.java</strong></p>
+<p>[sourcecode language="java"]</p>
+<p>package edu.burakkk.sun;</p>
+<p>import java.io.ObjectInputStream;<br />
+import java.io.FileInputStream;<br />
+import java.io.IOException;<br />
+import java.util.Calendar;</p>
+<p>public class InflateTime {<br />
+public static void main(String[] args) {<br />
+String filename = "time.ser";<br />
+if (args.length &gt; 0) {<br />
+filename = args[0];<br />
+}<br />
+PersistentTime time = null;<br />
+FileInputStream fis = null;<br />
+ObjectInputStream in = null;<br />
+try {<br />
+fis = new FileInputStream(filename);<br />
+in = new ObjectInputStream(fis);<br />
+time = (PersistentTime) in.readObject();<br />
+in.close();<br />
+} catch (IOException ex) {<br />
+ex.printStackTrace();<br />
+} catch (ClassNotFoundException ex) {<br />
+ex.printStackTrace();<br />
+}<br />
+// print out restored time<br />
+System.out.println("Flattened time: " + time.getTime());<br />
+System.out.println();<br />
+// print out the current time<br />
+System.out.println("Current time: " +
+Calendar.getInstance().getTime());<br />
+}<br />
+}</p>
+<p>[/sourcecode]</p>
+<p>Bu programda FlattenTime execute ettiğimizde o andaki saati objeye
+alarak time.ser adıyla kaydediyor. Daha sonra InflateTime sınıfıyla da
+bu kaydedilmiş objeyi okuyabiliriz. Aynı zamanda programı derlerken
+argüman olarak dosya adını verdiğimiz takdirde obje verdiğimizle adla
+kaydedilip okunacaktır. Dikkati çeken diğer bir konu
+<code>static final long serialVersionUID = 10275539472837495L</code>kod satırıdır.
+Aslında bu serilize ettiğimiz objeyi daha sonra tanımlada
+kullanabileceğimiz bir anahtar değerdir.  Fakat olması şart değildir.
+<code>ObjectOutputStream</code> veya<code>ObjectInputStream</code> ile obje dosyasını yazma
+ve okumayı sağlıyoruz. Serialization özellikle network(ağ) programlamada
+çok kullanılan bir özelliktir.</p>
+    </article>
+
+    <hr>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'serializationserilestirme.html';
+                var disqus_url = 'http://www.burakisikli.com/serializationserilestirme.html';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    <ul class="list-inline text-center">
+                        <li>
+                            <a href="http://twitter.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="http://github.com/burakisikli">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- jQuery -->
+    <script src="http://www.burakisikli.com/theme/js/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="http://www.burakisikli.com/theme/js/clean-blog.min.js"></script>
+
+<script type="text/javascript">
+    var disqus_shortname = 'burakisikli-com';
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+</body>
+
+</html>

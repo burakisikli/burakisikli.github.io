@@ -1,0 +1,3074 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="http://www.burakisikli.com/" rel="alternate"></link><link href="http://www.burakisikli.com/feeds/all.atom.xml" rel="self"></link><id>http://www.burakisikli.com/</id><updated>2009-08-14T02:50:00+03:00</updated><entry><title>Google App Engine Java İpuçları</title><link href="http://www.burakisikli.com/google-app-engine-java-ipuclari.html" rel="alternate"></link><published>2009-08-14T02:50:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-08-14:google-app-engine-java-ipuclari.html</id><summary type="html">&lt;p&gt;ğını bulmanız mümkün. Ben de ayrıca java programcıları ve teknolojileri
+derneği tarafından yayınlanmış sitenin &lt;a href="http://burakisikli.files.wordpress.com/2009/08/google-app-engine.pdf"&gt;pdf
+dosyasını&lt;/a&gt;veriyorum.&lt;/p&gt;
+&lt;p&gt;Kurulumu yapıp örnek bir proje oluşturduktan sonra uygulamanın nasıl
+çalıştığını anlayalım. Öncelikle deploy yapmadan projeniz web'e atılmaz.
+Bu nedenle de yerel alanda istediğiniz kadar değişiklik yaparken asıl
+sayfanız(belirttiğinizad.appspot.com) herhangi bir değişiklik olmaz.&lt;/p&gt;
+&lt;p&gt;Her zaman belirttiğiniz proje isminin servlet'i oluşturuluyor. Örneğin
+deneme diye proje oluşturuyorsanız servlet'inizin adı otomatik olarak
+denemeServlet oluyor. Peki bunu nasıl değiştireceğiz? Refactor
+kullanmanız ismini değiştirmek için yeterli gelmiyor. Bunu deneyip
+deploy ederseniz karşınıza boş bir sayfa çıkacaktır. Bildiğiniz üzere bu
+servlet'imizin bağlı olduğu web.xml dosyası olması gerekiyor. İşte bu
+dosya war klasörünün altındaki web-inf klasöründedir. Aşağıdakine benzer
+bir dosya karşınıza gelecektir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;web.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="xml"]&lt;/p&gt;
+&lt;p&gt;
+
+&lt;web-app xsi="http://www.w3.org/2001/XMLSchema-instance" &lt;br&gt;&lt;/web-app&gt;
+xmlns="http://java.sun.com/xml/ns/javaee"  
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
+http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd" version="2.5"&amp;gt;  
+&lt;servlet&gt;  
+&lt;servlet-name&gt;Deneme&lt;/servlet-name&gt;  
+&lt;servlet-class&gt;edu.burakkk.google.app.DenemeServlet&lt;/servlet-class&gt;  
+&lt;/servlet&gt;  
+&lt;servlet-mapping&gt;  
+&lt;servlet-name&gt;Deneme&lt;/servlet-name&gt;  
+&lt;url-pattern&gt;/deneme&lt;/url-pattern&gt;  
+&lt;/servlet-mapping&gt;  
+&lt;welcome-file-list&gt;  
+&lt;welcome-file&gt;index.html&lt;/welcome-file&gt;  
+&lt;/welcome-file-list&gt;  
+&lt;/web-app&gt;
+
+&lt;/p&gt;
+
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Buradan servlet-class ismini de değiştirerek servlet isminde kolayca
+değişiklik yapabilirsiniz. Ayrıca url-pattern ile servletinizin
+çalışacağı uzantıyı da değiştirebilirsiniz. deneme yerine deneme.do
+yapabilirsiniz. Başlangıçta google app engine tarafından oluşturulan
+index.html yerine de welcome-file değiştirerek de kendi istediğiniz
+dosyayı hatta çalıştıracağınız servlet'i yapabilirsiniz. Bunun anlamı
+xxx.appspot.com sayfasını açtığınızda kendi tarafından oluşturulmuş
+index sayfası yerine sizin sayfanız çıkabilir.&lt;/p&gt;
+&lt;p&gt;Eğer uygulama ismini veya versiyonu değiştirmek istiyorsanız aynı
+dizindeki(war/web-inf) appengine-web.xml dosyasından yapacaksınız.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;appengine-web.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="xml"]&lt;/p&gt;
+&lt;p&gt;
+
+&lt;appengine-web-app xmlns="http://appengine.google.com/ns/1.0"&gt;  
+&lt;application&gt;bisikli&lt;/application&gt;  
+&lt;version&gt;1&lt;/version&gt;
+
+&lt;/p&gt;
+
+&lt;!-- Configure java.util.logging --&gt;
+
+&lt;p&gt;&lt;system-properties&gt;&lt;/p&gt;
+&lt;p&gt;&lt;property name="java.util.logging.config.file" value="WEB-INF/logging.properties"&gt;&lt;/property&gt;
+&lt;/system-properties&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;/appengine-web-app&gt;&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Application kısmından uygulama ismini versiyon kısmından da versiyonunu
+değiştirebilirsiniz.&lt;/p&gt;
+&lt;p&gt;Bunları dikkate alarak anasayfamızda gerçek ip'nizi çıkaran bir servlet
+yapalım.&lt;/p&gt;
+&lt;p&gt;edu.burakkk.google.app isimli paket ipAlma isimli servlet yaratıyoruz.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ipAlma.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.google.app;&lt;/p&gt;
+&lt;p&gt;import java.io.IOException;&lt;br /&gt;
+import java.io.PrintWriter;&lt;/p&gt;
+&lt;p&gt;import javax.servlet.http.*;&lt;/p&gt;
+&lt;p&gt;@SuppressWarnings("serial")&lt;br /&gt;
+public class ipAlma extends HttpServlet {&lt;br /&gt;
+public void doGet(HttpServletRequest req, HttpServletResponse resp)&lt;br /&gt;
+throws IOException {&lt;br /&gt;
+resp.setContentType("text/html");&lt;br /&gt;
+PrintWriter out = resp.getWriter();&lt;br /&gt;
+out.println("IP: " + req.getRemoteHost());&lt;br /&gt;
+out.flush();&lt;br /&gt;
+out.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;web.xml&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="xml"]&lt;/p&gt;
+&lt;p&gt;
+
+&lt;web-app xsi="http://www.w3.org/2001/XMLSchema-instance" &lt;br&gt;&lt;/web-app&gt;
+xmlns="http://java.sun.com/xml/ns/javaee"  
+xmlns:web="http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd"  
+xsi:schemaLocation="http://java.sun.com/xml/ns/javaee  
+http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd" version="2.5"&amp;gt;  
+&lt;servlet&gt;  
+&lt;servlet-name&gt;ipAlma&lt;/servlet-name&gt;  
+&lt;servlet-class&gt;edu.burakkk.google.app.ipAlma&lt;/servlet-class&gt;  
+&lt;/servlet&gt;  
+&lt;servlet-mapping&gt;  
+&lt;servlet-name&gt;ipAlma&lt;/servlet-name&gt;  
+&lt;url-pattern&gt;/ipAlma&lt;/url-pattern&gt;  
+&lt;/servlet-mapping&gt;  
+&lt;welcome-file-list&gt;  
+&lt;welcome-file&gt;ipAlma&lt;/welcome-file&gt;  
+&lt;/welcome-file-list&gt;  
+&lt;/web-app&gt;
+
+&lt;/p&gt;
+
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu projeyi deploy ettiğinizde anasayfanızda IP: XXXXX şeklinde ip'nizi
+yazan bir web sayfası çıkacaktır. Örnek sayfaya
+&lt;a href="http://bisikli.appspot.com/"&gt;http://bisikli.appspot.com/&lt;/a&gt;(sizinUygulamaAdınız.appspot.com)
+adresinden ulaşabilirsiniz. Ayrıca aynı sayfaya servlet'mize
+&lt;a href="http://bisikli.appspot.com/ipAlma"&gt;http://bisikli.appspot.com/ipAlma&lt;/a&gt; bu adresle de ulaşabiliriz.&lt;/p&gt;</summary><category term="App"></category><category term="Engine"></category><category term="Google"></category><category term="Google App Engine"></category><category term="Java"></category></entry><entry><title>Dinamik Programlama(Dynamic Programming)</title><link href="http://www.burakisikli.com/dinamik-programlamadynamic-programming.html" rel="alternate"></link><published>2009-08-14T02:00:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-08-14:dinamik-programlamadynamic-programming.html</id><summary type="html">&lt;p&gt;Dinamik programlama bir problemi çözerken aynı alt-problemi birden fazla
+çözmemiz gereken durumlarda bu alt-problemi birden fazla kez çözmemizi
+engelleyen bir tekniktir. Dinamik programalama, matematik ve bilgisayar
+bilimlerinde karmaşık problemleri çözmek için kullanılan bir metottur.
+&lt;a href="http://en.wikipedia.org/wiki/Overlapping_subproblem" title="Overlapping subproblem"&gt;Overlapping
+subproblems&lt;/a&gt;
+ve &lt;a href="http://en.wikipedia.org/wiki/Optimal_substructure" title="Optimal substructure"&gt;optimal
+substructure&lt;/a&gt;
+denilen problemlerde
+uygunabiliyor.&lt;a href="http://en.wikipedia.org/wiki/Optimal_substructure" title="Optimal substructure"&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Eğer problemimiz kendi içinde alt problemlere ayrılabiliyorsa
+overlapping subproblems'dir. Buna en iyi örnek Fibanicci serisidir. Daha
+önceden &lt;a href="http://burakisikli.wordpress.com/2009/06/15/fibonacci-serisi/"&gt;bu
+yazımda&lt;/a&gt;
+fibonacci serisini anlatmıştım.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Shortest Path Optimal
+Substructure" class="alignleft
+.size-full wp-image-221" height="107" src="http://burakisikli.files.wordpress.com/2009/08/shortest_path_optimal_substructure.png" title="Shortest Path Optimal Substructure" width="200" /&gt;Fakat problemimiz
+kendi içinde alt problemlere ayrıldığında daha iyi bir performans
+sağlıyorsa buna optimal substructure deniliyor. Buna en iyi örnek ise
+greedy algoritmasıdır. Dinamik programlamada geçen programlama sözcüğü
+sadece bilgisayar programlarını kapsamamaktadır, çünkü burada
+kullandığımız program sözcüğü “matematiksel programlama” dan
+gelmektedir, ki bu da kısaca sıkça kullandığımız optimizasyon(bir nevi
+iyileştirme demek optimizasyon belki kullanmayan da vardır :) kelimesine
+denk gelmektedir.&lt;/p&gt;
+&lt;p&gt;Dinamik programlama uygulamalarımızda temel olarak 3 teknikten
+faydalanacağız:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Çözümü aynı olan alt-problemler&lt;/li&gt;
+&lt;li&gt;Büyük bir problemi küçük parçalara bölmek ve bu küçük parçaları
+    kullanarak baştaki büyük problemimizin sonucuna ulaşmak&lt;/li&gt;
+&lt;li&gt;Çözdüğümüz her alt-problemin sonucunu bir yere not almak ve
+    gerektiğinde bu sonucu kullanarak aynı problemi tekrar tekrar
+    çözmeyi engellemek.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Şimdi örneğimiz olan fibonacci dizimize başlayalım. Fibonacci dizimizi
+kısaca bir hatırlayalım.&lt;/p&gt;
+&lt;p&gt;Eğer herhangi bir sayının Fibonacci karşılığına F(n) dersek,&lt;/p&gt;
+&lt;p&gt;F(0) = F(1) = 1 olmak üzere&lt;/p&gt;
+&lt;p&gt;F(n) = F(n-1) + F(n-2)'dir.&lt;/p&gt;
+&lt;p&gt;İlk yaptığımız prosesimizin fonksiyonunu hatırlayalım:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;fib.cpp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="cpp"]&lt;br /&gt;
+// Recursive Function&lt;br /&gt;
+int fib(int num) {&lt;br /&gt;
+if ((num == 0) || (num == 1))&lt;br /&gt;
+return num;&lt;br /&gt;
+else&lt;br /&gt;
+return (fib(num - 1) + fib(num - 2));&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu kadar kısa bir kod yazarak çözümü sağlamıştık. Ancak bu yöntem kodun
+kısa olmasına rağmen performans açısından kötü bir yöntemdir.  Nedenine
+gelirsek mesela F(3)'ü adım adım hesaplayalım:&lt;/p&gt;
+&lt;p&gt;F(4) = (F(2) + F(1)))&lt;/p&gt;
+&lt;p&gt;= ((F(1) + F(0)) + F(1)) + F(2)&lt;/p&gt;
+&lt;p&gt;= ((F(1) + F(0)) + F(1)) + (F(1) + F(0))&lt;/p&gt;
+&lt;p&gt;Görüldüğü gibi F(4) değerini hesaplarken F(1)'ye 2 defa ihtiyacımız oldu
+ama 2 seferde de hesapladık. Prosesimizi değiştirerek bir de şu hale
+getirelim.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;fib2.cpp&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="k"&gt;[sourcecode language=&amp;quot;cpp&amp;quot;]&lt;/span&gt;
+&lt;span class="err"&gt;/*&lt;/span&gt;
+ &lt;span class="err"&gt;*&lt;/span&gt;
+ &lt;span class="err"&gt;*&lt;/span&gt; &lt;span class="err"&gt;Program: &lt;/span&gt; &lt;span class="err"&gt;Fibonacci&lt;/span&gt; &lt;span class="err"&gt;Series&lt;/span&gt; &lt;span class="err"&gt;v2&lt;/span&gt;
+ &lt;span class="err"&gt;*&lt;/span&gt; &lt;span class="err"&gt;Programmer:&lt;/span&gt; &lt;span class="err"&gt;Burak&lt;/span&gt; &lt;span class="err"&gt;ISIKLI&lt;/span&gt;
+ &lt;span class="err"&gt;*&lt;/span&gt;
+ &lt;span class="err"&gt;*/&lt;/span&gt;
+
+&lt;span class="c1"&gt;#include &amp;lt;iostream.h&amp;gt;&lt;/span&gt;
+
+&lt;span class="err"&gt;unsigned&lt;/span&gt; &lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;fib2(unsigned&lt;/span&gt; &lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;num)&lt;/span&gt;&lt;span class="c1"&gt;;&lt;/span&gt;
+
+&lt;span class="err"&gt;unsigned&lt;/span&gt; &lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;fibArray[1000]&lt;/span&gt;&lt;span class="c1"&gt;;&lt;/span&gt;
+
+&lt;span class="err"&gt;//&lt;/span&gt; &lt;span class="err"&gt;Main&lt;/span&gt; &lt;span class="err"&gt;Function&lt;/span&gt;
+&lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;main()&lt;/span&gt; &lt;span class="err"&gt;{&lt;/span&gt;
+ &lt;span class="err"&gt;unsigned&lt;/span&gt; &lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;number,&lt;/span&gt; &lt;span class="err"&gt;result&lt;/span&gt;&lt;span class="c1"&gt;;&lt;/span&gt;
+ &lt;span class="na"&gt;cout &amp;lt;&amp;lt; &amp;quot;Fibonacci serisinin(fib(x)) sayisini giriniz x&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;;&lt;/span&gt;
+&lt;span class="s"&gt; cin &amp;gt;&amp;gt; number;&lt;/span&gt;
+
+ &lt;span class="na"&gt;result&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;fib2(number);&lt;/span&gt;
+&lt;span class="s"&gt; cout &amp;lt;&amp;lt; &amp;quot;fib( &amp;quot; &amp;lt;&amp;lt; number &amp;lt;&amp;lt; &amp;quot; ) = &amp;quot; &amp;lt;&amp;lt; result &amp;lt;&amp;lt; &amp;quot;\n\n&amp;quot;;&lt;/span&gt;
+
+ &lt;span class="err"&gt;return&lt;/span&gt; &lt;span class="err"&gt;0&lt;/span&gt;&lt;span class="c1"&gt;;&lt;/span&gt;
+&lt;span class="err"&gt;}&lt;/span&gt;
+
+&lt;span class="err"&gt;unsigned&lt;/span&gt; &lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;fib2(unsigned&lt;/span&gt; &lt;span class="err"&gt;int&lt;/span&gt; &lt;span class="err"&gt;num)&lt;/span&gt;
+&lt;span class="err"&gt;{&lt;/span&gt;
+ &lt;span class="na"&gt;unsigned int i&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s"&gt;2;&lt;/span&gt;
+&lt;span class="s"&gt; fibArray[0] = fibArray[1] = 1;&lt;/span&gt;
+&lt;span class="s"&gt; while(i &amp;lt;= num)&lt;/span&gt;
+&lt;span class="s"&gt; {&lt;/span&gt;
+&lt;span class="s"&gt; fibArray[i] = fibArray[i - 1] + fibArray[i - 2];&lt;/span&gt;
+&lt;span class="s"&gt; i++;&lt;/span&gt;
+&lt;span class="s"&gt; }&lt;/span&gt;
+&lt;span class="s"&gt; return fibArray[num];&lt;/span&gt;
+&lt;span class="err"&gt;}&lt;/span&gt;
+
+&lt;span class="k"&gt;[/sourcecode]&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Burada yaptığımız işlem ise şu. Hesapladığımız Fibonacci sayılarını bir
+diziye kaydediyoruz. Daha sonra lazım olunca bu değerleri direkt diziden
+hazır bi şekilde alıyoruz. Böylece aynı işlemi tekrar tekrar yapmaktan
+kurtuluyoruz.&lt;/p&gt;
+&lt;p&gt;Performans karşılaştırması yapacak olursak kendi bilgisayarımda
+fibonacci(50) 8dk. 36 sn'de sonuç verirken fibonacci2(50) 0.003 sn'de
+sonuç veriyor. Daha bilimsel konuşacak olursak problemi temelde aynı
+mantıkla çalışan iki fonksiyonun birincisi O(2\^n) iken ikincisi O(n)
+zamanda çözmektedir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kaynaklar:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Dynamic_programming"&gt;http://en.wikipedia.org/wiki/Dynamic_programming&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Optimal_substructure"&gt;http://en.wikipedia.org/wiki/Optimal_substructure&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://e-bergi.com/2008/Mart/Dinamik-Programlama"&gt;http://e-bergi.com/2008/Mart/Dinamik-Programlama&lt;/a&gt;&lt;/p&gt;
+&lt;div id="_mcePaste"
+style="overflow:hidden;position:absolute;left:-10000px;top:1557px;width:1px;height:1px;"&gt;
+
+    [sourcecode language="cpp"]
+    /*
+     *
+     * Program:  Fibonacci Series v2
+     * Programmer: Burak ISIKLI
+     *
+     */
+
+    #include &lt;iostream.h&gt;
+
+    unsigned int fib2(unsigned int num);
+
+    unsigned int fibArray[1000];
+
+    // Main Function
+    int main() {
+     unsigned int number, result;
+     cout &lt;&lt; "Fibonacci serisinin(fib(x)) sayisini giriniz x = ";
+     cin &gt;&gt; number;
+
+     result = fib2(number);
+     cout &lt;&lt; "fib( " &lt;&lt; number &lt;&lt; " ) = " &lt;&lt; result &lt;&lt; "\n\n";
+
+     return 0;
+    }
+
+    unsigned int fib2(unsigned int num)
+    {
+     unsigned int i = 2;
+     fibArray[0] = fibArray[1] = 1;
+     while(i &lt;= num)
+     {
+     fibArray[i] = fibArray[i - 1] + fibArray[i - 2];
+     i++;
+     }
+     return fibArray[num];
+    }
+
+    [/sourcecode]
+
+&lt;/div&gt;</summary><category term="Dinamik"></category><category term="Dinamik Programlama"></category><category term="Dynamic"></category><category term="Fibonacci"></category><category term="Optimal Substructure"></category><category term="Overlapping Subproblems"></category><category term="Programlama"></category><category term="Programming"></category><category term="Rekürsif"></category><category term="Serisi"></category></entry><entry><title>Web Service ile Sıcaklık Dönüşümü</title><link href="http://www.burakisikli.com/web-service-ile-sicaklik-donusumu.html" rel="alternate"></link><published>2009-07-29T02:06:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-07-29:web-service-ile-sicaklik-donusumu.html</id><summary type="html">&lt;p&gt;Daha önceden blogumdaki &lt;a href="post.php?action=edit&amp;amp;post=162" title="Edit “Axis 2 Kullanılarak Web Servis Oluşturma”"&gt;Axis 2 Kullanılarak Web
+Servis Oluşturma&lt;/a&gt;
+adlı yazımda web servisin nasıl oluşturulacağını anlatmıştım. Fakat çok
+iyi bir örnek vermediğim için biraz havada kaldı. Şimdi anlatacağım
+örnekle konu tam anlamıyla oturmuş olacak. Web servislerde internette
+biraz araştırma yaparsanız en sık öne çıkan örnekler sıcaklık dönüşümü,
+para dönüşümü, kimlik sorgulama gibi hizmetler olacaktır. Bende
+bunlardan biri olan sıcaklık dönüşümünü java ve jsp kullanarak
+anlatacağım.&lt;/p&gt;
+&lt;p&gt;Yapacağımız programı iki aşamalı olarak anlatacağım. Birinci
+versiyonumuz için paket adımız
+“edu.burakkk.webservice.tempConverter.v1”. İlk önce birinci versiyonu
+yapalım.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TempConverter.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.webservice.tempConverter.v1;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+* Web Service&lt;br /&gt;
+* Temp Converter&lt;br /&gt;
+*&lt;br /&gt;
+*@version 1.0 Release 1&lt;br /&gt;
+*@author burakkk&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;public class TempConverter{&lt;br /&gt;
+public String FahrenheitToCelsius(String Input) {&lt;br /&gt;
+if (!Input.isEmpty() &amp;amp;&amp;amp; isNumber(Input)) {&lt;br /&gt;
+double result = 0;&lt;br /&gt;
+result = Double.parseDouble(Input);&lt;br /&gt;
+result = (((result) - 32) / 9) * 5;&lt;br /&gt;
+Input = Double.toString(result);&lt;br /&gt;
+return Input;&lt;br /&gt;
+} else {&lt;br /&gt;
+return "ERROR! Please enter the input number...";&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public String CelsiusToFahrenheit(String Input) {&lt;br /&gt;
+if (!Input.isEmpty() &amp;amp;&amp;amp; isNumber(Input)) {&lt;br /&gt;
+double result = 0;&lt;br /&gt;
+result = Double.parseDouble(Input);&lt;br /&gt;
+result = (((result) * 9) / 5) + 32;&lt;br /&gt;
+Input = Double.toString(result);&lt;br /&gt;
+return Input;&lt;br /&gt;
+} else {&lt;br /&gt;
+return "ERROR! Please enter the input number...";&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;private boolean isNumber(String num) {&lt;br /&gt;
+try {&lt;br /&gt;
+Double.parseDouble(num);&lt;br /&gt;
+} catch (NumberFormatException nfe) {&lt;br /&gt;
+return false;&lt;br /&gt;
+}&lt;br /&gt;
+return true;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Aslında yaptığımız programı bu şekilde kullanmak doğru olmaz. Çünkü her
+metodu çağırmak için ayrı bir fçıktır. İşte bu işlemi bu şekilde iki
+ayrı metoda bölerek rahatlıkla yapabiliriz. Özel olan metoda önce
+kullanıcı üye mi değil mi diye üyelik testi yaptırırız. Bu sebeple de
+sınıfımıza private olan ayrı bir metod daha ekleriz. Bu private metod,
+gelen kullanıcının üye olup olmadığını kontrol eder. Örneğin boolean
+türünde olursa true sonuç döndürürse istediğimiz webservisin sonucunu
+döndürürüz aksi takdirde üye olmadığına dair hata sonucunu döndürürüz.&lt;/p&gt;
+&lt;p&gt;Bu prosesimizi(web servisimizi) kullanacağımız zaman yani çağırmak için
+olan prosesimizi yapalım. Aslında bunu bir web sayfası olarak JSP ile
+yapacağız. Ancak daha öncedende anlattığım gibi web servis genel bir
+konsept olduğu için her programlama dilinde yapmak mümkündür. Ben sadece
+örnek olarak JSP kullanacağım.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TempConverter.v1.jsp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+\[sourcecode language="html"\]
+
+
+
+
+
+
+
+
+
+&lt;/p&gt;
+
+&lt;p&gt;&lt;form&lt;br&gt;&lt;/form&lt;br&gt;
+action='http://localhost:8080/WebService/services/TempConverter/FahrenheitToCelsius'&lt;br /&gt;
+method="post" target="_blank"&amp;gt;  &lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Fahrenheit to Celsius:   &lt;input type="text" size="30" name="Input"&gt;
+                           &lt;input type="submit" value="Convert"&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;/form&gt;
+&lt;form&lt;br&gt;&lt;/form&lt;br&gt;
+action='http://localhost:8080/WebService/services/TempConverter/CelsiusToFahrenheit'&lt;br /&gt;
+method="post" target="_blank"&amp;gt;  &lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Celsius to Fahrenheit:   &lt;input type="text" size="30" name="Input"&gt;
+                           &lt;input type="submit" value="Convert"&gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;/form&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;strong&gt;Ekran Görüntüsü:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Result" class="aligncenter
+.size-full wp-image-203" height="166" src="http://burakisikli.files.wordpress.com/2009/07/11.jpg" title="Result" width="380" /&gt;&lt;/p&gt;
+&lt;p&gt;Sayfamızı çalıştırdığımızda yukarıdaki gibi bir ekran karşımıza
+gelecektir. Buraya fahrenheit olarak veya celcius olarak çevirmek
+istediğimiz rakamı girip convert butonuna bastığımızda karşımıza sonuç
+gelecektir. Ancak web servis bir xml tabanlı olduğu için sonucumuz da
+xml formatında gelecektir.&lt;/p&gt;
+&lt;p&gt;Programımızın ikinci aşamasına gelelim. İkinci programımızın paket adı
+“edu.burakkk.webservice.tempConverter.v2”dır. Web servisimizi yaratalım.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TempConverter.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.webservice.tempConverter.v2;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+* Web Service&lt;br /&gt;
+* Temp Converter&lt;br /&gt;
+*&lt;br /&gt;
+*@version 1.1 Release 1&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;public class TempConverter {&lt;br /&gt;
+public String Convert(String type, String Input) {&lt;br /&gt;
+if (Input.isEmpty() || !isNumber(Input)) {&lt;br /&gt;
+return "ERROR! Please enter the input number...";&lt;br /&gt;
+}&lt;br /&gt;
+// Fahrenheit To Celsius&lt;br /&gt;
+if (type.equals("F")) {&lt;br /&gt;
+double result = 0;&lt;br /&gt;
+result = Double.parseDouble(Input);&lt;br /&gt;
+result = (((result) - 32) / 9) * 5;&lt;br /&gt;
+Input = Double.toString(result);&lt;br /&gt;
+return Input;&lt;br /&gt;
+}&lt;br /&gt;
+// Celsius To Fahrenheit&lt;br /&gt;
+else if (type.equals("C")) {&lt;br /&gt;
+double result = 0;&lt;br /&gt;
+result = Double.parseDouble(Input);&lt;br /&gt;
+result = (((result) * 9) / 5) + 32;&lt;br /&gt;
+Input = Double.toString(result);&lt;br /&gt;
+return Input;&lt;br /&gt;
+}&lt;br /&gt;
+return "ERROR! Please enter the input number...";&lt;/p&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;private boolean isNumber(String num) {&lt;br /&gt;
+try {&lt;br /&gt;
+Double.parseDouble(num);&lt;br /&gt;
+} catch (NumberFormatException nfe) {&lt;br /&gt;
+return false;&lt;br /&gt;
+}&lt;br /&gt;
+return true;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu prosesimiz bir öncekinden biraz daha farklı oldu. Bu prosesimizde tek
+fonksiyonda olayı çözdük. Ancak fahrenheit mı celcius mu olduğunu kısaca
+hangi tür olduğunu kullancıdan başkan bir değişken isteyerek yaptık. Bu
+istediğimiz değişkeni formda belirleyerek programa derdimizi anlattık.
+Böylelikle tek hamlede istediğimiz web servisi yapmış olduk. Aslında
+benim yaptığım hata döndürme olaylarını da web tarafında yapmak daha
+doğru olur. Basit bir örnek vermek istediğim için detaylı incelemedim.
+Formda javascriptle gerekli eklemeler yapılarak hatta ajax kullanılarak
+çok daha kullanışlı bir sayfa yapmak mümkün olabilir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TempConverter.v1.1.jsp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+\[sourcecode language="html"\]
+
+
+
+
+
+
+
+
+
+&lt;/p&gt;
+
+&lt;p&gt;&lt;form&lt;br&gt;&lt;/form&lt;br&gt;
+action='http://localhost:8080/WebService/services/TempConverter/Convert'&lt;br /&gt;
+method="post"&amp;gt;  &lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;Enter the input number: &lt;input type="text" size="30" name="Input"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;input type="radio" name="type" value="F"&gt;&lt;/input&gt; Fahrenheit&lt;br /&gt;
+ &lt;input type="radio" name="type" value="C" checked&gt;&lt;/input&gt; Celsius&lt;/p&gt;
+&lt;p&gt;&lt;input type="submit" value="Convert" &lt;br&gt;&lt;/input&gt; class="button"&amp;gt;&lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;&lt;/form&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;
+&lt;strong&gt;Ekran Görüntüsü:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;img alt="Result-2" class="aligncenter
+.size-full wp-image-204" height="166" src="http://burakisikli.files.wordpress.com/2009/07/12.jpg" title="Result-2" width="380" /&gt;&lt;/strong&gt;45 Celcius’u
+Fahrenheit’e çevirmek istediğimizde karşımıza gelen ekran şu şekilde
+olacaktır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ekran Görüntüsü:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;img alt="Result-3" class="aligncenter
+.size-full wp-image-205" height="66" src="http://burakisikli.files.wordpress.com/2009/07/13.jpg" title="Result-3" width="643" /&gt;&lt;br /&gt;
+&lt;/strong&gt;&lt;/p&gt;</summary><category term="Axis"></category><category term="Axis 2"></category><category term="Örnek"></category><category term="Converter"></category><category term="Dönüşümü"></category><category term="Eclipse"></category><category term="Example"></category><category term="Service"></category><category term="Servis"></category><category term="SOA"></category><category term="SOAP"></category><category term="Sıcaklık"></category><category term="Temperature"></category><category term="Web"></category><category term="Web Service"></category><category term="Web Servis"></category><category term="WSDL"></category></entry><entry><title>Programların Kullanım Alanları</title><link href="http://www.burakisikli.com/programlarin-kullanim-alanlari.html" rel="alternate"></link><published>2009-07-29T02:05:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-07-29:programlarin-kullanim-alanlari.html</id><summary type="html">&lt;p&gt;Hayatımıza son yıllarda çok fazla çeşitte kendi alanlarında özelleşmiş
+programlar girdi. Ancak biz bu programların kullanım alanlarının neler
+olduğunu bilmeden ve bazen yanlış yerlerde yanlış amaçla kullanıyoruz. 
+Bu nedenle bu yazımda bazı özellikle web tasarımıyla ilgili programların
+nerelerde ne amaçla kullanıldığını sırayla yazıyorum.Ve başlıyorum...&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Adobe Dreamweaver:&lt;/strong&gt; Web tasarımında kullanılıyor. Daha çok kodlamaya
+yönelik avantajlar sağlayan bu programımızda aynı zamanda görsel olarak
+web sayfaları da hazırlayabiliyoruz. Hepimizin bildiği zamanında
+kullandığı Frontpage'in gelişmiş versiyonu olarak da düşünebiliriz.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Adobe Flash:&lt;/strong&gt; Özellikle animasyon yapanların vazgeçemeyeceği bir
+program. Animasyonlara çok güzel ve kolaylıkla hareket verebilen action
+script denilen kendine özgü bir de programlama diliyle de
+geliştirilebilen bir programdır. Zamanında çok tutan "Karete Kamil",
+"Karşı takım taraftarını yumruklama" gibi projelerin yapıldığı bu
+programda aynı zamanda şu anda hayatımızda olan grafi2000 ve atv'de
+halen yayımlanmakta olan "harbi tivi" adlı programın animasyonları da bu
+programla yapılmaktadır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Adobe Illustrator:&lt;/strong&gt; Broşür, kapak türü tasarım yapanlar için ideal
+bir program. Amacı kapsamlı vektör grafiği geliştirmektir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Adobe Photoshop:&lt;/strong&gt; Namı çok duyulmuş "fotoşop" programı. Resimleri
+değiştirmek hatta modifiye edip olmayan bir durum yaratmada
+kullanıldığını düşündüğümüz ve bunu düşündüren filmlerin aslında
+yanıldığını biliyor musunuz? Bu programın aslında 3D grafik tasarımı
+için dizayn edilmiştir :)&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Adobe Fireworks:&lt;/strong&gt; Özellikle web sitelerinde kullanılan bu program
+grafik dizayn ve web sitesi için prototip tasarlamada kullanılıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Device Control:&lt;/strong&gt; Mobil aygıtlarda veya mobil içerikte tasarım yapmak
+ve ön görünüm almak için bu program kullanılıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bridge:&lt;/strong&gt; Medya yönetimi veya diğer bi deyişle dosya yönetimini
+sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Version Cue:&lt;/strong&gt; Özellikle web sitelerindeki versiyon kontrolünde
+kullanılıyor. Bir tür versiyon kontrol sistemidir.&lt;/p&gt;</summary><category term="Alan"></category><category term="Bridge"></category><category term="Device Control"></category><category term="Dreamweaver"></category><category term="Fireworks"></category><category term="Flash"></category><category term="Illustrator"></category><category term="Kullanım"></category><category term="Photoshop"></category><category term="Program"></category><category term="Version Cue"></category></entry><entry><title>Asal Sayı(Prime Number) Algoritması:</title><link href="http://www.burakisikli.com/asal-sayiprime-number-algoritmasi.html" rel="alternate"></link><published>2009-07-24T02:26:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-07-24:asal-sayiprime-number-algoritmasi.html</id><summary type="html">&lt;p&gt;Bir forumda gördüğüm konu üzerine ufak bir araştırma yaptım. Konuda asal
+sayıların bulma algoritmasının nasıl olacağı soruluyordu. Bu soru iki
+şekilde anlaşılabilir. Birincisi verilen sayının asal sayı olup
+olmadığı, ikincisi ise verilen sayı aralığındaki bütün asal sayıların
+bulunmasıdır. Öncelikle asal sayının ne olduğunu hatırlayalım.&lt;/p&gt;
+&lt;p&gt;'&lt;em&gt;Asal sayılar'&lt;/em&gt;, yalnız ve yalnız iki böleni olan doğal sayılardır.
+Kendisinden ve 1 sayısından başka böleni olmayan, 1'den büyük pozitif
+tam sayılar biçiminde de tanımlanmaktadır.(kendisinden küçük asal
+sayıların hiçbirine tam bölünmeyen sayılardır) Yüzden küçük asal sayılar
+2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67,
+71, 73, 79, 83, 89 ve 97 dir. Tam listesi için &lt;a href="http://tr.wikipedia.org/wiki/Asal_say%C4%B1lar_listesi"&gt;burayı
+tıklayın.&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Şimdi birinci algoritmamızı yapalım. Bu algoritmada tanımdan gidiyoruz.
+“Sayı kendisinden ve 1’den başka sayıya bölünemez”. Boolean fonksiyonu
+ve for döngüsü yardımıyla herhangi bir sayıyı bölündüğünü yakaladığımız
+takdirde false döndürerek asal sayı olmadığına karar veriyoruz. Bu
+algoritmanın çözüm karmaşıklığı &lt;em&gt;O(&lt;strong&gt;&lt;em&gt;√&lt;/em&gt;&lt;/strong&gt;n)&lt;/em&gt;’dir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Prime.cpp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="cpp"]&lt;br /&gt;
+/*&lt;br /&gt;
+* Process:  Prime Number&lt;br /&gt;
+* Programmer: Burak ISIKLI&lt;br /&gt;
+*&lt;br /&gt;
+*/&lt;/p&gt;
+&lt;p&gt;#include&amp;lt;iostream.h&amp;gt;&lt;/p&gt;
+&lt;p&gt;bool isPrimeNumber(long int num);&lt;/p&gt;
+&lt;p&gt;int main() {&lt;br /&gt;
+long int number;&lt;br /&gt;
+cout &amp;lt;&amp;lt; "Find primes: ";&lt;br /&gt;
+cin &amp;gt;&amp;gt; number;&lt;/p&gt;
+&lt;p&gt;if (isPrimeNumber(number))&lt;br /&gt;
+cout &amp;lt;&amp;lt; endl &amp;lt;&amp;lt; number &amp;lt;&amp;lt; ", is a prime number"
+&amp;lt;&amp;lt; endl;&lt;br /&gt;
+else&lt;br /&gt;
+cout &amp;lt;&amp;lt; endl &amp;lt;&amp;lt; number &amp;lt;&amp;lt; ", isn't a prime number"
+&amp;lt;&amp;lt; endl;&lt;/p&gt;
+&lt;p&gt;return 0;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;bool isPrimeNumber(long int num) {&lt;br /&gt;
+for (long int i = 2; i &amp;lt; num; i++) {&lt;br /&gt;
+if (num % i == 0)&lt;br /&gt;
+return false;&lt;br /&gt;
+}&lt;br /&gt;
+return true;&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu prosesimiz bize Çözmek istediğimiz sayıyı soruyor. Öğrenmek
+istediğimiz sayıyı girdiğimizde sayının asal olup olmadığını söylüyor.&lt;/p&gt;
+&lt;p&gt;Peki ama bu algoritmayı daha verimli yapamaz mıyız? Elbette yapabiliriz.
+Eğer n sayımızın şu şekilde bir fonksiyon aralığında olduğunu düşünürsek
+&lt;strong&gt;d (1 &amp;lt; d &amp;lt; n)&lt;/strong&gt; ve bu fonksiyonun tamamının karekökünü alırsak
+&lt;strong&gt;d~0~ (1 &amp;lt; d~0~ &amp;lt; √n)&lt;/strong&gt; &lt;strong&gt;ş&lt;/strong&gt;eklinde bir fonksiyon elde ederiz.
+Eğer n sayımızın tamamen karekökü alınabiliyorsa mükemmel karedir ancak
+asal değildir. Aksi halde farzedelimki ilk bulduğumuz bölüm &lt;strong&gt;d~1~,  √n
+&amp;lt; d~1~ &amp;lt; n&lt;/strong&gt; olsun. Ama n, √n’den az olan &lt;strong&gt;d~2~ = n / d~1~&lt;/strong&gt;
+tarafından tamamen bölünüyor. Bu nedenle tahmin yanlıştır ve eğer
+&lt;strong&gt;&lt;span style="font-weight:normal;"&gt;√n’den daha büyük bir bölen varsa o
+zaman çifti √n’den azdır. Böylelikle ifademiz kanıtlanmış oldu.&lt;/span&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Son olarak kodumuzu vermeden bir iyileştirmeden daha bahsetmeliyim. Farz
+edelimki n tek bir sayı(2 bölen olamaz) olsun. Eğer n 2’ye kalansız
+bölünemiyorsa başka hiçbir çift sayıya tamamen bölünemez. İşte bu
+iyileştirmeden sonra değişen algoritmamız ve prosesimiz şu şekilde
+oluyor:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Prime.v2.cpp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="cpp"]&lt;br /&gt;
+/*&lt;br /&gt;
+* Process:  Prime Number&lt;br /&gt;
+* Programmer: Burak ISIKLI&lt;br /&gt;
+*&lt;br /&gt;
+*/&lt;/p&gt;
+&lt;p&gt;#include&amp;lt;iostream.h&amp;gt;&lt;br /&gt;
+#include&amp;lt;math.h&amp;gt;&lt;/p&gt;
+&lt;p&gt;bool isPrimeNumber(long int num);&lt;/p&gt;
+&lt;p&gt;int main() {&lt;br /&gt;
+long int number;&lt;br /&gt;
+cout &amp;lt;&amp;lt; "Find primes: ";&lt;br /&gt;
+cin &amp;gt;&amp;gt; number;&lt;/p&gt;
+&lt;p&gt;if (isPrimeNumber(number))&lt;br /&gt;
+cout &amp;lt;&amp;lt; endl &amp;lt;&amp;lt; number &amp;lt;&amp;lt; ", is a prime number"
+&amp;lt;&amp;lt; endl;&lt;br /&gt;
+else&lt;br /&gt;
+cout &amp;lt;&amp;lt; endl &amp;lt;&amp;lt; number &amp;lt;&amp;lt; ", isn't a prime number"
+&amp;lt;&amp;lt; endl;&lt;/p&gt;
+&lt;p&gt;return 0;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;bool isPrimeNumber(long int num) {&lt;br /&gt;
+if (number == 2)&lt;br /&gt;
+return true;&lt;br /&gt;
+if (number % 2 == 0)&lt;br /&gt;
+return false;&lt;br /&gt;
+for (long int i = 3; i &amp;lt;= (long int) sqrt((double) num); i++) {&lt;br /&gt;
+if (num % i == 0)&lt;br /&gt;
+return false;&lt;br /&gt;
+}&lt;br /&gt;
+return true;&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu algoritmamızın iyileştirmelerden sonraki çözüm karmaşıklığı &lt;em&gt;O(√n /
+ln(n))&lt;/em&gt; oldu.&lt;/p&gt;
+&lt;p&gt;İkinci algoritma girilen sayı aralığına kadar asal sayıları listeleme.
+Aslında bunun için özelleşmiş spesifik bir algoritma mevcut. &lt;strong&gt;“Sieve
+Algoritması”&lt;/strong&gt; adı verilen algoritmanın çözüm karmaşıklığı
+&lt;em&gt;O&lt;/em&gt;(&lt;em&gt;n&lt;/em&gt;^1\ /\ 2^loglog&lt;em&gt;n&lt;/em&gt; / log&lt;em&gt;n&lt;/em&gt;)’dir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Sieve.cpp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="cpp"]&lt;/p&gt;
+&lt;p&gt;/*&lt;br /&gt;
+* Process:  Prime Number - Sieve Algorithm&lt;br /&gt;
+* Programmer: Burak ISIKLI&lt;br /&gt;
+*&lt;br /&gt;
+*/&lt;/p&gt;
+&lt;p&gt;#include &amp;lt;iostream.h&amp;gt;&lt;br /&gt;
+#include &amp;lt;math.h&amp;gt;&lt;br /&gt;
+#include &amp;lt;assert.h&amp;gt;&lt;br /&gt;
+#include &amp;lt;time.h&amp;gt;&lt;/p&gt;
+&lt;p&gt;int main() {&lt;br /&gt;
+int i;&lt;br /&gt;
+clock_t start, stop;&lt;br /&gt;
+double t = 0.0;&lt;br /&gt;
+cout &amp;lt;&amp;lt; "Find primes up to: ";&lt;br /&gt;
+cin &amp;gt;&amp;gt; i;&lt;/p&gt;
+&lt;p&gt;assert((start = clock())!=-1);&lt;/p&gt;
+&lt;p&gt;//create prime list&lt;br /&gt;
+int prime[i];&lt;br /&gt;
+int c1, c2, c3;&lt;/p&gt;
+&lt;p&gt;//fill list with 0 - prime&lt;br /&gt;
+for (c1 = 2; c1 &amp;lt;= i; c1++) {&lt;br /&gt;
+prime[c1] = 0;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;//set 0 and 1 as not prime&lt;br /&gt;
+prime[0] = 1;&lt;br /&gt;
+prime[1] = 1;&lt;/p&gt;
+&lt;p&gt;//find primes then eliminate their multiples (0 = prime, 1 = composite)&lt;br /&gt;
+for (c2 = 2; c2 &amp;lt;= (int) sqrt(i) + 1; c2++) {&lt;br /&gt;
+if (prime[c2] == 0) {&lt;br /&gt;
+c1 = c2;&lt;br /&gt;
+for (c3 = 2 * c1; c3 &amp;lt;= i + 1; c3 = c3 + c1) {&lt;br /&gt;
+prime[c3] = 1;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;stop = clock();&lt;br /&gt;
+t = stop - start;&lt;/p&gt;
+&lt;p&gt;//print primes&lt;br /&gt;
+for (c1 = 0; c1 &amp;lt; i + 1; c1++) {&lt;br /&gt;
+if (prime[c1] == 0)&lt;br /&gt;
+cout &amp;lt;&amp;lt; c1 &amp;lt;&amp;lt; "\t";&lt;br /&gt;
+}&lt;br /&gt;
+cout &amp;lt;&amp;lt; endl &amp;lt;&amp;lt; "Run time: " &amp;lt;&amp;lt; t &amp;lt;&amp;lt; endl;
+//print time to find primes&lt;/p&gt;
+&lt;p&gt;return 0;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu prosesimiz bize hangi sayıya kadar bulmak istediğimizi soruyor.
+Sayıyı girdiğimiz takdirde asal sayıları listeleyip çalışma süresini
+yazıyor.&lt;/p&gt;
+&lt;p&gt;Asal sayılar özellikle şifreleme(cryptography) alanında sıkça kullanılan
+bir konudur. Örneğin bizden 100 basamaklı asal sayı üretilmesi istense,
+görünüş olarak algoritmamız iyi bir zamanda sayıları kontrol edemez.
+İşte bu nedenle bizim algoritmamız pratikte kullanılmak amacıyla
+uygulanmıştır. Ancak büyük sayıların asal olup olmadığını test etmek
+istediğimizde olasılıksal algoritma(probabilistic algorithm) kullanılır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kaynaklar:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://tr.wikipedia.org/wiki/Asal_say%C4%B1"&gt;http://tr.wikipedia.org/wiki/Asal_say%C4%B1&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes"&gt;http://en.wikipedia.org/wiki/Sieve_of_Eratosthenes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.dreamincode.net/code/snippet3315.htm"&gt;http://www.dreamincode.net/code/snippet3315.htm&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://mathworld.wolfram.com/PrimeNumber.html"&gt;http://mathworld.wolfram.com/PrimeNumber.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.algolist.net/Algorithms/Number_theoretic_algorithms/Sieve_of_Eratosthenes"&gt;http://www.algolist.net/Algorithms/Number_theoretic_algorithms/Sieve_of_Eratosthenes&lt;/a&gt;&lt;/p&gt;</summary><category term="Asal"></category><category term="Asal Sayı"></category><category term="Cryptography"></category><category term="Prime"></category><category term="Prime Number"></category><category term="Sieve"></category><category term="Sieve Algorithm"></category><category term="Sieve of Eratosthenes"></category><category term="Şifreleme"></category></entry><entry><title>Axis 2 Kullanılarak Web Servis Oluşturma</title><link href="http://www.burakisikli.com/axis-2-kullanilarak-web-servis-olusturma.html" rel="alternate"></link><published>2009-07-14T02:12:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-07-14:axis-2-kullanilarak-web-servis-olusturma.html</id><summary type="html">&lt;p&gt;“Web servis nedir” yazımda web servisin ne olduğunu nerelerde ne amaçla
+kullandığını anlatmaya çalıştım ancak örnek vermeyince konu biraz havada
+kaldı. Bu nedenle eğer web servis nedir bilmiyorsanız önce &lt;a href="../2009/07/04/web-servicesweb-servis-nedir/"&gt;bu
+yazımı&lt;/a&gt; okumanızı öneririm.&lt;/p&gt;
+&lt;p&gt;Örnek olarak Axis 2’yi kullanarak web servis oluşturup buna bağlanarak
+gerekli bilgiyi alacağız.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Gerekenler:&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Java&lt;/li&gt;
+&lt;li&gt;Axis 2 Version 1.4&lt;/li&gt;
+&lt;li&gt;Eclipse&lt;/li&gt;
+&lt;li&gt;Tomcat&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Örneğimize geçmeden önce axis nedir onu anlamalıyız.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Axis 2:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Axis 2, web servisler için oluşturulmuş çekirdek makinadır(core engine).
+Bize SOAP kullanılarak dizayn ve yazma sağlayan apache tarafından
+geliştirilmiş proje diyebiliriz. Java ve C programlama dillerini
+desteklemektedir. Ayrıca
+&lt;a href="http://en.wikipedia.org/wiki/REST" title="REST"&gt;REST&lt;/a&gt; ve &lt;a href="http://en.wikipedia.org/wiki/Spring_Framework" title="Spring Framework"&gt;Spring
+Framework&lt;/a&gt;
+desteği de mevcuttur.&lt;/p&gt;
+&lt;p&gt;Axis 2 bazı özellikleri şunlardır:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Yeni XML işleme(process) çekirdeği modeli, AXIOM (&lt;strong&gt;AXI&lt;/strong&gt;s
+    &lt;strong&gt;O&lt;/strong&gt;bject &lt;strong&gt;M&lt;/strong&gt;odel)&lt;/li&gt;
+&lt;li&gt;A blocking ve non-blocking istemci API (application
+    programming interface)&lt;/li&gt;
+&lt;li&gt;WS-Addressing desteği&lt;/li&gt;
+&lt;li&gt;HTTP (Hypertext Transfer Protocol), SMTP (Simple Mail Transfer
+    Protocol), ve TCP (Transmission Control Protocol) iletişimi için
+    destek&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;Axis 2 Mimarisi:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;img alt="axis2" class="aligncenter
+.size-full wp-image-172" height="454" src="http://burakisikli.files.wordpress.com/2009/07/axis2.gif" title="axis2" width="562" /&gt;&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Kısaca bir SOAP uygulama çatısı olduğunu gördük. Tomcat gibi servlet
+motorlarına eklenebilir. Bizim tarifimizde kullanacagımız bölüm WSDL’den
+Java sınıfları üreten kısım olacak. Daha detaylı bilgi için lütfen
+&lt;a href="http://ws.apache.org/axis2/"&gt;burayı&lt;/a&gt; tıklayınız.&lt;/p&gt;
+&lt;p&gt;Axis 2’yi binary dosyasını &lt;a href="http://ws.apache.org/axis2/download/1_4/download.cgi"&gt;bu
+linkten&lt;/a&gt;
+indirdikten sonra kurmaya başlayabiliriz. Axis’in kurulum kısmı biraz
+tarif modunda olacak ama elimden geldiğince her adımı nedenini detaylı
+anlatmaya çalışacağım.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1-)&lt;/strong&gt; Binary dosyasını istediğiniz herhangi bir dizine açtıktan sonra
+Eclipse IDE’sini açıyoruz. Menüden sırasıyla &lt;em&gt;Window -&amp;gt; Preferences&lt;/em&gt;
+seçeneğini tıklıyoruz. Açılan menüden Web Services’dan Axis2 Prefences
+seçeneğini seçiyoruz. Karşımıza aşağıdaki resimdeki gibi bir ekran
+gelecektir. Axis2’nin kurulu olduğu dizini seçiyoruz. Böylelikle
+Eclipse’e axis2’yi tanıtmış oluyoruz.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Step
+1" class="aligncenter
+.size-full wp-image-173" height="536" src="http://burakisikli.files.wordpress.com/2009/07/swb_1.png" title="Step 1" width="626" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2-)&lt;/strong&gt; İkinci adımımız dinamik bir web projesi oluşturmaktır. &lt;em&gt;File
+&amp;gt; New &amp;gt; Project&lt;/em&gt; seçeneğinden web bölmesinin altında &lt;em&gt;Dynamic Web
+Project&lt;/em&gt; seçiyoruz. Proje için bir isim veriyoruz. Biz örneğimizde
+WebService adını kullanacağınız.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Step
+2" class="aligncenter
+.size-full wp-image-174" height="500" src="http://burakisikli.files.wordpress.com/2009/07/swb_2.png" title="Step 2" width="500" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Step
+2" class="aligncenter
+.size-full wp-image-175" height="616" src="http://burakisikli.files.wordpress.com/2009/07/3.jpg" title="Step 2" width="525" /&gt;&lt;/p&gt;
+&lt;p&gt;Burada dikkat edilmesi gereken nokta Configuration kısmıdır. Tomcat’in
+seçeneğinin yanında bulunan Modify butonuna tıkladıktan sonra aşağıdaki
+gibi bir menü açılacaktır. Burada “Axis2 Web Services” seçeneğinin
+işaretli olmasına dikkat etmemiz gerekiyor.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Step
+2" class="aligncenter
+.size-full wp-image-176" height="518" src="http://burakisikli.files.wordpress.com/2009/07/4.jpg" title="Step 2" width="617" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;3-)&lt;/strong&gt; Artık web servisimize ait sınıflarımızı oluşturmaya
+başlayabiliriz. edu.burakkk.webservice.example paket isimli MyService
+adında bir  sınıf oluşturuyoruz.&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Step
+3" class="size-full
+.wp-image-177 aligncenter" height="630" src="http://burakisikli.files.wordpress.com/2009/07/5.jpg" title="Step 3" width="540" /&gt;&lt;/p&gt;
+&lt;p&gt;Sınıfımıza aşağıdaki kodu yazıyoruz:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SumService.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;
+\[sourcecode language="java"\]
+
+&lt;/pre&gt;
+package edu.burakkk.webservice.example;
+
+/\*\*  
+\* Web Service Example  
+\* Sum of two numbers  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*  
+\*\*/
+
+public class SumService {  
+public String sum(Integer a, Integer b) {  
+return a + " + " + b + " = " + (a + b);  
+}  
+}  
+\[/sourcecode\]
+
+**4-)** SumService sınıfımıza sağ tıklıyoruz. Web Services -&amp;gt; Create
+Web Service seçeneğine tıklıyoruz. Ekrana gelen menüde Web Service
+runtime seçeniğinin Axis 2 olmasını sağlıyoruz. Bunun için yazının
+üstüne tıklayarak Axis 2 seçiyoruz.
+
+![Step
+4](http://burakisikli.files.wordpress.com/2009/07/6.jpg "Step 4"){.aligncenter
+.size-full .wp-image-178 width="701" height="705"}
+
+![Step
+4](http://burakisikli.files.wordpress.com/2009/07/7.jpg "Step 4"){.aligncenter
+.size-full .wp-image-179 width="564" height="503"}
+
+![Step
+4](http://burakisikli.files.wordpress.com/2009/07/8.jpg "Step 4"){.aligncenter
+.size-full .wp-image-180 width="705" height="747"}
+
+![Last
+Step](http://burakisikli.files.wordpress.com/2009/07/9.jpg "Last Step"){.aligncenter
+.size-full .wp-image-181 width="705" height="747"}
+
+**5-)** Start Server butonuna bastıktan sonra web servisimiz yaratılmış
+ve başlatılmış olacaktır. Web servis’e ulaşmak için
+*&lt;http://localhost:8080/WebService/services/SumService/sum?a=6&amp;b=76&gt;*
+yazdığımız takdirde aşağıdaki gibi bir ekran karşımıza gelecektir.
+
+![Result](http://burakisikli.files.wordpress.com/2009/07/10.jpg "Result"){.size-full
+.wp-image-182 .alignnone width="285" height="105"}
+
+Web servise ulaştırken, a ve b değişkenlerini yazdıktan sonra
+toplayacağımız sayıları yazıyoruz. Biz örnek olarak a’ya 6, b’ye de 76
+değerini verdik. Ayrıca Axis 2’nin oluşturduğu wsdl dosyasına
+&lt;http://localhost:8080/WebService/services/SumService?wsdl&gt; linkinden
+ulaşabiliriz. Şimdilik bu basit örnek bize yol göstermek web servisin ne
+olduğunu anlamak içindi. Gelecek web serviste daha detaylı bir örnekle
+daha da anlaşılır hale gelecektir.
+
+**Kaynaklar:**
+
+&lt;http://en.wikipedia.org/wiki/Apache_Axis2&gt;
+
+&lt;http://www.ibm.com/developerworks/webservices/library/ws-webaxis1/&gt;
+
+&lt;http://www.javaworld.com/javaworld/jw-09-2003/jw-0912-fop.html?page=2&gt;
+
+&lt;http://omeryurduseven.blogspot.com/2008/07/web-service-sample-in-eclipse-using.html&gt;
+
+&lt;http://javamanyaklari.com/2007/06/axis-ile-stub-olusturarak-web-servis-kullanimi.jsp&gt;
+
+&lt;http://eclipse.dzone.com/articles/web-services-development-with-&gt;</summary><category term="Axis"></category><category term="Axis 2"></category><category term="Eclipse"></category><category term="Servis"></category><category term="SOA"></category><category term="SOAP"></category><category term="Web"></category><category term="Web Service"></category><category term="Web Servis"></category><category term="WSDL"></category></entry><entry><title>Web Services(Web Servis) Nedir?</title><link href="http://www.burakisikli.com/web-servicesweb-servis-nedir.html" rel="alternate"></link><published>2009-07-04T19:27:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-07-04:web-servicesweb-servis-nedir.html</id><summary type="html">&lt;p&gt;Web servisleri Haziran 2000'de ortaya çıkan bir çok yazılım firması
+tarafından yoğun bir destek bulan bir modeldir. Web servisleri açık
+internet standartlarına dayanır. Henüz gelişme ve olgunlaşma aşamasında
+olan bu modelle ilgili olarak bu aşamada ortaya çıkan ve kullanılan
+çekirdek standartlar SOAP, WSDL ve UDDI'dır.  Web servisleri
+anlayabilmeniz için öncelikle HTML ve XML dillerinin temelini anlamanız
+gerekiyor.&lt;/p&gt;
+&lt;p&gt;Web servisler, &lt;a href="http://en.wikipedia.org/wiki/Object_Management_Group" title="Object Management Group"&gt;Object Management
+Group&lt;/a&gt;(OMG),
+Common Object Request Broker Architecture
+(&lt;a href="http://en.wikipedia.org/wiki/CORBA" title="CORBA"&gt;CORBA&lt;/a&gt;),
+&lt;a href="http://en.wikipedia.org/wiki/Microsoft" title="Microsoft"&gt;Microsoft&lt;/a&gt;'s
+Distributed Component Object Model
+(&lt;a href="http://en.wikipedia.org/wiki/DCOM" title="DCOM"&gt;DCOM&lt;/a&gt;)  veya
+&lt;a href="http://en.wikipedia.org/wiki/SUN" title="SUN"&gt;SUN&lt;/a&gt;'s Java/Remote Method
+Invocation
+(&lt;a href="http://en.wikipedia.org/wiki/Java_remote_method_invocation" title="Java remote method invocation"&gt;RMI&lt;/a&gt;)
+gibi diğer yaklaşımlarla fonksiyonellik bakımından çok benzerlik
+gösteriyor.&lt;/p&gt;
+&lt;p&gt;Web servisleri modelini destekleyen Microsoft, IBM, Sun, HP, Oracle ve
+daha bir çok firma bu konuda yoğun bir şekilde çalışmakta ve web
+servisleri yazılım ve uygulama geliştirme araçlarını geliştiricilere
+sunmaktadırlar. Bu konudaki firmaların yoğun desteğinden dolayı uygulama
+bütünleştirmesi konusunda ortaya çıkacak hakim ortamın web servisleri
+modeline dayanacağı yönündedir.&lt;/p&gt;
+&lt;p&gt;Peki ama web servis nerelerde kullanılıyor?&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Web Servisler uygulama bileşenidir&lt;/li&gt;
+&lt;li&gt;Web Servisler açık protokolleri(open protocols)
+    kullanarak haberleşir.&lt;/li&gt;
+&lt;li&gt;Web Servisler kendi kendine yetebilen ve kendinden tanımlıdırlar.&lt;/li&gt;
+&lt;li&gt;Web Servisler UDDI kullanılarak keşfedilebilir.&lt;/li&gt;
+&lt;li&gt;Web Servisler diğer uygulamalar tarafından kullanılabilir.&lt;/li&gt;
+&lt;li&gt;Web Servisler XML temeline dayanır yani XML tabanlı
+    bir teknolojidir.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Web servisler ile diğer programlama dilleri veya diğer platformlardan
+xml ile erişilebilir bu sayede platformdan ve programlama dilinden
+bağımsız olarak aynı uygulamayı yapabiliriz. Bunun için temel platform
+elemenleri şunlardır:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SOAP (Simple Object Access Protocol)&lt;/li&gt;
+&lt;li&gt;UDDI (Universal Description, Discovery and Integration)&lt;/li&gt;
+&lt;li&gt;WSDL (Web Services Description Language)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Web Servislerin iki temel kullanımı vardır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;1-) Reusable application-components(Yeniden kullanılabilir uygulama
+bileşenleri)&lt;br /&gt;
+&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Bazı uygulama bileşenleri birden fazla yerde değişik şekillerde
+kullanılabilir. Web servisler bunu sağlayabilir. Örneğin para birimi
+dönüşümü, hava durumu raporları veya dil tercümanlığını dahi servis
+olarak uygulama bileşeni halinde sunabilir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;2-) Connect existing software&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Web Servisler verilen farklı uygulamaların veri bağlantısı için
+birliktelik(interoperability) problemini çözmenize yardım edebilir. Web
+Servisleri ile veriyi farklı uygulamalar ve farklı platformlar arasında
+değiştirebilirsiniz.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;SOAP(Simple Object Access Protocol):&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;SOAP, XML tabanlı uygulamalarda HTTP üzerinden bilgi değişimine izin
+veren protokoldür. Basitçe SOAP, Web Servis erişimi için protokoldür.
+RPC (Remote Procedure Call, DCOM, IIOP (Internet Inter-ORB Protocol) ve
+Java RMI bu çözümlerden bazılarıdır.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;SOAP,  mesaj göndermek için bir formattır.&lt;/li&gt;
+&lt;li&gt;SOAP, Internet üzerinden iletişim kurmak amacıyla tasarlanmıştır.&lt;/li&gt;
+&lt;li&gt;SOAP, platformdan ve programlama dilinden bağımsızdır.&lt;/li&gt;
+&lt;li&gt;SOAP, firewall(güvenlik duvarına) gelebilmeye izin verir.&lt;/li&gt;
+&lt;li&gt;SOAP W3C standardıdır.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;WSDL(Web Services Description Language):&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;WSDL, XML tabanlı web servisleri tanımlamak ve yerini belirtmek için
+tanımlanmış dildir. WSDL, W3C standardıdır. Bir anlamda dağıtık
+programlamada kullanılan IDL'e (Interface Definition Language – Arayüz
+Tanımlama Dili) benzer. Web servisi tanımı işlemler, giren ve çıkan
+mesaj formatları, ağ ve port adresleri gibi bilgileri tanımlar. Bir web
+servisi tanım belgesi aşağıdaki temel elemanları içerir:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Types: mesajlarda kullanılacak veri tiplerini belirtir.&lt;/li&gt;
+&lt;li&gt;Message: İletişimde kullanılacak measjları tanımlar.&lt;/li&gt;
+&lt;li&gt;PortType : Web servisinin içerdiği işlemleri (methods) ve ilgili
+    mesajları tanımlar.&lt;/li&gt;
+&lt;li&gt;Binding : İşlem ve mesajlarda kullanılacak veri
+    formatlarını tanımlar.&lt;/li&gt;
+&lt;li&gt;Port: Binding ve web adresinden oluşan servis noktasını tanımlar.
+    Web adresi servisin çalıştırılacağı URL'dir.&lt;/li&gt;
+&lt;li&gt;Service: Kullanılan port'lar kümesidir.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;UDDI(Universal Description, Discovery and Integration):&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;UDDI, şirketlerin web servisler için kayıt edebildiği ve arayabildiği
+dizin servisidir. UDDI Kurum Kayıt Servisi (UDDI Business Registry)
+kurum ve web servisleri bilgilerini saklayan sunuculardır. Bu sunucular
+servis sağlayıcılarından gelen bilgilerini kendi veritabanlarına kayıt
+ederek diğer kurumların erişimine açar. Şu anda aktif olarak çalışan
+kurum kayıt sunucuları uddi.microsoft.com ve uddi.ibm.com ‘dur.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;UDDI, web servisler hakkında bilgi depolandığı dizinlerdir.&lt;/li&gt;
+&lt;li&gt;UDDI, WSDL tarafından tanımlanmış web servis arayüz(interface)
+    dizinidir.&lt;/li&gt;
+&lt;li&gt;UDDI, SOAP üzerinden iletişim kurar.&lt;/li&gt;
+&lt;li&gt;UDDI, Microsoft .NET platformu üzerine kurulmuştur.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="Web Service
+Example" class="aligncenter
+.size-medium wp-image-168" height="194" src="http://burakisikli.files.wordpress.com/2009/07/image014ws.jpg?w=300" title="Web Service Example" width="300" /&gt;&lt;/p&gt;
+&lt;p&gt;Geçen yıllardaki gelişmelerden sonra bugünkü web ortamı olmadan ağ
+tabanlı bilgi sistemlerinin düşünülmesi çok zordur. Web'in bu kadar
+başarılı olmasının nedeni basitlik ve yaygınlığıdır (ubiquity). Web
+ortamındaki gelişmeleri üç safhada inceleyebiliriz:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Belge Web'i (Document Web) : Belge web'i ile web ilk aşamadaki
+    kullanımı, yani HTTP protokolü ile HTML dilinde biçimlendirilmiş
+    statik belgelerinin kullanıcılara sunumunu ifade ediyor.&lt;/li&gt;
+&lt;li&gt;Uygulama Web'i (Application Web) : Bu yapı işletmelerin
+    müşterilerine web üzerinden bazı iş süreçlerini yaptırma gereksinimi
+    sonucunda ortaya çıktı. Bu yapıda sunucu tarafında çalışan
+    programlar (server-side programs) vasıtasıyla hazırlanan dinamik
+    HTML belgeleri ile kullanıcı ve iş uygulaması arasında
+    etkileşim sağlandı.&lt;/li&gt;
+&lt;li&gt;Servis Web'i (Services Web) : İşletmelerin diğer işletmelerle olan
+    iş süreçlerini bütünleştirme gereksinimi sonucunda ortaya çıkan ve
+    gelişmekte olan yeni yapıdır. Bu yapının temel taşı
+    web servisleridir. Web servislerindeki temel amaç işletme bilgi
+    sistemlerindeki program modüllerinin etkileşimini sağlamaktır. Web
+    servisleri web ortamında yayınlanabilen, aranıp bulunabilen ve
+    çağrılarak erişilebilen modüler uygulama fonksiyonlarıdır. Bu
+    fonksiyonlar değişik kurumsal iş süreçlerini gerçekleştireceklerdir.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img alt="Webservice" class="size-full
+.wp-image-166 alignleft" height="218" src="http://burakisikli.files.wordpress.com/2009/07/webservices.png" title="Webservice" width="240" /&gt;&lt;img alt="Web
+Servis" class="size-full
+.wp-image-167 aligncenter" height="336" src="http://burakisikli.files.wordpress.com/2009/07/image004.jpg" title="Web Servis" width="444" /&gt;&lt;/p&gt;
+&lt;p&gt;Web servisleri modeli üç ana birimin etkileşimine dayanır.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Servis Sağlayıcı (Servis Provider): Servis sağlayıcı istemcilerin
+    sağlayıcıda bulunan servislere erişimini sağlar. Servis sağlayıcı
+    kendi sitesinde bulunan web servisleri tanımını servis kayıt
+    birimine (service registry) kaydederek bu servisinin nasıl
+    çağrılacağı belirtir.&lt;/li&gt;
+&lt;li&gt;Servis İstemcisi (Service Requester) : Servis sağlayıcısında bulunan
+    web servislerini çağırarak kullanan istemci uygulamalardır. Web
+    servisinin nasıl çağrılacağı ve ilgili parametreleri servis kayıt
+    biriminden arayarak bulur ve çağırır.&lt;/li&gt;
+&lt;li&gt;Servis Kayıt Birimi (Service Registry) : Servis sağlayıcılarının
+    yayınladıkları web servisi tanımlarını saklar ve aranıp
+    bulunmasını sağlar. Servis sağlayıcıları servis kayıt birimini
+    tarayarak istediği servislere hakkında bilgi alabilir. Servis kayır
+    birimi her servisin nasıl çağırılacağı konusunda tanım
+    bilgileri içerir.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Bir web servisi istemcisinin bir servis sağlayıcıdan bir servisi çağırma
+aşamasındaki temel adımları:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Web servisi istemcisi (SOAP Client) servis kayıt biriminden (UDDI)
+    web servisini bulur.&lt;/li&gt;
+&lt;li&gt;İstemci bir SOAP mesajı hazırlar. SOAP mesajı bir XML belgesidir.&lt;/li&gt;
+&lt;li&gt;İstemci SOAP mesajını web server veya uygulama sunucusunda çalışan
+    SOAP istek dinleyicisine gönderir. İstek dinleyici gelen isteklere
+    cevap veren sunucu programlardır. Bu programlar bir JSP, ASP, CGI
+    veya ISAPI programıdır.&lt;/li&gt;
+&lt;li&gt;SOAP sunucu gelen SOAP mesajını parse eder ve gerekli parametreleri
+    göndererek istenen nesnenin istenen yöntemini çağırır.&lt;/li&gt;
+&lt;li&gt;Çağırılan nesnedeki yöntem çalışır ve sonuçları SOAP
+    sunucuna'a gönderir. SOAP sunucusu gelen sonucu SOAP mesajı
+    formatında biçimlendirerek istemciye gönderir.&lt;/li&gt;
+&lt;li&gt;İstemci gelen SOAP mesajının içindeki bilgileri alarak istekde
+    bulunan programa gönderir.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni nesil web uygulamaları web servisleri modeline dayanacaktır. Web
+servisleri ile, kurumlar işbirliği yaptığı satıcı, müşteri ve banka gibi
+diğer kurumlardaki iş süreçlerini birleştirerek daha iyi işlevsellik ve
+daha az maliyet gibi bir çok avantajlar sağlayacaklardır.&lt;/p&gt;
+&lt;p&gt;Web servisleri modeli XML, SOAP, WSDL ve UDDI gibi açık internet
+standartlarına dayanır. Bu konudaki firmaların yoğun desteğinden dolayı
+uygulama bütünleştirmesi konusunda ortaya çıkacak hakim ortamın web
+servisleri modeline dayanacağı yönündedir. Web servisleri modelini ciddi
+olarak benimseyen Microsoft, IBM, Sun, HP, Oracle ve daha bir çok firma
+bu konuda yoğun bir şekilde çalışmakta ve web servisleri yazılım ve
+uygulama geliştirme araçlarını geliştiricilere sunmaktadırlar.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kaynaklar:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.godoro.com/divisions/ehil/Mecmua/Magazines/Articles/txt/html/article_WebServices.html"&gt;http://www.godoro.com/divisions/ehil/Mecmua/Magazines/Articles/txt/html/article_WebServices.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/Web_service"&gt;http://en.wikipedia.org/wiki/Web_service&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.w3schools.com/webservices/default.asp"&gt;http://www.w3schools.com/webservices/default.asp&lt;/a&gt;&lt;/p&gt;</summary><category term="Service"></category><category term="Servis"></category><category term="SOAP"></category><category term="UDDI"></category><category term="Web"></category><category term="Web Service"></category><category term="Web Servis"></category><category term="WSDL"></category></entry><entry><title>Java Bean</title><link href="http://www.burakisikli.com/java-bean.html" rel="alternate"></link><published>2009-06-21T02:09:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-21:java-bean.html</id><summary type="html">&lt;p&gt;Java Bean'ler reusable(yeniden kullanılabilir) yazılım bileşenidir. Java
+Bean'ler bir serializable(serileştirebilir), herhangi bir argümanı
+olmayan constructor'a sahip ve getter-setter metodunun kullanıldığı java
+objesidir. Bunun için bazı şartları sağlaması gerekmektedir:&lt;/p&gt;
+&lt;p&gt;* Sınıfın public default constructor'ı olmalıdır.&lt;br /&gt;
+* Sınıf properties(özellikleri) set-get metodlarını kullanarak
+erişilmelidir.&lt;br /&gt;
+* Sınıf serializable(serileştirebilir) olmalıdır.&lt;/p&gt;
+&lt;p&gt;Java Bean'ler Enterprise Java Bean'lerden farklıdır,
+karıştırılmamalıdır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PersonBean.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+package edu.burakkk.bean;&lt;br /&gt;
+import java.io.Serializable;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+* Java Bean&lt;br /&gt;
+*&lt;br /&gt;
+*@version 1.0 Release 1&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;public class Bean implements Serializable {&lt;br /&gt;
+static final long serialVersionUID = 102755394728345L;&lt;br /&gt;
+private String name;&lt;br /&gt;
+private boolean happiness;&lt;/p&gt;
+&lt;p&gt;/** No-arg constructor (takes no arguments). */&lt;br /&gt;
+public Bean() {&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public String getName() {&lt;br /&gt;
+return this.name;&lt;br /&gt;
+}&lt;br /&gt;
+public void setName(final String name) {&lt;br /&gt;
+this.name = name;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public boolean isHappiness() {&lt;br /&gt;
+return this.happiness;&lt;br /&gt;
+}&lt;br /&gt;
+public void setHappiness(final boolean happiness) {&lt;br /&gt;
+this.happiness = happiness;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;TestPersonBean.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+package edu.burakkk.bean;&lt;/p&gt;
+&lt;p&gt;public class TestBean {&lt;br /&gt;
+public static void main(String[] args) {&lt;br /&gt;
+Bean person = new Bean();&lt;br /&gt;
+person.setName("Burakkk");&lt;br /&gt;
+person.setHappiness(true);&lt;/p&gt;
+&lt;p&gt;// Output: "Burakkk [Mutlu]"&lt;br /&gt;
+System.out.print(person.getName());&lt;br /&gt;
+System.out.println(person.isHappiness() ? " [Mutlu]" : " [Mutlu
+Değil]");&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;testPersonBean.jsp&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+&amp;lt;% // Use of PersonBean in a JSP. %&amp;gt;&lt;br /&gt;
+&lt;usebean id="person" scope="page"&gt;&lt;/usebean&gt;&lt;br /&gt;
+&lt;setproperty name="person" property="*"&gt;&lt;/setproperty&gt;&lt;/p&gt;
+&lt;p&gt;
+
+
+
+Isim: &lt;getproperty name="person" property="name"&gt;&lt;/getproperty&gt;  
+Secenek: &lt;getproperty name="person" property="happiness"&gt;&lt;/getproperty&gt;
+
+&lt;/p&gt;
+
+&lt;form name="beanTest" method="POST" action="testPersonBean.jsp"&gt;
+Isim: &lt;input type="text" name="name" size="50"&gt;  
+Secenek:
+
+&lt;/p&gt;
+&lt;select name="happiness"&gt; &lt;option value="false"&gt;Mutlu&lt;/option&gt;
+&lt;option value="true"&gt;Mutlu Degil&lt;/option&gt; &lt;/select&gt;
+
+&lt;p&gt;
+&lt;input type="submit" value="Test et"&gt;  
+
+&lt;/form&gt;
+
+&lt;p&gt;
+
+
+
+\[/sourcecode\]
+
+&lt;/p&gt;
+
+&lt;p&gt;Bu örnekte isminizi ve mutlu olup olmadığınızı soran bir java bean
+yaptık. Bu java bean'i hem java'da derleyerek hem de jsp aracılığıyla
+ulaşabiliriz. Java'da derlediğiniz takdirde "Burakkk [Mutlu]" ekranda
+yazacaktır. JSP'de ise bir form ekrana gelerek form girdiğimiz
+değerlerle sayfayı sürekli güncelleyecektir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kaynaklar:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://en.wikipedia.org/wiki/JavaBeans"&gt;http://en.wikipedia.org/wiki/JavaBeans&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://java.sun.com/docs/books/tutorial/javabeans/whatis/index.html"&gt;http://java.sun.com/docs/books/tutorial/javabeans/whatis/index.html&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://www.roseindia.net/ejb/introduction/javabean.shtml"&gt;http://www.roseindia.net/ejb/introduction/javabean.shtml&lt;/a&gt;&lt;/p&gt;</summary><category term="Bean"></category><category term="Java"></category><category term="Java Bean"></category></entry><entry><title>Design Patterns(Tasarım Şablonları)-1</title><link href="http://www.burakisikli.com/design-patternstasarim-sablonlari-1.html" rel="alternate"></link><published>2009-06-18T02:35:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-18:design-patternstasarim-sablonlari-1.html</id><summary type="html">&lt;p&gt;şablonları aşağıda yeralan ortak özelliklere sahiptir:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+Edinilen tecrübeler sonunda ortaya çıkmışlardır.
+
+&lt;/li&gt;
+&lt;li&gt;
+Tekerin tekrar icat edilmesini önlerler.
+
+&lt;/li&gt;
+&lt;li&gt;
+Tekrar kullanılabilir kalıplardır.
+
+&lt;/li&gt;
+&lt;li&gt;
+Ortak kullanılarak daha büyük problemlerin çözülmesinım şablonları ve
+kullanım alanları hakkında ihtisas yapmış olmak gerekmektedir.
+
+Tasarım şablonları değişik kategorilere ayrılır. Bunlar:
+
+-   Oluşturucu tasarım şablonları (**creational patterns**)
+-   Yapısal tasarım şablonları (**structual patterns**)
+-   Davranışsal tasarım şablonlar (**behavioral patterns**)
+
++--------------------------+--------------------------+--------------------------+
+| Oluşturucu               | Yapısal                  | Davranışsal              |
++--------------------------+--------------------------+--------------------------+
+| - Abstract Factory       | - Adapter                | - Command (komut)        |
+| (soyut fabrika)          | &lt;/p&gt;                     | &lt;/p&gt;                     |
+| &lt;/p&gt;                     | - Bridge (köprü)         | - Memento (hatıra)       |
+| - Builder (inşaatçi)     |                          |                          |
+|                          | - Facade (cephe)         | - Strategy (strateji)    |
+| - Factory Method         |                          |                          |
+| (fabrika)                | - Decorator (dekotatör)  | - Iterator               |
+|                          |                          | (tekrarlayıcı)           |
+| - Prototype  (prototip)  | - Composite (kompozit)   |                          |
+|                          |                          | - State (durum)          |
+| &lt;p&gt;                      | - Flyweight (sinek       |                          |
+| - Singleton (yalnızlık)  | siklet)                  | - Chain Of               |
+|                          |                          | Responsibility           |
+|                          | - Proxy (vekil)          | (sorumluluk zinciri)     |
+|                          |                          |                          |
+|                          | &lt;p&gt;                      | - Mediator (aracı)       |
+|                          |                          |                          |
+|                          |                          | - Observer (gözlemci)    |
+|                          |                          |                          |
+|                          |                          | - Template Method        |
+|                          |                          | (şablon metot)           |
+|                          |                          |                          |
+|                          |                          | &lt;p&gt;                      |
+|                          |                          | - Visitor (ziyaretçi)    |
++--------------------------+--------------------------+--------------------------+
+
+**1-) SINGLETON PATTERN(YALNIZLIK TASARIM ŞABLONU)**
+
+Bazı durumlarda bir sınıftan sadece bir nesnenin oluşturulması ve
+oluşturulan bu nesnenin tüm sistemde kullanılması gerekebilir. Örneğin
+bilgibankası için bir connection pool (bilgibankası bağlantı havuzu)
+sadece bir defa oluşturulmalı ve kullanılmalıdır veya oluşturulacak
+properties nesnesinin bir kere ve proses(process) çalışmaya başladığı
+anda(constructor) oluşturulmalıdır. Bu durumda Singleton tasarım şablonu
+kullanılarak, bir sınıftan sadece bir nesnenin oluşturulması
+sağlanabilir.
+
+![Singleton Pattern UML
+Diagram](http://burakisikli.files.wordpress.com/2009/06/singletonuml.gif "Singleton Pattern UML Diagram"){.aligncenter
+.size-full .wp-image-152 width="237" height="172"}
+
+Singleton tasarım şablonunu iki farklı yöntemle yapabiliriz. Yapacağımız
+değişiklik senkronizasyonu yapacağımız aracı değiştirmektir.
+Senkronizasyonu kilit objesiyle veya komple sınıfı kilitleyerek
+yapabiliriz.
+
+Bir singleton sınıfın taşıması gereken bazı özellikler vardır. Bunlar:  
+·Sınıf konstruktörlerinin(constructor) private olması gerekiyor.
+Konstruktörleri private olan bir sınıftan, başka bir sınıf new operatörü
+ile nesne oluşturamaz.  
+·Singleton sınıfından sadece bir tane nesne oluşturulması gerektiği
+için, oluşturulması gereken nesneyi sınıfın static değişkeni olarak
+tanımlamamız gerekiyor. Örnekte "private static Singleton instance =
+null" şeklinde bu tanımlamayı yapıyoruz.  
+·Singleton sınıfında instance() isminde static bir metodun olması ve bu
+metodun static olarak tanımlanmış nesneyi geri vermesi gerekiyor.
+instance() metodu içinde sınıfın tek nesnesi olacak değişken
+oluşturulur.
+
+**Singleton.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* Singleton Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/  
+public class Singleton {  
+/\*  
+\* Singleton sinifindan olusturulabilecek tek nesne static sinif
+degiskeni  
+\* olarak tanimlaniyor.  
+\*/  
+private static volatile Singleton instance = null;
+
+/\*  
+\* Sınıf yerine kullanılacak obje tanımı(synchronized(lock)) Double
+check  
+\* locking yapabilmek icin kullanilan nesne. private static Object lock
+=  
+\* new Object();  
+\*  
+\*  
+\* \* Baska siniflarin new Singleton() seklinde nesne olusturmalarini,
+sinif  
+\* konstruktorünü private yaparak engellemis oluyoruz.  
+\*/  
+private Singleton() {  
+System.out.println("Constructor");  
+}
+
+/\*\*  
+\* Singleton sinifindan olusturulabilen tek nesneye ulasmak icin
+instance()  
+\* metodu kullanilir.  
+\*  
+\* @return Singleton static Singleton nesnesi  
+\*/  
+public static Singleton getInstance() {  
+if (instance == null) {  
+// Double checked locking  
+synchronized (Singleton.class) {  
+if (instance == null) {  
+instance = new Singleton();  
+}  
+}  
+}  
+return instance;  
+}
+
+/\*\*  
+\* Singleton sinifinda bulunan bir metod. Buraya kendi metotlarınızı  
+\* ekleyebilirsiniz  
+\*/  
+public void printIt() {  
+System.out.println(this);  
+}  
+}
+
+\[/sourcecode\]
+
+**Main.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* Main Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Main {  
+public static void main(String\[\] args) {  
+Singleton.getInstance().printIt();  
+}  
+}
+
+\[/sourcecode\]
+
+Main sınıfımızı çalıştırdığımızda ekrana şunlar gelecektir:
+
+Constructor  
+edu.burakkk.patterns.singleton.Singleton@9304b1
+
+Yukarıda yazdığımız kod ise multithread'e karşı güvenli bir koddur. Yine
+de bunu test etmek için de bir sınıf oluşturalım:
+
+**Test.java**
+
+\[sourcecode language="java"\]
+
+package edu.burakkk.patterns.singleton;
+
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* MultiThread Test Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Test {  
+private static Singleton singletona, singletonb;  
+public static void main(String\[\] args) {  
+// getInstance() iki ayrı thread ile çağırılsın.  
+Thread threada = new Thread() {  
+@Override  
+public void run() {  
+singletona = Singleton.getInstance();  
+}  
+};  
+threada.start();
+
+Thread threadb = new Thread() {  
+@Override  
+public void run() {  
+singletonb = Singleton.getInstance();  
+}  
+};  
+threadb.start();
+
+// Her iki thread tamamlanana kadar beklensin  
+while (!(threada.getState() == Thread.State.TERMINATED &amp;&amp; threadb  
+.getState() == Thread.State.TERMINATED))  
+;
+
+System.out.println(singletona == singletonb);  
+}  
+}
+
+\[/sourcecode\]
+
+Eğer test başarılı olursa ekran çıktısı şu şekilde olacaktır:
+
+Constructor  
+true
+
+*Notlar:*
+
+Abstract Factory, Builder ve Prototype tasarım şablonlarında olabileceği
+gibi birçok tasarım şablonu Singleton tasarım şablonu kullanılarak
+implemente edilir.
+[](http://en.wikipedia.org/wiki/Facade_pattern "Facade pattern")
+
+[Facade](http://en.wikipedia.org/wiki/Facade_pattern "Facade pattern")
+objeleri genellik Singleton'dır çünkü sadece bir tane Facade objesi
+gereklidir.
+
+State(Durum) objeleri genellikle Singleton'dır.
+
+Daha detaylı bilgi için:
+
+&lt;http://www.ibm.com/developerworks/library/j-dcl.html&gt;
+
+&lt;http://www.kurumsaljava.com&gt;
+
+&lt;div id="_mcePaste"
+style="overflow:hidden;position:absolute;left:-10000px;top:3852px;width:1px;height:1px;"&gt;
+
+package edu.burakkk.patterns.singleton;
+&lt;/p&gt;
+/\*\*  
+\* Singleton Pattern(Yalnızlık Tasarım Şablonu)  
+\* Yaratılacak objelerin bir sefer yaratılıp  
+\* aynı objenin birden fazla yerde yeniden  
+\* yaratılmadan kullanılmasını sağlar  
+\* MultiThread Test Sınıfı  
+\*  
+\*@version 1.0 Release 1  
+\*@author Burak ISIKLI  
+\*@date June 18, 2009  
+\*  
+\*\*/
+
+public class Test {  
+private static Singleton singletona, singletonb;  
+public static void main(String\[\] args) {  
+// getInstance() iki ayrı thread ile çağırılsın.  
+Thread threada = new Thread() {  
+@Override  
+public void run() {  
+singletona = Singleton.getInstance();  
+}  
+};  
+threada.start();
+
+Thread threadb = new Thread() {  
+@Override  
+public void run() {  
+singletonb = Singleton.getInstance();  
+}  
+};  
+threadb.start();
+
+// Her iki thread tamamlanana kadar beklensin  
+while (!(threada.getState() == Thread.State.TERMINATED &amp;&amp; threadb  
+.getState() == Thread.State.TERMINATED))  
+;
+
+System.out.println(singletona == singletonb);  
+}  
+}
+
+&lt;/div&gt;</summary><category term="Design"></category><category term="Design Pattern"></category><category term="Pattern"></category><category term="Patterns"></category><category term="Singleton"></category><category term="Tasarım"></category><category term="Tasarım Şablonları"></category><category term="Yalnızlık"></category><category term="Yalnızlık Tasarım Şablonu"></category><category term="Şablonu"></category></entry><entry><title>Serialization(Serileştirme)</title><link href="http://www.burakisikli.com/serializationserilestirme.html" rel="alternate"></link><published>2009-06-17T18:05:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-17:serializationserilestirme.html</id><summary type="html">&lt;p&gt;Bir nesne herhangi stream'a (örneğin bir file'a ) yazılabilir ve bir
+stream'den okunabilir. Programın çalışması esnasında hafızada bulunan
+nesneler program bitince (kapatılınca) yok olur. Ancak serialization
+tekniğiyle bir nesne diske veya herhangi bir yere kaydedilebilir. Bir
+program, kapanmadan önce bir dosyayaya sakladığı bir nesneyi daha sonra
+tekrar çalıştırıldığında dosyadan okuyabilir. Hatta bir programın
+yazdığı nesneyi aynı dosyadan başka bir program da okuyabilir. Bu
+şekilde nesnelerin network'te bir yerden diğerine gönderilmesi,
+veritabanına normal bir veri gibi kaydedilebilmesi mümkün
+olabilmektedir.&lt;/p&gt;
+&lt;h2&gt;Serializable&lt;/h2&gt;
+&lt;p&gt;Bir class'ın serialization'a tabi tutulabilmesi için bazı koşulları
+sağlaması gerekir.&lt;/p&gt;
+&lt;p&gt;1. Class public olmalı.&lt;/p&gt;
+&lt;p&gt;2. Serializable' interface'ini implement etmeli. Bu interface'de
+implement edilecek herhangi bir method yoktur. Sadece class'ın serialize
+edilebilemesine class yazarının izin verdiği anlamına gelir. Bazı
+classlar güvenlik v.s. nedenlerle buna izin vermek istemeyebilir.
+Nesnenin içerisindeki bütün veri serializable olmalıdır. Bir tane bile
+serializable olmayan nesne varsa işlem başarısız olur.&lt;/p&gt;
+&lt;p&gt;3. Default (parametresiz) bir constructor'ı olmalıdır. Hiç bir
+constructor yazılmaması durumunda da default contructor'un geçerli
+olduğu için yine sorun olmaz.&lt;/p&gt;
+&lt;p&gt;Öncelikle yaratacağımız objeyi  &lt;code&gt;Serializable&lt;/code&gt;yapmalıyız. Bunun için 
+&lt;code&gt;Serializable&lt;/code&gt; implement etmeliyiz.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;PersistentTime.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.sun;&lt;/p&gt;
+&lt;p&gt;import java.io.Serializable;&lt;br /&gt;
+import java.util.Date;&lt;br /&gt;
+import java.util.Calendar;&lt;/p&gt;
+&lt;p&gt;public class PersistentTime implements Serializable {&lt;br /&gt;
+static final long serialVersionUID = 10275539472837495L;&lt;br /&gt;
+private Date time;&lt;/p&gt;
+&lt;p&gt;public PersistentTime() {&lt;br /&gt;
+time = Calendar.getInstance().getTime();&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public Date getTime() {&lt;br /&gt;
+return time;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;FlattenTime.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.sun;&lt;/p&gt;
+&lt;p&gt;import java.io.ObjectOutputStream;&lt;br /&gt;
+import java.io.FileOutputStream;&lt;br /&gt;
+import java.io.IOException;&lt;/p&gt;
+&lt;p&gt;public class FlattenTime {&lt;br /&gt;
+public static void main(String[] args) {&lt;br /&gt;
+String filename = "time.ser";&lt;br /&gt;
+if (args.length &amp;gt; 0) {&lt;br /&gt;
+filename = args[0];&lt;br /&gt;
+}&lt;br /&gt;
+PersistentTime time = new PersistentTime();&lt;br /&gt;
+FileOutputStream fos = null;&lt;br /&gt;
+ObjectOutputStream out = null;&lt;br /&gt;
+try {&lt;br /&gt;
+fos = new FileOutputStream(filename);&lt;br /&gt;
+out = new ObjectOutputStream(fos);&lt;br /&gt;
+out.writeObject(time);&lt;br /&gt;
+out.close();&lt;br /&gt;
+} catch (IOException ex) {&lt;br /&gt;
+ex.printStackTrace();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;InflateTime.java&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.sun;&lt;/p&gt;
+&lt;p&gt;import java.io.ObjectInputStream;&lt;br /&gt;
+import java.io.FileInputStream;&lt;br /&gt;
+import java.io.IOException;&lt;br /&gt;
+import java.util.Calendar;&lt;/p&gt;
+&lt;p&gt;public class InflateTime {&lt;br /&gt;
+public static void main(String[] args) {&lt;br /&gt;
+String filename = "time.ser";&lt;br /&gt;
+if (args.length &amp;gt; 0) {&lt;br /&gt;
+filename = args[0];&lt;br /&gt;
+}&lt;br /&gt;
+PersistentTime time = null;&lt;br /&gt;
+FileInputStream fis = null;&lt;br /&gt;
+ObjectInputStream in = null;&lt;br /&gt;
+try {&lt;br /&gt;
+fis = new FileInputStream(filename);&lt;br /&gt;
+in = new ObjectInputStream(fis);&lt;br /&gt;
+time = (PersistentTime) in.readObject();&lt;br /&gt;
+in.close();&lt;br /&gt;
+} catch (IOException ex) {&lt;br /&gt;
+ex.printStackTrace();&lt;br /&gt;
+} catch (ClassNotFoundException ex) {&lt;br /&gt;
+ex.printStackTrace();&lt;br /&gt;
+}&lt;br /&gt;
+// print out restored time&lt;br /&gt;
+System.out.println("Flattened time: " + time.getTime());&lt;br /&gt;
+System.out.println();&lt;br /&gt;
+// print out the current time&lt;br /&gt;
+System.out.println("Current time: " +
+Calendar.getInstance().getTime());&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu programda FlattenTime execute ettiğimizde o andaki saati objeye
+alarak time.ser adıyla kaydediyor. Daha sonra InflateTime sınıfıyla da
+bu kaydedilmiş objeyi okuyabiliriz. Aynı zamanda programı derlerken
+argüman olarak dosya adını verdiğimiz takdirde obje verdiğimizle adla
+kaydedilip okunacaktır. Dikkati çeken diğer bir konu
+&lt;code&gt;static final long serialVersionUID = 10275539472837495L&lt;/code&gt;kod satırıdır.
+Aslında bu serilize ettiğimiz objeyi daha sonra tanımlada
+kullanabileceğimiz bir anahtar değerdir.  Fakat olması şart değildir.
+&lt;code&gt;ObjectOutputStream&lt;/code&gt; veya&lt;code&gt;ObjectInputStream&lt;/code&gt; ile obje dosyasını yazma
+ve okumayı sağlıyoruz. Serialization özellikle network(ağ) programlamada
+çok kullanılan bir özelliktir.&lt;/p&gt;</summary><category term="Serializable"></category><category term="Serialization"></category><category term="Serileştirme"></category><category term="Serilize"></category></entry><entry><title>Multi-Threaded(Çok Kanallı) Programlama</title><link href="http://www.burakisikli.com/multi-threadedcok-kanalli-programlama.html" rel="alternate"></link><published>2009-06-16T01:30:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-16:multi-threadedcok-kanalli-programlama.html</id><summary type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal (thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir takım kütüphanelerle eklenmemiştir. Aslında her Java
+programı bir kanalda (thread'te) çalışır. Örneğin application'ların main
+method'unun çalıştırılmasıyla adı 'main' olan bir ana thread
+çalıştırılır. Ancak tek bir kanal olunca programcı yazdığı kodun bir
+thread'in içerisinde çalıştığını farketmez.  Thread bize eş zamanlı
+birden fazla işi yapma fırsatını yani multitasking sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thread’in faydaları:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kaynak paylaşımı&lt;/li&gt;
+&lt;li&gt;Daha az bekleme süresi&lt;/li&gt;
+&lt;li&gt;Daha verimli donanım kullanımı(Multiprocessor kullanımı)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni bir thread yaratıldığında biz start komutu vermedikçe thread
+çalışmaya başlamıyor hazır durumda bekliyor. Biz start komutunu
+verdiğimizde çalışmaya başlıyor. Ayrıca thread’i sleep komutu ile belli
+süre bekletebiliyor, stop komutu ile öldürebiliyoruz.  Peki ama thread
+ile multithread arasında ne fark vardır?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="multithread" class="size-medium
+.wp-image-144 aligncenter" height="179" src="http://burakisikli.files.wordpress.com/2009/06/multithread.jpg?w=300" title="multithread" width="300" /&gt;&lt;/p&gt;
+&lt;p&gt;Resimde gördüğümüz gibi threadler aynı kodu, veriyi ve dosyaları
+kullanmasına rağmen farklı register ve stack’leri vardır. Bu sayede aynı
+kod içinde farklı işler yapıp farklı şeyleri hafızada tutabiliyor.
+Java’da thread yaratmanın iki yolu var. Ben implement ederek kullandım.
+Ancak extend ederek de thread yaratılabilir. Thread pool diye bir kavram
+da var. Siz belirli bir thread sayısı veriyorsunuz. Thread pool boşta
+olan thread’i kullandırıyor. Multihreading yaşanabilecek en önemli
+sorunlardan biri, concurrent(eş zamanlılık) ve senkronizasyon sorunu.
+Siz aynı anda hem ekleme hem de silme yapmamınız gerekiyor. Aksi
+takdirde istediğinizi eklemeden hangi elemanı almaya çalışırsanız
+hangisini alacaksınız gibi bir soru karşımıza çıkıyor. Bunu çözmenin 3
+yolu var:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Producer-consumer problemi:&lt;/strong&gt; İşletim sistemleri dersinde
+    öğrendiğimiz aynı mantık üretici-tüketici problemiyle çözebiliriz.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Circular buffer:&lt;/strong&gt; Producer-consumer problemi benzer bir çözüm.
+    Farkı kendiniz bir dizi oluşturuyorsunuz ve kilit kontrolü bu
+    dizide oluyor.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Java collections:&lt;/strong&gt; Kendimiz kilitlerle uğraşmadan bu işi
+    java’ya bırakabiliriz. Java’nın bu konulara kendi çözüm getirdiği
+    collections sınıfını kullanabiliriz.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basit bir thread örneği(ThreadTest.java):&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;import java.util.*;&lt;/p&gt;
+&lt;p&gt;public class ThreadTest implements Runnable {&lt;br /&gt;
+public void run() {&lt;br /&gt;
+while (true) {&lt;br /&gt;
+try {&lt;br /&gt;
+Thread.sleep(1000);&lt;br /&gt;
+System.out.println("Other thread time : " + new Date());&lt;br /&gt;
+} catch (Exception e) {&lt;br /&gt;
+e.printStackTrace();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public static void main(String[] args) {&lt;br /&gt;
+ThreadTest test = new ThreadTest();&lt;br /&gt;
+Thread thread = new Thread(test);&lt;br /&gt;
+thread.start();&lt;br /&gt;
+System.out.println("Main thread");&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu programda ekrana "main thread" yazdıktan sonra  threadimiz
+başlatılarak 1 saniye aralıklarla tarihi ekrana yazıdırıyor.&lt;/p&gt;</summary><category term="Çok Kanallı"></category><category term="Multi-Thread"></category><category term="Multi-Threaded"></category><category term="Programlama"></category><category term="Thread"></category></entry><entry><title>Faktoriyel(Factorial) Bulma</title><link href="http://www.burakisikli.com/faktoriyelfactorial-bulma.html" rel="alternate"></link><published>2009-06-15T02:14:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-15:faktoriyelfactorial-bulma.html</id><summary type="html">&lt;p&gt;Rekürsif fonksiyolarda kullanılan en sık örneklerden biri de faktoriyel
+bulmadır. Bildiğiniz üzere faktoriyel örneğin 5
+faktoriyel=5!=5*4*3*2*1 şeklinde sayıdan geriye giderek 0'a kadar
+çarpılır. Ancak 0! ve 1! 1'e eşittir.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="cpp"]&lt;/p&gt;
+&lt;p&gt;// Program:  Factorial Number&lt;br /&gt;
+// Programmer: Burak ISIKLI&lt;/p&gt;
+&lt;p&gt;#include &lt;iostream.h&gt;&lt;/p&gt;
+&lt;p&gt;// Prototype Function&lt;br /&gt;
+int fac(int num);&lt;/p&gt;
+&lt;p&gt;// Main Function&lt;br /&gt;
+int main()&lt;br /&gt;
+{&lt;br /&gt;
+int number, result;&lt;br /&gt;
+cout &amp;lt;&amp;lt; "Lutfen hesaplatacaginiz sayiyi giriniz: x!= ";&lt;br /&gt;
+cin &amp;gt;&amp;gt; number;&lt;br /&gt;
+result = fac(number);&lt;br /&gt;
+cout &amp;lt;&amp;lt; number &amp;lt;&amp;lt; "! = " &amp;lt;&amp;lt; result &amp;lt;&amp;lt; "\n\n";&lt;br /&gt;
+return 0;&lt;/p&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;// Recursive Function&lt;br /&gt;
+int fac(int num)&lt;br /&gt;
+{&lt;br /&gt;
+if(num == 0 || num == 1)&lt;br /&gt;
+return 1;&lt;br /&gt;
+else&lt;br /&gt;
+return num * fac(num-1);&lt;/p&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Kullanıcıya sayıyı sorup hesaplatıp ekrana yazdıran basit bir faktoriyel
+bulma programıdır.&lt;/p&gt;</summary><category term="Factorial"></category><category term="Faktoriyel"></category><category term="Number"></category><category term="Recursion"></category><category term="Rekürsif"></category><category term="Sayı"></category></entry><entry><title>Fibonacci Serisi</title><link href="http://www.burakisikli.com/fibonacci-serisi.html" rel="alternate"></link><published>2009-06-15T00:44:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-15:fibonacci-serisi.html</id><summary type="html">&lt;p&gt;Recursive(Rekürsif) fonksiyonlar öğretilirken en çok kullanılan örnek
+fibonacci serisidir. Bu seri özeldir. Serinin ilk iki değeri 0 ve 1'dir.
+Sonrasında ise hesaplanacak sayının bir ve iki eksiğinin
+fonksiyonlarındaki değerlerinde toplanmasıyla oluşur. Başarılı bir
+fibonacci serisi 1.618....'a yakınsar. Buna altın oran(golden ratio) 
+veya altın ortalama(golden mean) denir. 0, 1, 1, 2, 3, 5, 8, 13, 21, ...
+şeklinde devam eden serinin matematiksel fonksiyonu şu şekildedir:&lt;/p&gt;
+&lt;p&gt;fibonacci(0) = 0&lt;/p&gt;
+&lt;p&gt;fibonacci(1) = 1&lt;/p&gt;
+&lt;p&gt;fibonacci(&lt;span&gt;n&lt;/span&gt;) = fibonacci(&lt;span&gt;n&lt;/span&gt;-1) +
+fibonacci(&lt;span&gt;n&lt;/span&gt;-2)&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Fibonacci" class="aligncenter
+.size-full wp-image-141" height="190" src="http://burakisikli.files.wordpress.com/2009/06/foxtrot20051011.jpg" title="Fibonacci" width="600" /&gt;&lt;/p&gt;
+&lt;p&gt;Bu fonksiyonun kodu:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="cpp"]&lt;br /&gt;
+// Program:  Fibonacci Series&lt;br /&gt;
+// Programmer: Burak ISIKLI&lt;/p&gt;
+&lt;p&gt;#include &lt;iostream.h&gt;&lt;/p&gt;
+&lt;p&gt;// Prototype Function&lt;br /&gt;
+int fib(int num);&lt;/p&gt;
+&lt;p&gt;// Main Function&lt;br /&gt;
+int main() {&lt;br /&gt;
+int number, result;&lt;br /&gt;
+cout &amp;lt;&amp;lt; "Fibonacci serisinin(fib(x)) sayisini giriniz x = ";&lt;br /&gt;
+cin &amp;gt;&amp;gt; number;&lt;/p&gt;
+&lt;p&gt;result = fib(number);&lt;br /&gt;
+cout &amp;lt;&amp;lt; "fib( " &amp;lt;&amp;lt; number &amp;lt;&amp;lt; " ) = " &amp;lt;&amp;lt; result
+&amp;lt;&amp;lt; "\n\n";&lt;/p&gt;
+&lt;p&gt;return 0;&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;// Recursive Function&lt;br /&gt;
+int fib(int num) {&lt;br /&gt;
+if ((num == 0) || (num == 1))&lt;br /&gt;
+return num;&lt;br /&gt;
+else&lt;br /&gt;
+return (fib(num - 1) + fib(num - 2));&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Bu programımızda kullanıcıya hesaplatmak istediği fibonacci değerini
+soruyoruz. Hesaplatarak ekrana yazdırıyoruz.&lt;/p&gt;</summary><category term="Fibonacci"></category><category term="Recursive"></category><category term="Rekürsif"></category><category term="Serisi"></category></entry><entry><title>Dağıtık Sistemler(Distributed Systems)-1</title><link href="http://www.burakisikli.com/dagitik-sistemlerdistributed-systems-1.html" rel="alternate"></link><published>2009-06-11T16:23:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-11:dagitik-sistemlerdistributed-systems-1.html</id><summary type="html">&lt;p&gt;Dağıtık sistemlerde en çok kullanılan program Hadoop'tur. Hadoop, Java
+programlama dilinde yazılmış framework’tür. Amacı Google Dosya Sistemi
+teknolojisi olan Map-Reduce algoritmasını birçok bilgisayara dağıtarak
+uygulayı sağlamaktır.&lt;/p&gt;
+&lt;p&gt;Google, Yahoo ve Facebook gibi şirketler devasa boyutlarda veriyi analiz
+etmek için artık SQL, RDBMS kullanmıyorlar. Hadoop adlı  anahtar-değer
+tekniğini kullanan bir ürünü kullanıyorlar. Arama motoru pazarında
+başarılı olmak öncelikle &lt;em&gt;teknolojik altyapının dağıtımlı çalışması&lt;/em&gt;ndan
+geçiyor. Yani bütün arama, depolama, ve indeksleme gibi işleri birden
+fazla bilgisayara dağıtarak yapmak. Hatta böyle bir altyapısı olduğu
+için Google’dan &lt;em&gt;aslında bir dağıtımlı bilgisayar şirketi&lt;/em&gt; diye
+bahsedilir. Yani herkes internetten bilgileri toplayıp depolayabilir ama
+bunu yüksek performansta yapmak yükü bir bilgisayar tarlasına
+dağıtabilmekten geçiyor. Bilgisayarlar arasındaki bu iş bölümünü Google
+kendi geliştirdiği MapReduce denilen bir yazılım platformu ile yapıyor.
+Ancak MapReduce ile aynı işi yapan ve açık kaynaklı olan bir yazılım
+platformu daha var: Hadoop.&lt;/p&gt;
+&lt;p&gt;Hadoop'un temelindeki teknik "eşle/indirge (map/reduce)" adindaki bir
+tekniktir. Bu teknik Apache tarafindan open source ortama getirildi ve
+Hadoop bu şekilde dünyaya geldi. Teknolojinin çıkış noktası Google; bu
+şirketin Web'den çektiği terabaytlarca veriyi analiz etmesi gerektiği
+için eşle/indirge teknolojisini geliştirdiler, geliştirmeye mecbur
+oldular.&lt;/p&gt;
+&lt;p&gt;Eşle/indirge nedir? Online tabanlarda anahtar değeri belli bir makinaya
+yönlendirmek için kullanılıyor. Eşle/indirge tabanlarında ise, anahtar
+değeri eşle sürecinde her node(düğüm) üzerindeki veriye bakılarak bir
+"özet" çıkarmak için kullanılıyor. Indirge sürecinde ise her ayrı
+node'daki anahtar-deger çiftleri alınarak uyuşan anahtarlar bir daha
+birleştiriliyor. Bu son birleşim bize nihai sonucu veriyor.&lt;/p&gt;
+&lt;p&gt;Hadoop, yatay olarak ölçeklenebilen bir teknoloji, bu sebeple kümedeki
+her makina kendi verisine sahip, yani tüm işlem o makinaya yerel. Aynı
+online dünyada oldugu gibi (mesela Voldemort) her node kendi verisini
+çöküşten kurtulmak amacıyla kümede birkaç diger bilgisayara yedek olarak
+gönderebilmekte. Hadoop'ta değişik olan bir "idare edici" yani "görev
+verici" makinanın olması. Burada bir mahsur yok; Eşle/indirge arka
+planda çalışan bir teknoloji olduğu için dağıtıcı kondüktör sistem, eger
+iyi tasarlanmışsa, bir hassas nokta haline gelmez. İşin en ağır kısmı
+zaten kümedeki işlemci nodelar tarafindan üstlenmekte. Hadoop'ta
+yapılacak işlemler tipik olarak bir "Job" olarak yazılıyor. Job'ınızı
+yazıyorsunuz, ve Hadoop kümenize veriyorsunuz.&lt;/p&gt;
+&lt;p&gt;Bir örnek düşünelim: Elimizde koca bir dosya var, bu dosyada her satırda
+bir meyve ismi, ve o meyve satın alındığında ne kadar para ödenmiş
+olduğu yazılı olsun (alttaki koca bir dosya değil ama olduğunu
+düşünelim). Amacımız her meyve için toplam ne kadar harcandığını
+bulmak.&lt;br /&gt;
+armut 10&lt;br /&gt;
+portakal 3&lt;br /&gt;
+incir 9&lt;br /&gt;
+armut 9&lt;br /&gt;
+armut 10&lt;br /&gt;
+incir 3&lt;br /&gt;
+mandalin 2&lt;br /&gt;
+erik 29&lt;/p&gt;
+&lt;p&gt;Burada anahtar değerleri meyve isimleri olacak. Diyelim ki Hadoop
+kümemizde 2 node var, ve üstteki dosyayı Hadoop'a verdik.&lt;/p&gt;
+&lt;p&gt;Hadoop bu dosyayı iki eşit parcaya bölecektir (anahtar değerlerine hiç
+bakmadan, burası online'dan farklı), ve diyelim ki bölünme tam ortadan
+yapıldı:&lt;br /&gt;
+armut 10&lt;br /&gt;
+portakal 3&lt;br /&gt;
+incir 9&lt;br /&gt;
+armut 9  &lt;/p&gt;
+&lt;hr /&gt;
+&lt;p&gt;armut 10&lt;br /&gt;
+incir 3&lt;br /&gt;
+mandalin 2&lt;br /&gt;
+incir 29&lt;/p&gt;
+&lt;p&gt;Her node, kendi içinde "eşle" yaparken, benzer anahtar degerlerini aynı
+toplama yazacak. Bölüm 1) armut = 19, portakal = 3, incir = 9. Bolum 2)
+armut 10, incir = 32, mandalin = 2.&lt;/p&gt;
+&lt;p&gt;Her bölümün işi böylece bitiyor, yani eşle sahfası sona eriyor. Bundan
+sonra "indirge" kısmında her bölümdeki anahtarlar bir de kendi
+aralarında toplanıyorlar. Böylece armut = 29, portakal = 3, incir = 41,
+mandalin = 2. Bu en son sonuç.&lt;/p&gt;
+&lt;p&gt;Aktarılan bilgilere göre, saşırtıcı derecede çok sayıdaki analiz işlemi,
+üstteki eşle/indirge mentalitesine uyarlanabilmektedir.&lt;/p&gt;
+&lt;p&gt;Haberdar olunması gereken müthiş örneklerden biri, makina ögrenimi
+algoritmalarının aynı eşle/indirge sistemine uyarlanabilmiş olmasıdır.
+Mahout projesi bunu open source ortamına taşımaya aday oldu. Rapor
+edilen sonuçlara göre eklenen her mikroişlemci core'u (Hadoop node'u
+gibi) eşle/indirge ile kodlanmış makina ögrenimi algoritmasını bir o
+kadar hızlandırmaktadır. Yani performans kazanımı "lineer" şekilde
+artabilmektedir. Her eklenen core bir o kadar hızlanma getirmektedir.&lt;/p&gt;
+&lt;p&gt;Hadoop’un Google’un MapReduce’undan en büyük farkı tabii ki açık
+kaynaklı olması. Dolayısıyla Hadoop kullanarak isteyen herkes Google
+kadar hızlı çalışabilen bir arama motoru yapabilir, tabii bir miktar
+bütçeyle bir bilgisayar tarlası kurabiliyorsanız. Burada durup bir kere
+daha düşünün. Hadoop açık kaynaklı olduğundan Google’a bir değil
+binlerce rakip çıkabilir.&lt;br /&gt;
+&lt;em&gt;MapReduce işlemleri küçük parçalara bölüyor ve farklı bilgisayarlara
+dağıtıyor, sonra işlenenleri toplayıp sonucu veriyor.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;Hadoop giderek bir endüstri standardı olmaya başlıyor. Mesela Facebook
+Hadoop kullanarak kullanıcı davranışlarının analizini yapıyor (50 milyon
+kişi ve ilişkileri) ve sosyal reklamların etkisini ölçüyor. Geçtiğimiz
+aylarda New York Times bilgi işlem ekibi Hadoop kullanarak 150 yıllık
+arşivindeki 11 milyon makaleyi dijitalleştirdi ve aranabilir hale
+getirdi. Normalde aylar sürebilecek bilgi işleme bir kaç günde
+bitirildi. Amazon ile Hadoop kullanarak EC2 (dağııtmlı işlemci) ve S3
+(dağıtımlı depolama) servislerinden faydalanabilirsiniz.&lt;/p&gt;
+&lt;p&gt;Hadoop projesini başlatan Doug Cutting aynı zamanda Yahoo ArGe bölümünde
+çalışmaya başladı, haliyle Yahoo içinde arama dahil bir çok başka bilgi
+işleme sisteminin performansını geliştiriyor. Daha fazla geliştiricinin
+katılmasıyla Hadoop giderek daha da iyileşiyor ve tabii üniversitelerde
+de yayılmaya başlıyor. Hadoop kullanabilmek / programlayabilmek önemli
+bir beceri haline geliyor. Sonuçta Hadoop kullanabilen yeni mezunlar
+piyasaya çıktıkça sadece Google gibi şirketler değil daha fazla kişi
+veya şirket yüksek performanslı iş yapabilecek.&lt;/p&gt;
+&lt;p&gt;Bir zamanlar dağıtımlı bilgisayar sistemlerine &lt;em&gt;bilgisayar tarlası&lt;/em&gt;
+denilmekteydi, bugünlerde ise &lt;em&gt;bilgisayar bulutu&lt;/em&gt; (“cloud computing”)
+diyoruz. Çok daha dinamik bir dünyanın tasviri bu. Nasıl bugün herkesin
+kişisel bilgisayarı varsa yakında hepimiz günlük hayatımızdaki bilgileri
+düzenleyebilmek için bilgisayar bulutu kullanıyor olabiliriz. Aslında
+yaptığımız her Google aramasında kullanıyoruz bile.&lt;/p&gt;</summary><category term="Dağıtık"></category><category term="Distributed"></category><category term="Hadoop"></category><category term="Sistemler"></category><category term="Systems"></category></entry><entry><title>Client-Server(İstemci-Sunucu) Programlama-2</title><link href="http://www.burakisikli.com/client-serveristemci-sunucu-programlama-2.html" rel="alternate"></link><published>2009-06-11T03:05:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-11:client-serveristemci-sunucu-programlama-2.html</id><summary type="html">&lt;p&gt;UDP&lt;/p&gt;
+&lt;p&gt;Bu protokolde iletişimde güvenlik önemli değildir. UDP'nin en önemli
+özelliği ise Datagram kullanılmasıdır. Bağlantı yaparken DatagramSocket
+ve DatagramPacket kullanılmaktadır.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.udp;&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Server {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+DatagramSocket aSocket = null;&lt;br /&gt;
+try {&lt;br /&gt;
+aSocket = new DatagramSocket(6789);&lt;br /&gt;
+// create socket at agreed port&lt;br /&gt;
+byte[] buffer = new byte[1000];&lt;br /&gt;
+while (true) {&lt;br /&gt;
+DatagramPacket request = new DatagramPacket(buffer,&lt;br /&gt;
+buffer.length);&lt;br /&gt;
+aSocket.receive(request);&lt;br /&gt;
+DatagramPacket reply = new DatagramPacket(request.getData(),&lt;br /&gt;
+request.getLength(), request.getAddress(), request&lt;br /&gt;
+.getPort());&lt;br /&gt;
+aSocket.send(reply);&lt;br /&gt;
+}&lt;br /&gt;
+} catch (SocketException e) {&lt;br /&gt;
+System.out.println("Socket: " + e.getMessage());&lt;br /&gt;
+} catch (IOException e) {&lt;br /&gt;
+System.out.println("IO: " + e.getMessage());&lt;br /&gt;
+} finally {&lt;br /&gt;
+if (aSocket != null)&lt;br /&gt;
+aSocket.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Sunucu sınıfımızda aynen TCP protokolünde olduğu gibi uygun olan portu
+açıyoruz ve yayına başlıyoruz.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.udp;&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Client {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+// args give message contents and destination hostname&lt;br /&gt;
+DatagramSocket aSocket = null;&lt;br /&gt;
+try {&lt;br /&gt;
+aSocket = new DatagramSocket();&lt;br /&gt;
+byte[] m = args[0].getBytes();&lt;br /&gt;
+InetAddress aHost = InetAddress.getByName(args[1]);&lt;br /&gt;
+int serverPort = 6789;&lt;br /&gt;
+DatagramPacket request = new DatagramPacket(m, args[0].length(),&lt;br /&gt;
+aHost, serverPort);&lt;br /&gt;
+aSocket.send(request);&lt;br /&gt;
+byte[] buffer = new byte[1000];&lt;br /&gt;
+DatagramPacket reply = new DatagramPacket(buffer, buffer.length);&lt;br /&gt;
+aSocket.receive(reply);&lt;br /&gt;
+System.out.println("Reply: " + new String(reply.getData()));&lt;br /&gt;
+} catch (SocketException e) {&lt;br /&gt;
+System.out.println("Socket: " + e.getMessage());&lt;br /&gt;
+} catch (IOException e) {&lt;br /&gt;
+System.out.println("IO: " + e.getMessage());&lt;br /&gt;
+} finally {&lt;br /&gt;
+if (aSocket != null)&lt;br /&gt;
+aSocket.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Client ise tcp'den farklı olarak argüman olarak bağlanacağımız adresi
+veriyoruz. Yani süreci(process) çalıştırırken arg olarak ip adresini
+veriyoruz.&lt;/p&gt;
+&lt;p&gt;MULTICAST&lt;/p&gt;
+&lt;p&gt;UDP'ye benzer olarak multicast olarak yayın yapabiliriz. Ancak bu bir
+protokol değildir. UDP yöntemini kullanmaktadır ancak burada önemli olan
+bir tek istemci değil birden fazla istemci(yani bir grup)'tur. Yani
+gruba bağlı yayın yapılmaktadır.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;br /&gt;
+package edu.burakkk.cliser.multicast;&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Multicastpeer {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+// args give message contents and destination multicast group (e.g.&lt;br /&gt;
+// "228.5.6.7")&lt;br /&gt;
+MulticastSocket s = null;&lt;br /&gt;
+try {&lt;br /&gt;
+InetAddress group = InetAddress.getByName(args[1]);&lt;br /&gt;
+s = new MulticastSocket(6789);&lt;br /&gt;
+s.joinGroup(group);&lt;br /&gt;
+byte[] m = args[0].getBytes();&lt;br /&gt;
+DatagramPacket messageOut = new DatagramPacket(m, m.length, group,&lt;br /&gt;
+6789);&lt;br /&gt;
+s.send(messageOut);&lt;br /&gt;
+byte[] buffer = new byte[1000];&lt;br /&gt;
+for (int i = 0; i &amp;lt; 3; i++) { // get messages from others in group&lt;br /&gt;
+DatagramPacket messageIn = new DatagramPacket(buffer,&lt;br /&gt;
+buffer.length);&lt;br /&gt;
+s.receive(messageIn);&lt;br /&gt;
+System.out.println("Received:"&lt;br /&gt;
++ new String(messageIn.getData()));&lt;br /&gt;
+}&lt;br /&gt;
+s.leaveGroup(group);&lt;br /&gt;
+} catch (SocketException e) {&lt;br /&gt;
+System.out.println("Socket: " + e.getMessage());&lt;br /&gt;
+} catch (IOException e) {&lt;br /&gt;
+System.out.println("IO: " + e.getMessage());&lt;br /&gt;
+} finally {&lt;br /&gt;
+if (s != null)&lt;br /&gt;
+s.close();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;[/sourcecode]
+&lt;/pre&gt;&lt;/div&gt;</summary><category term="Client"></category><category term="Client-Server"></category><category term="Server"></category><category term="Sunucu"></category><category term="İstemci"></category><category term="İstemci-Sunucu"></category></entry><entry><title>Client-Server(İstemci-Sunucu) Programlama-1</title><link href="http://www.burakisikli.com/client-serveristemci-sunucu-programlama-1.html" rel="alternate"></link><published>2009-06-11T01:50:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-06-11:client-serveristemci-sunucu-programlama-1.html</id><summary type="html">&lt;p&gt;Client-Server(Sunucu-İstemci) programlama yaparken bilmemiz gereken bazı
+kavramlar var. Programlama yaparken network(ağ) altyapısını iyi bilmemiz
+gerekiyor. Ağ'da her katmanın özelliğini anlamamız gerekiyor. Eğer
+bilmiyorsanız OSI katmanlarını öğrenmenizi tavsiye ederim. Biz
+kullanacağımız katman orta katmandır. Haberleşme türü olarak Socket
+Communication(Soket İletişimi)'i kullanacağız. Soket iletişimi  TCP ve
+UDP iletişimi olmak üzere iki farklı protokölle sağlanır.   TCP ile UDP
+protokolünün farkı; UDP protokolünü güvenlik olmaksızın iletişim
+sağlanacağında örneğin online radyo(streaming) gibi, TCP protokolünü ise
+güvenliğin ön planda olduğu iletişimde kullanıyoruz. Öncelikle TCP
+protokolünü kullanarak programımızı yapacağız.&lt;/p&gt;
+&lt;p&gt;TCP&lt;/p&gt;
+&lt;p&gt;Bir istemci bir de sunucumuz olacaktır. Sunucumuz istemcilere yayın
+yaparak gönderilmesi gereken bilgileri gönderecektir. Ancak bunu güvenli
+bir iletişim yoluyla yapacaktır.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.tcp;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+*&lt;br /&gt;
+* A Simple Client-Server&lt;br /&gt;
+* Server&lt;br /&gt;
+*  &lt;br /&gt;
+*@version 1.0&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*@date July 09, 2009&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;br /&gt;
+import java.util.*;&lt;/p&gt;
+&lt;p&gt;public class Server {&lt;br /&gt;
+public static void main(String args[]) {&lt;br /&gt;
+try {&lt;br /&gt;
+ServerSocket sock = new ServerSocket(5000);&lt;br /&gt;
+// Listen for connections&lt;br /&gt;
+while (true) {&lt;br /&gt;
+System.out.println("Waiting for client");&lt;br /&gt;
+Socket client = sock.accept();&lt;/p&gt;
+&lt;p&gt;// We have a connection&lt;br /&gt;
+System.out.println("Connected with client");&lt;br /&gt;
+PrintWriter pout = new PrintWriter(client.getOutputStream(),&lt;br /&gt;
+true);&lt;/p&gt;
+&lt;p&gt;// Write the Date to the socket&lt;br /&gt;
+System.out.println("Sent data to client");&lt;br /&gt;
+pout.println(new Date().toString());&lt;/p&gt;
+&lt;p&gt;// Close the socket&lt;br /&gt;
+// and resume listening for more connections&lt;/p&gt;
+&lt;p&gt;client.close();&lt;br /&gt;
+pout.close();&lt;br /&gt;
+}&lt;br /&gt;
+} catch (Exception e) {&lt;br /&gt;
+System.err.println(e);&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Sunucunun yayın yapacağı portun seçimi bu konuda en önemli konudur.
+0-1023 arasındaki portlar başka uygulamalarda kullanıldığı için bu
+portlar dışında bir portu seçerseniz bir sorun çıkacağını sanmıyorum.
+Ben örneğimde 5000 portunu seçtim. ServerSocket objesini yaratılırken
+bunu yaptığımı görebilirsiniz. PrintWriter objesiyle istemciye
+gönderilecek ögeler yazılacaktır(pipeline edilecek) Yani istemci her
+istekte bulunduğunda sunucu kendi tarihini karşı tarafa gönderecektir.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="java"]&lt;/p&gt;
+&lt;p&gt;package edu.burakkk.cliser.tcp;&lt;/p&gt;
+&lt;p&gt;/**&lt;br /&gt;
+*&lt;br /&gt;
+* A Simple Client-Server&lt;br /&gt;
+* Dummy Client&lt;br /&gt;
+*  &lt;br /&gt;
+*@version 1.0&lt;br /&gt;
+*@author Burak ISIKLI&lt;br /&gt;
+*@date July 09, 2009&lt;br /&gt;
+*&lt;br /&gt;
+**/&lt;/p&gt;
+&lt;p&gt;import java.net.*;&lt;br /&gt;
+import java.io.*;&lt;/p&gt;
+&lt;p&gt;public class Client implements Runnable {&lt;br /&gt;
+public void connect() {&lt;br /&gt;
+try {&lt;br /&gt;
+Socket sock = new Socket("127.0.0.1", 5000);&lt;br /&gt;
+InputStream in = sock.getInputStream();&lt;br /&gt;
+BufferedReader bin = new BufferedReader(new InputStreamReader(in));&lt;br /&gt;
+String line;&lt;br /&gt;
+while ((line = bin.readLine()) != null)&lt;br /&gt;
+System.out.println(line);&lt;br /&gt;
+sock.close();&lt;br /&gt;
+} catch (IOException ioe) {&lt;br /&gt;
+System.err.println(ioe);&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public void run() {&lt;br /&gt;
+while (true) {&lt;br /&gt;
+try {&lt;br /&gt;
+Thread.sleep(1000);&lt;br /&gt;
+connect();&lt;br /&gt;
+} catch (Exception e) {&lt;br /&gt;
+System.out.println("Error : " + e);&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;public static void main(String[] args) throws Exception {&lt;br /&gt;
+Thread Debugger = new Thread(new Client());&lt;br /&gt;
+Debugger.start();&lt;br /&gt;
+Debugger.join();&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;İstemciyi yaparken thread mantığıyla yaptığımız dikkatinizi çekmiştir.
+Bunun nedeni eğer thread mantığıyla yapmazsak istemci bir sefer istekte
+bulunacak ve program sonlandırılacaktır. Bu nedenle sürekli hale
+getirerek 1 saniye arayla istekte bulunacaktır. Socket objesine
+yaratırken ip adresini ve portunu yazmamız gerekiyor. Biz kendi kendine
+sanal bağlantı yapılacağı için(dummy client) 127.0.0.1 adresine verdik
+ancak buraya gerçek ip adresini yazmanız gerekecektir. Port ise sunucuya
+verdiğimiz port ile aynı olmak zorundadır. Biz 5000 'ni vermiştik.
+Inputstream ve bufferedreader ise gönderilen cevapları okumak için
+yaratıyoruz.&lt;/p&gt;</summary><category term="Client"></category><category term="Client-Server"></category><category term="Server"></category><category term="Sunucu"></category><category term="İstemci"></category><category term="İstemci-Sunucu"></category></entry><entry><title>SQL Server ile "İyiki Doğdun :)" Mesajı Göndermek</title><link href="http://www.burakisikli.com/sending-happy-birthday-message-using-sql-server.html" rel="alternate"></link><published>2009-04-23T18:40:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-04-23:sending-happy-birthday-message-using-sql-server.html</id><summary type="html">&lt;p&gt;Eğer benim gibi unutkan biriyseniz, bu metodu kullanarak bundan böyle
+arkadaşlarınızın doğumgününü unutmayacaksınız.&lt;/p&gt;
+&lt;p&gt;İlk olarak SQL Server Agent Service'i ve Database Mail hizmetlerini
+kullanmayı bilmelisiniz. Bununla ilgili daha önceki yazılarımı okuyarak
+öğrenebilirsiniz.&lt;br /&gt;
+SQL Server Agent Service ile ilgili yazım için
+&lt;a href="http://burakisikli.wordpress.com/2009/03/05/sql-server-agent-service/"&gt;link&lt;/a&gt;
+ve Database Mail ile ilgili yazım için
+&lt;a href="http://burakisikli.wordpress.com/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/"&gt;link&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;SQL Server Agent Service job görev tanımlamaya dayalıdır(job schedule)
+Doğumgününü hatırlamak için kullanacağınız görev şu:&lt;/p&gt;
+&lt;p&gt;[sourcecode language='sql']&lt;/p&gt;
+&lt;p&gt;DECLARE @email nvarchar(50), @birthday date&lt;br /&gt;
+DECLARE emailCursor CURSOR FOR&lt;br /&gt;
+SELECT email, birthday FROM test;&lt;br /&gt;
+OPEN emailCursor;&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email, @birthday&lt;br /&gt;
+WHILE (@@FETCH_STATUS = 0)&lt;br /&gt;
+BEGIN&lt;br /&gt;
+IF(DATEDIFF(DD, DAY(@birthday),DAY(GETDATE()))=0) AND&lt;br /&gt;
+(DATEDIFF(DD, MONTH(@birthday),MONTH(GETDATE()))=0)&lt;br /&gt;
+BEGIN&lt;br /&gt;
+EXEC msdb.dbo.sp_send_dbmail&lt;br /&gt;
+@profile_name='Test',&lt;br /&gt;
+@recipients=@email,&lt;br /&gt;
+@body='Happy birthday to you!...',&lt;br /&gt;
+@body_format='HTML',&lt;br /&gt;
+@subject='Happy Birthday';&lt;br /&gt;
+END&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email, @birthday&lt;br /&gt;
+END&lt;br /&gt;
+CLOSE emailCursor&lt;br /&gt;
+DEALLOCATE emailCursor&lt;br /&gt;
+GO&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Elimizde bir tane tablomuz olacaktır. Bu tabloda en az 3 adet sütun(id,
+email, birthday-dateofbirth) olacaktır. Satır sayısı sınırsızdır. Bu
+tabloyu oluşturduktan sonra, oluşturduğunuz görevi(job) çalıştırmaya
+başlayın(execute).  O arka planda çalışırken herhangi bir kişinin yani
+arkadaşınızın doğumgünü geldiğinde farkına varacak ve ona belirlediğiniz
+doğumgünü mesajını gönderecektir. Hepsi bu :)&lt;/p&gt;</summary><category term="Agent"></category><category term="Agent Service"></category><category term="Birthday"></category><category term="Dogumgunu"></category><category term="E-mail"></category><category term="E-posta"></category><category term="Email"></category><category term="Eposta"></category><category term="SQL Server"></category></entry><entry><title>Veri Madenciliği(Data Mining) Nedir ve Nerelerde Kullanılır-3</title><link href="http://www.burakisikli.com/veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-3.html" rel="alternate"></link><published>2009-02-16T01:17:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-16:veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-3.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;**2. Veri
+Madenciliğinin Kullanım Alanları**
+&lt;/p&gt;
+Veri Madenciliği kullanım alanı olarak çok geniş bir yelpazeye sahiptir.
+Örnek uygulama alanları aşağıda belirtilmiştir:
+
+**2.1. Finans Sektörü**  
+Finans ve sigorta sektörü günümüzde sundukları hizmet, ürün ve
+servislerle bilgiye dayalı yönetime en fazla ihtiyaç duyan
+kuruluşlardır. Bu sektörde bilgiye dayalı yönetim özellikle ekonomik
+krizin yaşattığı sonuçlar göz önüne alındığında tartışmasız önemli ve
+zorunludur. Finans sektöründe en temel uygulamalar çapraz satış, risk
+derecelendirme, mevcut müşteriyi elde tutma, yeni müşteriler kazanma,
+maliyetleri azaltma, kayıp ve kaçakları engelleme, alternatif kanallar
+oluşturma, müşteri memnuniyetini sağlama olarak özetlenebilir. Hangi
+müşteri profilinin neyi, ne zaman ve neden tercih ettiğini anlayabilen
+bir kuruluş hem talep yaratma, hem de doğru zamanda doğru talebi
+karşılama ve sunma avantajına sahip olacaktır. Kuruluşun karlılığı
+artarken, müşterinin memnuniyeti de artacağından, aynı zamanda müşteri
+sadakati de sağlanmış olacaktır ki, ağ ekonomisinin en büyük kaosu
+budur. Mevcut müşteri kaybı, finans ve sigorta sektörlerinde en önemli
+problemi teşkil etmektedir. Yeni bir müşteri kazanmanın maliyetinin
+müşteriyi elde tutma maliyetinden daha yüksek olduğu, kaybedilen bir
+müşteriyi yeniden kazanma maliyetinin yeni müşteriler edinme
+maliyetinden daha fazla olduğu göz önüne alındığında şirketler müşteri
+odaklı gitmek ve mevcut müşteriyi ellerinde tutmak zorundadır. Bankalar,
+mevcut müşterilerden rakip bankaya geçme ihtimali olan müşterileri,
+profillerini ve kaybettikleri müşterilerin hangi sebepler yüzünden
+sistemden ayrıldıklarını tespit etmek istemektedir.
+
+**2.2. Haberleşme Sektörü**  
+Telekom sektöründe en önemli sorun müşteri kaybıdır. Kuruluşlar hangi
+müşterilerini kaybedebileceklerini önceden belirleyebildikleri taktirde
+bu müşterilerini elde tutma amaçlı stratejiler geliştirebilir, düşük
+maliyetli ve etkili kampanyalar düzenleyebilirler. Kaybetme olasılığı
+olmayan bir müşteriye kalıcılığını sağlama amaçlı bir mesaj göndermek
+hem müşterinin kendisine verilmek istenen mesajın ne olduğunu
+algılamasını zorlaştıracak hem de maliyetleri artıracaktır. Örneğin
+Amerika’nın en büyük kablosuz iletişim sağlayıcısı olan Verizon kaybetme
+olasılığı yüksek olan müşterilerini ve müşteri kaybına neden olan
+faktörleri belirleme amaçlı bir Veri Madenciliği çalışması yapmıştır.
+
+**2.3. Sağlık Sektörü**  
+Doğru ve zamanında karar almanın hasta sağlığı üzerindeki etkisi
+tartışmasız çok önemlidir. Hastane bünyesinde toplanan operasyonel
+veriler, hasta verileri, uygulanan tedavi yöntemi ve tedavi sürecine
+dair veriler yöneticiler açısından bakıldığında; hastanedeki servislerin
+ve programların başarısının görüntülenmesi, kaynakların maliyetlerle
+göreceli olarak kullanımı, kaynak kullanımı ve hasta sayıları ile ilgili
+trendlerin tahmini, harcamalarla ilgili normal olmayan durumların anlık
+tespiti ve yolsuzlukların engellenmesi, hastanede uygulanan tedavi
+yöntemlerinin başarısının irdelenmesi açısından önemli bilgileri
+içermektedir. Bu veriler başarılı tedavi sonuçları almada etken
+faktörlerin belirlenmesi, ameliyatlarda yüksek risk faktörlerinin
+sınanması, hasta verilerinin yaş, cinsiyet, ırk ve tedavi yöntemi gibi
+faktörlere göre sınıflanması, hasta sağlığı açısından geriye dönük
+faktörlerin sınanması, tedavi yöntemi geliştirme vb. amaçlarla
+kullanılmaktadır. Dünya çapında çok sayıda başarılı uygulama örneği
+mevcuttur. Örneğin, San Francisco Hearth Institute; hasta sonuçlarının
+iyileştirilmesi, hastanın hastanede kalma süresinin azaltılması, vb
+amaçlarla bir çalışma başlatmış ve kurum bünyesinde toplanan verilerden
+hastanın geçmişine ait veriler, laboratuar verileri, kollestrol
+verileri, diğer medikal verileri bilgiye dönüştürmüştür.
+
+**2.4. Devlet Uygulamaları**  
+Kamu yöneticileri günümüzde verinin ve bilginin önemini kavramışlardır.
+Müşteriye özel hizmet sunan ticari kuruluşlarda olduğu gibi devlet
+kurumları da vatandaşlarının ihtiyaçlarına özel hizmet sunabilmenin
+önemini kavramışlardır. Kamu yöneticileri için en önemli uygulamalar
+kaynakların doğru olarak kullanımını sağlama ve planlama; kamu
+güvenliğini sağlama amacı ile güvenlik problemlerini önceden tahmin
+etmek, rastlantısal olaylardaki sorunların çözümüne dair izleri keşfetme
+ve olası güvenlik sorunlarını eş zamanlı olarak tespit edebilme ve çözüm
+üretebilme; vergi ile ilgili yolsuzlukları ve izlerini belirleme,
+yolsuzlukları eş zamanlı olarak belirleme, sağlık ödemeleri,
+programların uygulanması vb. konularda şüpheli durumların tespiti,
+suiistimal ve israfları belirleme ve milyonlarca dolarlık zararı
+engelleme, örnekleri artırmak mümkündür. Kamuda enformasyon ve bilgi
+ihtiyacı sonsuzdur. Emniyet birimleri için suç istatistiklerine dair
+online raporlama, hangi profildeki insanların ne tür suçlara meyilli
+olduklarını belirleme, eş zamanlı suç engelleme politikaları oluşturmak
+ancak ileri analitik uygulamalar ile mümkündür. Günümüzde e-devlet
+kavramı oldukça kritiktir. E-devlet uzmanlarının en önemli hedefi
+bilgiye eş zamanlı olarak ulaşmak ve daha iyi hizmet vermektir. E-devlet
+uygulaması gerçekleştirilen ülkelerde kamu kuruluşları ziyaretçilerin
+sayfalarını nasıl kullandığı, ihtiyaç duyulan formlara kolayca ulaşılıp
+ulaşılamadığı, web sayfa tasarımın nasıl en iyi kullanılabilir hale
+getirilebileceği, hangi sayfaların hangi sıra ile ziyaret edildiğinin
+anlaşılması, geçmişteki ziyaretçi davranışlarına göre kurumun web
+sayfasını vatandaşın ihtiyacına daha iyi yanıt verecek şekilde yeniden
+düzenlemek mümkündür.
+
+&lt;p&gt;
+&lt;/span&gt;
+
+&lt;/div&gt;</summary><category term="Data"></category><category term="Datamining"></category><category term="Madenciliği"></category><category term="Mining"></category><category term="Veri"></category><category term="Veri Madenciliği"></category></entry><entry><title>Veri Madenciliği(Data Mining) Nedir ve Nerelerde Kullanılır-2</title><link href="http://www.burakisikli.com/veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-2.html" rel="alternate"></link><published>2009-02-15T16:46:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-2.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Daha önceden
+belirtildiği gibi veri madenciliği, eldeki verilerden üstü kapalı, çok
+net olmayan, önceden bilinmeyen ancak potansiyel olarak kullanışlı
+bilginin çıkarılmasıdır. Bu da; kümeleme, veri özetleme, değişikliklerin
+analizi, sapmaların tespiti gibi belirli sayıda teknik yaklaşımları
+içerir (William J. Frawley, Gregory Piatetsky – Shapiro, Cristopher J.
+Matheus). Başka bir deyişle, veri madenciliği, verilerin içerisindeki
+desenlerin, ilişkilerin, değişimlerin, düzensizliklerin, kuralların ve
+istatistiksel olarak önemli olan yapıların yarı otomatik olarak
+keşfedilmesidir.
+&lt;/p&gt;
+Temel olarak veri madenciliği, veri setleri arasındaki desenlerin ya da
+düzenin, verinin analizi ve yazılım tekniklerinin kullanılması ile
+ilgilidir. Veriler arasındaki ilişkiyi, kuralları ve özellikleri
+belirlemekten bilgisayar sorumludur. Amaç, daha önceden fark edilmemiş
+veri desenlerini tespit edebilmektir. Veri madenciliğini istatistiksel
+bir yöntemler serisi olarak görmek mümkün olabilir. Ancak veri
+madenciliği, geleneksel istatistikten birkaç yönde farklılık gösterir.
+Veri madenciliğinde amaç, kolaylıkla mantıksal kurallara ya da görsel
+sunumlara çevrilebilecek nitel modellerin çıkarılmasıdır. Bu bağlamda,
+veri madenciliği insan merkezlidir ve bazen insan – bilgisayar arayüzü
+birleştirilir. Veri madenciliği sahası, istatistik, makine bilgisi, veri
+tabanları ve yüksek performanslı işlem gibi temelleri de içerir.
+
+Veri madenciliği, günlük yaşamda birçok şekilde kullanılabilmektedir.
+Bunlardan bazıları aşağıdaki gibi sıralanabilir:
+
+Hastanelere yapılan tedavi taleplerinin bölgelere, zamana ve ihtiyaca
+göre değerlendirmesi salgın hastalık riskinin ilk aşamada tespiti,
+kontrolü ve kaynak planlama açısından faydalı olur.  
+Kaçak enerji kullananların profillerini tespit eden bir model, olası
+kaçak enerji kullanıcılarını tahmin etmeyi sağlayacak, düşük maliyet ile
+kaçaklarla etkin mücadele edilmesine olanak tanıyacaktır.  
+Karayollarının bölgelere ve zamana göre yoğunluklarını öngörme amaçlı
+bir çalışma doğru zamanda doğru kaynak planlaması ile örneğin kaza
+oranlarının asgariye indirilmesini sağlayacaktır.  
+Kamu kurumları destek programlarını uygularken, verilecek desteğin doğru
+miktarda ve doğru hedefleri olan kuruluşlara verilmesini sağlayacak
+kurumsal risk skorlaması yapılmasıyla uygulanan programların başarısı
+artar. Kredileri tahsis ederken ödememe riski olan profillerin tespit
+edilmiş olması batık kredi miktarlarını azaltır.
+
+&lt;p&gt;
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;div&gt;
+
+**1.1. Örnek Uygulamalar**
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+Veri Madenciliğinde kullanılan yaklaşımları aşağıda belirtildiği gibi
+sıralayabiliriz:
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Algoritma:** Verideki ilişki ya da örgüleri belirlemekte kullanılan
+programatik tekniklerdir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Model:** Algoritma tarafından belirlenen ilişkilerin tanımıdır. Bu
+tanım genelde kurallar kümesi, karar ağacı, denklemler ya da ilişkiler
+ağı şeklinde ifade edilir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Vaka:** Tekil bir nesneyle ilişkilendirilen özellikler ve ilişkiler
+koleksiyonudur. Gözlem olarak da adlandırılır. Vaka kümesi, aynı
+özellikleri paylaşan vakalar grubudur. Bunu bir tablo gibi
+düşünebilirsiniz, tablonun her satırında bir vaka yer alır. Tek tablo
+yerine birbiriyle ilişkili iki ayrı tablo kullanılması da sözkonusu
+olabilir. Bu durumda ana tablodaki her satır için yavru tabloda birden
+fazla satır bağlantılı olarak eklenebilir. Gözlem kümesi olarak da
+adlandırılır.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Bağımlı değişken (ya da tahmin edilen özellik):** Algoritmanın tahmin
+etmek ya da gruplamak için model inşa edeceği değişken.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Bağımsız değişken (ya da tahmin eden özellik):** Modeli inşa ederken
+kullanılan ve tarif edici bilgilere sahip olan değişkenlere denir.
+Bağımsız değişkenlerin içlerindeki çeşitli kombinasyonlar ele alınarak
+algoritma tarafından gruplamalar ve tahminler oluşturulur.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Kesikli ya da sürekli değişkenler:** Kesikli ya da sürekli değerlere
+sahip olan sayısal kolonlar. Mesela maaşlarla ilgili gerçek değerleri
+içeren bir kolon süreklidir. Ama maaş aralıkları belirler ve gerçek
+değerleri bu aralıklara karşılık gelen 0, 1, 2... gibi bir sayı
+dizisiyle ifade ederseniz, kesikli bir kolon elde etmiş olursunuz. Daha
+yeni araçlarda, kesikli kolonlar için sayısal değerler yerine tarif
+edici karakter ifadelerine de izin verilmektedir. Kolon tipinin kesikli
+ya da sürekli olması, kullanılan veri madenciliği algoritmaları için
+önemli olabilmektedir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Bağıntı:** "Çocuk bezi alan müşterilerin %30’u bira da satın alır."
+Sepet analizinde (basket analysis) müşterilerin beraber satın aldığı
+malların analizi yapılır. Buradaki amaç mallar arasındaki pozitif veya
+negatif korelâsyonları bulmaktır.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+Korelasyon, [olasılık
+kuramı](http://tr.wikipedia.org/wiki/Olas%C4%B1l%C4%B1k_kuram%C4%B1 "Olasılık kuramı")
+ve
+[istatistikte](http://tr.wikipedia.org/wiki/%C4%B0statistik "İstatistik")
+iki bağımsız değişken arasındaki doğrusal ilişkinin yönünü ve gücünü
+belirtir. Genel istatistiksel kullanımda korelasyon, bağımsızlık
+durumundan ne kadar uzaklaşıldığını gösterir.Korelasyon, [olasılık
+kuramı](http://tr.wikipedia.org/wiki/Olas%C4%B1l%C4%B1k_kuram%C4%B1 "Olasılık kuramı")
+ve
+[istatistikte](http://tr.wikipedia.org/wiki/%C4%B0statistik "İstatistik")
+iki bağımsız değişken arasındaki doğrusal ilişkinin yönünü ve gücünü
+belirtir. Genel istatistiksel kullanımda korelasyon, bağımsızlık
+durumundan ne kadar uzaklaşıldığını gösterir.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+Çocuk bezi alan müşterilerin mama da satın alacağını veya bira satın
+alanların cips de alacağını tahmin edebiliriz ama ancak otomatik bir
+analiz bütün olasılıkları göz önüne alır ve kolay düşünülemeyecek,
+örneğin çocuk bezi ve bira arasındaki bağıntıları da bulur.
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Sınıflandırma:&lt;/strong&gt; "Genç kadınlar küçük araba satın alır; yaşlı, zengin
+erkekler büyük, lüks araba satın alır." Amaç bir malın özellikleri ile
+müşteri özelliklerini eşlemektir. Böylece bir müşteri için ideal ürün
+veya bir ürün için ideal müşteri profili çıkarılabilir. Örneğin bir
+otomobil satıcısı şirket geçmiş müşteri hareketlerinin analizi ile
+yukarıdaki gibi iki kural bulursa genç kadınların okuduğu bir dergiye
+reklâm verirken küçük modelinin reklâmını verir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Regresyon:&lt;/strong&gt; "Ev sahibi olan, evli, aynı iş yerinde beş yıldan
+fazladır çalışan, geçmiş kredilerinde geç ödemesi bir ayı geçmemiş bir
+erkeğin kredi skoru 825’dir." Başvuru skorlamada (application scoring)
+bir finans kurumuna kredi için başvuran kişi ile ilgili finansal
+güvenilirliğini notlayan örneğin 0 ile 1000 arasında bir skor
+hesaplanır. Bu skor kişinin özellikleri ve geçmiş kredi hareketlerine
+dayanılarak hesaplanır.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Zaman İçinde Sıralı Örüntüler:&lt;/strong&gt; "İlk üç taksitinden iki veya daha
+fazlasını geç ödemiş olan müşteriler %60 olasılıkla kanuni takibe
+gidiyor." Davranış skoru (behavioral score), başvuru skorundan farklı
+olarak kredi almış ve taksitleri ödeyen bir kişinin sonraki taksitlerini
+ödeme/geciktirme davranışını notlamayı amaçlar.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benzer Zaman Sıraları:&lt;/strong&gt; "X şirketinin hisse fiyatları ile Y
+şirketinin hisse fiyatları benzer hareket ediyor." Amaç zaman içindeki
+iki hareket serisi arasında bağıntı kurmaktır. Bunlar örneğin iki malın
+zaman içindeki satış miktarları olabilir. Örneğin dondurma satışları ile
+kola satışları arasında pozitif, dondurma satışları ile salep satışları
+arasında negatif bir bağıntı beklenebilir.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Fark Saptanması:&lt;/strong&gt; "Normalden farklı davranış gösteren müşterilerim
+var mı?" Amaç önceki uygulamaların aksine kural bulmak değil, kurala
+uymayan istisnai hareketleri bulmaktır. Bu da örneğin olası
+sahtekârlıkların saptanmasını (fraud detection) sağlar. Örneğin Visa
+kredi kartı için yapılan CRIS sisteminde bir yapay sinir ağı kredi kartı
+hareketlerini takip ederek müşterinin normal davranışına uymayan
+hareketler için müşterinin bankası ile temasa geçerek müşteri onayı
+istenmesini sağlar.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Doküman Madenciliği:&lt;/strong&gt; "Arşivimde (veya internet üzerinde) bu dokümana
+benzer hangi dokümanlar var?" Amaç dokümanlar arasında ayrıca elle bir
+tasnif gerekmeden benzerlik hesaplayabilmektir (text mining). Bu genelde
+otomatik olarak çıkarılan anahtar sözcüklerin tekrar sayısı sayesinde
+yapılır.&lt;/p&gt;
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Madencilik Yapısı(Mining Structure):** Microsoft tarafından kullanılan
+bir tanımdır. Analysis Services'daki bir vaka kümesini temsil eder.
+Aslında alttaki veri yapısı üzerinde yer alan bir metadata katmanıdır.
+Verilerin temel özellikleri yanısıra veri madenciliği açısından çeşitli
+özelliklerini de barındırır. Bu yapı üzerine modeller kurulur.
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Madencilik modeli:** Belirli bir algoritmanın belirli bir madencilik
+çatısı üzerine uygulanmış halidir. Aynı çatı üzerine farklı algoritmalar
+ya da farklı parametrelerle birden fazla model oluşturabilirsiniz.
+
+&lt;/div&gt;</summary><category term="Data"></category><category term="Datamining"></category><category term="Madenciliği"></category><category term="Mining"></category><category term="Veri"></category><category term="Veri Madenciliği"></category></entry><entry><title>Veri Madenciliği(Data Mining) Nedir ve Nerelerde Kullanılır-1</title><link href="http://www.burakisikli.com/veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-1.html" rel="alternate"></link><published>2009-02-15T03:22:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:veri-madenciligidata-mining-nedir-ve-nerelerde-kullanilir-1.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Gelişen ve değişen
+çevre koşulları, sınırların kalkması ile küreselleşen dünya, farklı
+pazarlama ve ar-ge(araştırma geliştirme) yöntemleri “veri”nin değil
+“bilgi”nin önemini her geçen gün daha da artacak şekilde ortaya
+koymaktadır. İnternetin yaygınlaşması ve kolaylaşması ar-ge ekiplerinin
+“bilgi”ye erişmelerini zorlaştırmaktadır. İnternette arama motorları
+kullanılarak yapılan araştırmalar çoğu zaman istenilenden farklı bir
+şekilde sonuçlanmaktadır. Tıbbi bir araştırma sonucunda “veri”nin
+“bilgi”ye dönüşme işleminin vurgulandığı görülecektir. Bilginin kimi
+yöntemler ile analiz edilmesi ve çıkan sonuçların bir uzman gözüyle
+yorumlanmasıyla geçmiş verilerden gelecek tahminleri yapma işlemi veri
+madenciliği(data mining) olarak belirtilebilir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-size:85%;"&gt;&lt;span style="font-family:verdana;"&gt;**1.
+Veri Madenciliği Nedir?**  
+Basit bir tanım yapmak gerekir ise veri madenciliği, büyük ölçekli
+veriler arasından bilgiye ulaşma, bilgiyi madenleme işidir. Ya da bir
+anlamda büyük veri yığınları içerisinden gelecek ile ilgili tahminde
+bulunabilmemizi sağlayabilecek bağıntıların bilgisayar programı
+kullanarak aranmasıdır. Veri madenciliği deyimi yanlış kullanılan bir
+deyim olabileceğinden buna eş değer başka kullanımlar da literatüre
+geçmiştir. Veritabanlarında bilgi madenciliği (knowledge mining from
+databases), Bilgi çıkarımı(knowledge extraction), data/pattern anaysis
+(veri ve örüntü analizi), veri arkeolojisi gibi.  
+Bunların arasındaki en popüler kullanım Veritabanlarında Bilgi Keşfi
+(VBK - Knowledge Discovery From Databases - KDD) ‘dir. Alternatif olarak
+veri madenciliği aslında bilgi keşfi sürecinin bir parçası şeklinde
+kabul görmektedir. Bu adımlar:  
+1-) Veri Temizleme (gürültülü ve tutarsız verileri çıkarmak)  
+2-) Veri Bütünleştirme (birçok veri kaynağını birleştirebilmek)  
+3-) Veri Seçme (Yapılacak olan analiz ile ilgili olan verileri
+belirlemek )  
+4-) Veri Dönüşümü (Verinin veri madenciliği tekniğinden kullanılabilecek
+hale dönüşümünü gerçekleştirmek)  
+5-) Veri Madenciliği (Veri örüntülerini yakalayabilmek için akıllı
+metotları uygulamak)  
+6-) Örüntü Değerlendirme (Bazı ölçümlere göre elde edilmiş bilgiyi
+temsil eden ilginç örüntüleri tanımlamak)  
+7-) Bilgi Sunumu (Madenciliği yapılmış olan elde edilmiş bilginin
+kullanıcıya sunumunu gerçekleştirmek),  
+Veri madenciliği adımı, kullanıcı ve bilgi tabanı ile etkileşim
+halindedir. İlginç örüntüler kullanıcıya gösterilir, ve bunun ötesinde
+istenir ise bilgi tabanına da kaydedilebilir. Buna göre, veri
+madenciliği işlemi, gizli kalmış örüntüler bulunana kadar devam eder.
+Bir veri madenciliği sistemi, aşağıdaki temel bileşenlere
+sahiptir:&lt;/span&gt;&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Veritabanı, veri
+ambarı ve diğer depolama teknikleri&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Veritabanı ya da veri
+ambarı Sunucusu&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Bilgi Tabanı&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Veri Madenciliği
+Motoru&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Örüntü
+Değerlendirme&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;·Kullanıcı
+Arayüzü&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;"&gt;Veri madenciliği, eldeki verilerden
+üstü kapalı, çok net olmayan, önceden bilinmeyen ancak potansiyel olarak
+kullanışlı bilginin çıkarılmasıdır. Bu da; kümeleme, veri özetleme,
+değişikliklerin analizi, sapmaların tespiti gibi belirli sayıda teknik
+yaklaşımları içerir.  
+Başka bir deyişle, veri madenciliği, verilerin içerisindeki desenlerin,
+ilişkilerin, değişimlerin, düzensizliklerin, kuralların ve istatistiksel
+olarak önemli olan yapıların yarı otomatik olarak keşfedilmesidir.  
+Temel olarak veri madenciliği, veri setleri arasındaki desenlerin ya da
+düzenin, verinin analizi ve yazılım tekniklerinin kullanılması ile
+ilgilidir. Veriler arasındaki ilişkiyi, kuralları ve özellikleri
+belirlemekten bilgisayar sorumludur. Amaç, daha önceden fark edilmemiş
+veri desenlerini tespit edebilmektir.  
+Veri madenciliğini istatistiksel bir yöntemler serisi olarak görmek
+mümkün olabilir. Ancak veri madenciliği, geleneksel istatistikten birkaç
+yönde farklılık gösterir. Veri madenciliğinde amaç, kolaylıkla mantıksal
+kurallara ya da görsel sunumlara çevrilebilecek nitel modellerin
+çıkarılmasıdır. Bu bağlamda, veri madenciliği insan merkezlidir ve bazen
+insan – bilgisayar arayüzü birleştirilir. Veri madenciliği sahası,
+istatistik, makine bilgisi, veritabanları ve yüksek performanslı işlem
+gibi temelleri de içerir.  
+Veri madenciliği konusunda bahsi geçen geniş verideki geniş kelimesi,
+tek bir iş istasyonunun belleğine sığamayacak kadar büyük veri
+kümelerini ifade etmektedir. Yüksek hacimli veri ise, tek bir iş
+istasyonundaki ya da bir grup iş istasyonundaki disklere sığamayacak
+kadar fazla veri anlamındadır. Dağıtık veri ise, farklı coğrafi
+konumlarda bulunan verileri anlatır.&lt;/span&gt;
+
+&lt;/div&gt;</summary><category term="Data"></category><category term="Datamining"></category><category term="Madenciliği"></category><category term="Mining"></category><category term="Veri"></category><category term="Veri Madenciliği"></category></entry><entry><title>SQL Server 2008 Kullanılarak E-posta Göndermek</title><link href="http://www.burakisikli.com/sql-server-2008-kullanilarak-e-posta-gondermek.html" rel="alternate"></link><published>2009-02-15T01:56:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:sql-server-2008-kullanilarak-e-posta-gondermek.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;SQL Server kullanarak
+e-posta nasıl gönderilecek bunu anlatacağım. SQL Server 2000 mail
+gönderme sistemine sahipti fakat mail gönderebilmek için mutlaka MAPI
+alt yapısına sahip bir sistem hazırlamamız şarttı. Bu yapı aynen SQL
+Server 2005’de de tüm özellikleriyle korunuyor. Ancak gerekli hatta
+olmazsa olmaz diyebileceğimiz geliştirme geldi ve Database Mail isimli
+yeni bir mail gönderme sistemi SQL Server 2005’e eklendi. En önemli
+özelliklerinden biri artık MAPI alt yapısına ihtiyaç duymadan herhangi
+bir SMTP sunucu tanımlanarak gönderim yapılabiliyor. Bunun anlamı gmail
+hesabınızı sisteme tanımlayarak SQL Server 2005 üzerinden mail
+gönderebileceğinizdir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;**Güvenilirlik :**  
+Database Mail, önemli özelliklerinden biri olarak ön plana çıkan Simple
+Mail Transfer Protocol (SMTP) kullanabilme yeteneği ile göz doldurduğu
+kadar mail gönderme işleminin SMTP sayesinde SQL Server’dan ayrılmış
+olması ile güvenilirliği de artırmıştır. Bu sayede mail gönderme işlemi
+sırasında SQL Server 2005 çok daha az kaynak kullanarak performans kaybı
+yaşamayacak, herhangi bir dış kaynaklı sorundan ise etkilenmeyecektir.
+Yine Database Mail sisteminin gelişmiş özelliklerinden biri de SMTP
+sunucusunda oluşan herhangi bir sorunda gönderilecek mailleri beklemeye
+alıp SMTP sunucusundaki sorun giderildikten sonra tekrar
+gönderebilmesidir. Ayrıca bir Database Mail profili birden fazla SMTP
+sunucusu barındırabilir. Böylece kullanım dışı bir SMTP sunucusu varsa
+tanımlı diğer SMTP sunucuları üzerinden mail gönderimi yapılabilir.
+İlginç bir diğer özellik ise HTML formatında mail
+gönderebilmeniz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Kurulum ve Tanımlar :  
+Şimdi biraz Database Mail i yakından tanıyalım ve sonra diğer
+özelliklerine geçelim.&lt;/span&gt;  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdc9h6YE4I/AAAAAAAAAEY/0nw6jOYPiUM/s320/1.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdc9h6YE4I/AAAAAAAAAEY/0nw6jOYPiUM/s1600-h/1.jpg)Object
+Explorer üzerinde görüldüğü gibi Database Mail, Management başlığı
+altına konumlandırılmış. SQL 2000’den aşina olduğumuz MAPI tabanlı SQL
+Mail sistemi ise yine aynı başlık altında Legacy (= miras) isimli alt
+başlık içerisine eklenmiş. Eklendiği yerin ismi gibi gerçekten SQL
+2000’den miras kaldı...&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdb3IRqKVI/AAAAAAAAAEI/3UMrGe2_0iY/s320/2.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdb3IRqKVI/AAAAAAAAAEI/3UMrGe2_0iY/s1600-h/2.jpg)  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Database Mail üzerine
+sağ tuşla kliklediğimizde açılan menüden ulaşabileceğimiz Configure
+Database Mail sihirbazına yine Database Mail üzerine çift tıklayarak da
+ulaşabiliyoruz.&lt;/span&gt;  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Açılan sihirbaz basitçe
+bir profil tanımlayarak bu profil için SMTP sunucuları tanımlamanızı
+kolaylaştırıyor.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;p&gt;
+[![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZddvlFvupI/AAAAAAAAAEg/DDKO-QCjscA/s320/3.1.jpg)](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZddvlFvupI/AAAAAAAAAEg/DDKO-QCjscA/s1600-h/3.1.jpg)
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdd-pUAHxI/AAAAAAAAAEo/pWuiOQR7Zdw/s320/3.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdd-pUAHxI/AAAAAAAAAEo/pWuiOQR7Zdw/s1600-h/3.jpg)
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;En üstteki seçenekle
+devam ettiğimizde profil tanımlaması yapabileceğimiz ve bu profile SMTP
+sunucuları tanımlayabileceğimiz ekran açılıyor. Öncelikle bir profil
+ismi girip açıklama bilgilerini doldurmamız yararlı olacaktır.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdei51sppI/AAAAAAAAAEw/WWb0XFoPqSw/s1600-h/4.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;[![](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdmWxd1B-I/AAAAAAAAAFw/iadjWcZqlOI/s320/7.jpg)](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdmWxd1B-I/AAAAAAAAAFw/iadjWcZqlOI/s1600-h/7.jpg)Profil
+tanımlamalarını yaptıktan sonra ise SMTP accounts: bölümünden Add -&amp;gt;
+New Account tuşu ile SMTP sunucularını ekliyoruz. SMTP sunucularını
+eklerken bir isim verdikten sonra Outlook Express benzeri bir tanımlama
+ekranıyla SMTP sunucu adresini, kullanıcı adı ve şifreyi gerekli
+alanlara giriyoruz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;p&gt;
+[![](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdfiEQYquI/AAAAAAAAAE4/yiaSbys1MLc/s320/5.jpg)](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdfiEQYquI/AAAAAAAAAE4/yiaSbys1MLc/s1600-h/5.jpg)
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Birkaç SMTP sunucusu
+tanımladıktan sonra bunların önceliklerini de seçili sunucunun sırasını
+değiştirerek ayarlayabiliyoruz. Özellikle dikkat edeceğiniz nokta
+tanımlama yaparken Gmail gibi sunucularda "This server requires a secure
+connection(SSL)" işaretli olması gerekmektedir. Bunu öğrenmek için
+kullandığınız sunucunun bu özelliği destekleyip desteklemediğine
+bakmanız gerekmektedir. Eğer bu özelliği destekleyip siz kullanmazsanız
+e-posta göndermede "kullanıcı geçersiz" hatası alırsınız.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[![](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdgFHYTzrI/AAAAAAAAAFA/m1iDmSRK6Eg/s320/6.jpg)](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdgFHYTzrI/AAAAAAAAAFA/m1iDmSRK6Eg/s1600-h/6.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;İşleme devam ettiğimizde
+aşağıdaki gibi sistem parametrelerini değiştirebileceğimiz bir yönetim
+ekranı açılacaktır. Burada gerekli ayarları da yaptıktan sonra SQL
+Server 2008'in profilimizi oluşturması ve accountları tanımlaması için
+devam edebiliriz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;p&gt;
+[![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdl2UnoUtI/AAAAAAAAAFo/1ejAfxxLulQ/s320/7.jpg)](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdl2UnoUtI/AAAAAAAAAFo/1ejAfxxLulQ/s1600-h/7.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;Tüm bu işlemlerin ardından
+profilimiz oluşturulacak ve SMTP hesapları bu profille
+ilişkilendirilecektir.  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;**Ölçeklenebilirlik :  
+**Database Mail eş zamanlı olarak ve/veya arka planda çalışarak mail
+gönderme işlemlerini yapar. sp\_send\_dbmail stored procedure
+çağrıldığında Database Mail, Service Broker bekleme listesine bir istek
+sırası ataması yapar. Ardından stored procedure işletilerek dış mail
+sunucusuna istek gönderilir ve mail teslim edilir.  
+Çoklu profil desteği sayesinde birden fazla profil tanımlanabilir ve
+istenilen profil stored procedure parametresiyle belirlenerek mail
+gönderilebilir. Yine aynı şekilde çoklu SMTP hesabı desteğiyle bir
+profile birden fazla SMTP sunucusu tanımlanabilir. SMTP hesapları ve
+profiller birbirlerinden ayrı değerlendirildiği için aynı SMTP hesapları
+farklı profiller için kullanılabilir durumdadır.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Güvenlik :**  
+Öntanımlı olarak Database Mail kullanımı kapalıdır. Bu yüzden Database
+Mail’i kullanabilmek için SQL Server Surface Area Configuration aracı
+kullanılarak Database Mail stored procedure kullanıma açılmalıdır.  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Ancak daha önceden
+bahsettiğimiz gibi SQL Server 2008'de Surface Area Configuration aracı
+facet altındadır. Policy Management -&amp;gt; Facet -&amp;gt; Surface Area
+Configuration gelip sağ tıklayıp properties seçiyoruz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdivFq3_FI/AAAAAAAAAFQ/Uc-x0dxwBpE/s1600-h/8.1.jpg"&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdivFq3_FI/AAAAAAAAAFQ/Uc-x0dxwBpE/s320/8.1.jpg" /&gt;&lt;/a&gt;
+&lt;a href="http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdi1rMnhEI/AAAAAAAAAFY/es4kZ9stpRM/s1600-h/8.jpg"&gt;&lt;img alt="" src="http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdi1rMnhEI/AAAAAAAAAFY/es4kZ9stpRM/s320/8.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Database Mail
+gönderebilmek için kullanıcının DatabaseMailUserRole isimli veritabanı
+kullanıcı tanımına üye olması gerekir. Ayrıca profil güvenliği de
+mevcuttur. Buna göre tanımlayacağınız Database Mail profillerinden
+public olarak ayarlanan profil tüm msdb veritabanı kullanıcıları
+tarafından mail göndermek için kullanılabilecektir. Public olarak
+tanımlanmamış tüm diğer profillere ise ayrıntılı kullanıcı güvenlik
+ayarları tanımlanabilir.  
+Database Mail ile gönderilecek dosya boyutuna sınırlama getirilebilir.
+Bu konuda aktif bir yönetim sistemi bulunuyor. Yine gönderilecek
+dosyalarda uzantı sınırlaması da yapılabilir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Kullanım :**  
+Database Mail kullanımı sp\_send\_dbmail isimli stored procedure
+aracılığıyla yapılabiliyor. Kullanımı xp\_sendmail yapısına benzemekle
+birlikte bir çok ek parametre desteklenmiş. Aşağıda tam bir sytax ve
+örnek bir kullanımı bulunuyor.
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdjPeF6NII/AAAAAAAAAFg/wQCk2EzYo1A/s320/9.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language='sql']&lt;br /&gt;
+DECLARE @email nvarchar(50)&lt;br /&gt;
+DECLARE emailCursor CURSOR FOR&lt;br /&gt;
+SELECT email FROM deneme;&lt;br /&gt;
+OPEN emailCursor;&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email&lt;br /&gt;
+WHILE (@@FETCH_STATUS = 0)&lt;br /&gt;
+BEGIN&lt;br /&gt;
+EXEC msdb.dbo.sp_send_dbmail@profile_name='deneme',&lt;br /&gt;
+@recipients=@email,@body='deneme',@body_format='HTML',&lt;br /&gt;
+@subject='deneme';&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email&lt;br /&gt;
+END&lt;br /&gt;
+CLOSE emailCursor&lt;br /&gt;
+DEALLOCATE emailCursor&lt;br /&gt;
+GO&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Bu kadar basit bir
+olay. Database Mail seçeneğine gelip "Send Test E-mail" tıklayarak
+sistemin çalışıp çalışmadığını kontrol edebilirsiniz...&lt;/span&gt;&lt;/p&gt;</summary><category term="E-mail"></category><category term="E-posta"></category><category term="Email"></category><category term="Eposta"></category><category term="SQL Server"></category></entry><entry><title>SQL Server 2008'de Surface Area Configuration ne oldu?</title><link href="http://www.burakisikli.com/sql-server-2008de-surface-area-configuration-ne-oldu.html" rel="alternate"></link><published>2009-02-15T01:54:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:sql-server-2008de-surface-area-configuration-ne-oldu.html</id><summary type="html">&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Artık yok diye duymuş
+olabilirsiniz. Kısmen doğru ama aslında Surface Area Configuration hala
+var. Ama ayrı bir konfigürasyon arayüzü olarak değil. Surface Area
+Configuration'la ilgili olarak yaptığınız işleri artık Policy Based
+Management ile yapıyorsunuz. Policy Based Management'ta Facet diye bir
+kavram geliyor. Facet'ler birer özellik kümesi olarak düşünülebilir.
+Biribiriyle bağlantılı olan özellikleri paketleyen unsurlar. Surface
+area configuration da artık bir facet. Ve Policy Based Management'ın
+sağladığı imkanlar içinde bir imkan.&lt;/span&gt;&lt;/p&gt;</summary><category term="Area"></category><category term="Configuration"></category><category term="SQL Server"></category><category term="Surface"></category></entry><entry><title>MSN Listesini Aktarma</title><link href="http://www.burakisikli.com/msn-listesini-aktarma.html" rel="alternate"></link><published>2009-02-12T00:34:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-12:msn-listesini-aktarma.html</id><summary type="html">&lt;p&gt;MSN adresiniz değiştiğinde msn listenizdekileri tek tek eklemeniz
+gerekmiyor. Yapmanız gereken önce eski kullandığınız msn adresinize
+giriş yapın. Menüden kişiler -&amp;gt; Anlık ileti kişileri kaydet deyip ctt
+uzantılı dosyayı istediğiniz yere kaydedin. Sonra yeni msn adresinize
+giriş yapın. Aynı şekilde menüden kişiler -&amp;gt; Anlık ileti kişileri al
+deyip kaydettiğiniz dosyayı seçin. Listeniz aktarılmış oldu. Bu kadar
+basit...:)&lt;/p&gt;</summary><category term="MSN"></category></entry><entry><title>ASP ile Ajax Programlamada Div'de Karakter Sorunu</title><link href="http://www.burakisikli.com/asp-ile-ajax-programlamada-divde-karakter-sorunu.html" rel="alternate"></link><published>2009-02-05T03:05:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-05:asp-ile-ajax-programlamada-divde-karakter-sorunu.html</id><summary type="html">&lt;p&gt;Sitemle ilgili bir asp sayfasını ajax ile yapıyordum.&lt;/p&gt;
+&lt;p&gt;[sourcecode language="javascript"]&lt;br /&gt;
+function GetXmlHttpObject() {&lt;br /&gt;
+var xmlHttp = null;&lt;br /&gt;
+try {&lt;br /&gt;
+xmlHttp = new XMLHttpRequest();&lt;br /&gt;
+} catch (e) {&lt;br /&gt;
+try {&lt;br /&gt;
+xmlHttp = new ActiveXObject("Msxml2.XMLHTTP");&lt;br /&gt;
+} catch (e) {&lt;br /&gt;
+xmlHttp = new ActiveXObject("Microsoft.XMLHTTP");&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+return xmlHttp;&lt;br /&gt;
+}&lt;br /&gt;
+var http;&lt;br /&gt;
+function git(url) {&lt;br /&gt;
+http = GetXmlHttpObject();&lt;br /&gt;
+if (http == null) {&lt;br /&gt;
+alert("Tarayıcınızın AJAX desteği bulunmamaktadır...");&lt;br /&gt;
+return;&lt;br /&gt;
+}&lt;br /&gt;
+http.open("GET", url, true);&lt;br /&gt;
+http.onreadystatechange = updatePage;&lt;br /&gt;
+http.send(null);&lt;br /&gt;
+}&lt;br /&gt;
+function updatePage() {&lt;br /&gt;
+if (http.readyState == 4) {&lt;br /&gt;
+var response = http.responseText;&lt;br /&gt;
+document.getElementById("deneme").innerHTML = response;&lt;br /&gt;
+}&lt;br /&gt;
+}&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Sayfada belirli(yukarıdaki git('x.asp')şeklinde) fonksiyonla istenen
+sayfayı alıyor ve deneme adlı div'de gösteriliyor. Fakat türkçe
+karakterlerde sorun çıkıyordu. Ancak aynı sayfayı tarayıcı ile ayrı yeni
+bir sayfa olarak açtığımızda bu sorun meydana gelmiyordu. Sorun aldığım
+örneğin x.asp sayfasında meydana geliyor. div'de göstermek istediğimiz
+bu sayfanın kodlarken başına aşağıdaki kodu ekleyince sorun düzeldi:&lt;/p&gt;
+&lt;p&gt;[sourcecode language="php"]&lt;br /&gt;
+Response.Charset="windows-1254" Response.ContentType = "text/html"&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Uzun uğraşlarım sonucunda bu sorun da böylece çözülmüş oldu.&lt;/p&gt;</summary><category term="Ajax"></category><category term="ASP"></category><category term="Div"></category><category term="Hata"></category><category term="Sorun"></category></entry><entry><title>Vista'da IIS 7'ye PHP Kurulumu</title><link href="http://www.burakisikli.com/vistada-iis-7ye-php-kurulumu.html" rel="alternate"></link><published>2009-02-05T01:39:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-05:vistada-iis-7ye-php-kurulumu.html</id><summary type="html">&lt;p&gt;Vista'da IIS(Internet Information Services) ile php çalıştırmak mümkün.
+Apache Tomcat gibi benzer yöntemle kurulum yapılıyor.&lt;br /&gt;
+Eğer vistamızda internet information services kurulu değilse kuruyoruz.
+Bunu daha önceden &lt;a href="http://burakisikli.blogspot.com/2009/02/vista-uzerinde-iis-70-kurulumu.html"&gt;bu
+yazımda&lt;/a&gt;
+anlatmıştım. Evet IIS'i kurduğumuza göre sıra bunu PHP servisini
+eklemeye geldi.&lt;br /&gt;
+Öncelikle &lt;a href="http://www.php.net/downloads.php"&gt;bu adresten&lt;/a&gt; php kurulumunu
+indiriyoruz. Benim bu yazıyı yazarkenki en son sürümünün dosyası
+"php-5.2.8-win32-installer.msi"dı. Kurulumu başlattıktan sonra ilk adımı
+next diyerek geçiyoruz.&lt;br /&gt;
+&lt;a href="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYo0lsohaoI/AAAAAAAAADI/59nlsVhqYvI/s1600-h/1.jpg"&gt;&lt;img alt="" src="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYo0lsohaoI/AAAAAAAAADI/59nlsVhqYvI/s320/1.jpg" /&gt;&lt;/a&gt;
+Kurarken dikkat etmemiz gereken en önemli husus PHP'yi bir isapi modülü
+olarak kuracağımızdır. Resimde görüldüğü gibi IIS ISAPI Module
+seçeneğini seçerek tüm adımları next diyerek kurulumu tamamlıyoruz.
+Böylece PHP'yi bilgisayarımıza kurduk. Şimdi IIS'de PHP'yi tanıtıyoruz.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYo3HDKEmUI/AAAAAAAAADg/HOHvwzEYpyw/s1600-h/2.jpg"&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYo3HDKEmUI/AAAAAAAAADg/HOHvwzEYpyw/s320/2.jpg" /&gt;&lt;/a&gt;Denetim
+masası -&amp;gt; Yönetimsel Araçlar yolunu takip ederer resimdeki gibi
+Internet Information Services (IIS) Yöneticisi'ni açıyoruz.&lt;br /&gt;
+Sonra alt resimdeki görüldüğü gibi seçilen varsayılan bilgisayarın
+ismini(benimki BURAKKK)-&amp;gt;Siteler-&amp;gt;Default Web Site adımlarını
+takip ederek IIS sekmesindeki İşleyici eşleşmelerini açıyoruz.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://3.bp.blogspot.com/_FhRCL5jj9p8/SYo3-n7o0rI/AAAAAAAAADo/qwMfbUu2gJ0/s1600-h/3.jpg"&gt;&lt;img alt="" src="http://3.bp.blogspot.com/_FhRCL5jj9p8/SYo3-n7o0rI/AAAAAAAAADo/qwMfbUu2gJ0/s320/3.jpg" /&gt;&lt;/a&gt;Sağ
+taraftaki Eylemler menüsünden ikincis sırada bulunan "Kod eşlemesi ekle"
+linkine tıklıyoruz&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://3.bp.blogspot.com/_FhRCL5jj9p8/SYo6kFu6uMI/AAAAAAAAAD4/GV73PC9hd0Q/s1600-h/4.jpg"&gt;&lt;img alt="" src="http://3.bp.blogspot.com/_FhRCL5jj9p8/SYo6kFu6uMI/AAAAAAAAAD4/GV73PC9hd0Q/s320/4.jpg" /&gt;&lt;/a&gt;İstek
+yolu: *.php&lt;br /&gt;
+Çalıştırabilir: PHP Kurulu olduğu dizindeki php5isapi.dll dosyası
+(C:\Program Files\PHP\php5isapi.dll)&lt;br /&gt;
+Adı: İstediğinizi verebilirsiniz ancak daha sonra anlaşılması için PHP&lt;br /&gt;
+Açılan pencereden aşğıdaki gibi ayarlıyıp tamam diyoruz. Eğer aşağıdaki
+gibi bir uyarı verirse evet diyoruz.&lt;br /&gt;
+&lt;a href="http://2.bp.blogspot.com/_FhRCL5jj9p8/SYo44mcne5I/AAAAAAAAADw/gsp10gYqpig/s1600-h/5.jpg"&gt;&lt;img alt="" src="http://2.bp.blogspot.com/_FhRCL5jj9p8/SYo44mcne5I/AAAAAAAAADw/gsp10gYqpig/s320/5.jpg" /&gt;&lt;/a&gt;&lt;br /&gt;
+Eğer bir hata yapmamışsak şimdi bilgisayarımızda PHP'nin çalışır hale
+gelmiş olması lazım.&lt;br /&gt;
+Test için 1.php adlı aşağıdaki dosyayı c:\inetpub\wwwroot dizinine
+oluşturuyoruz:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="cp"&gt;&amp;lt;?PHP&lt;/span&gt; &lt;span class="k"&gt;echo&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;Oldu....&amp;#39;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;&lt;span class="cp"&gt;?&amp;gt;&lt;/span&gt;&lt;span class="x"&gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;http://localhost/1.php adresine girdiğimizde "Oldu" yazıyorsa PHP artık
+tamamen kurulmuştur...&lt;/p&gt;</summary><category term="IIS"></category><category term="PHP"></category><category term="Windows"></category></entry><entry><title>Vista üzerinde IIS 7.0 Kurulumu</title><link href="http://www.burakisikli.com/vista-uzerinde-iis-70-kurulumu.html" rel="alternate"></link><published>2009-02-05T00:53:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-05:vista-uzerinde-iis-70-kurulumu.html</id><summary type="html">&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Vista işletim
+sisteminde IIS 7.0 kurulumunu ve asp dosyalarının kendi bilgisayarımızda
+nasıl çalıştığını anlatacağız. IIS 7.0 kurmak için ilk önce denetim
+masası -&amp;gt; program ekle kaldır yolunu takip ederek, Windows Bileşeni
+ekle / kaldır’a tıklıyoruz, Ekrana resimdeki gibi bir pencere gelecek.
+Kurulumun devamı ve özel ayarları yazının devamında bulabilirsiniz. Bu
+pencereden Internet Information Services seceneğinin yanındaki +
+işaretine tıklayıp seçeneği genişletiyoruz...&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+style="font-family:verdana;font-size:85%;"&gt;&lt;img alt="" src="http://3.bp.blogspot.com/_FhRCL5jj9p8/SYoiJlFYkZI/AAAAAAAAACA/gqrdmLoVKIc/s320/1.jpg" /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;div&gt;
+
+[&lt;span
+style="font-family:verdana;font-size:85%;"&gt;![](http://1.bp.blogspot.com/_FhRCL5jj9p8/SYoiSJ2EaPI/AAAAAAAAACI/6t_Ui3lsIgc/s320/2.jpg)&lt;/span&gt;](http://1.bp.blogspot.com/_FhRCL5jj9p8/SYoiSJ2EaPI/AAAAAAAAACI/6t_Ui3lsIgc/s1600-h/2.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;Resimde görülen bütün
+alanları seçtikten sonra, OK tuşuna tıklayarak yüklemeyi başlatıyoruz.  
+Yükleme bittiğinde IIS 7.0 kullanıma hazır olacaktır.  
+IIS konsoluna erişmek için kontrol panelimizdeki yönetimsel araçlar
+-&amp;gt; Ineternet Information Services seçeeceğiz.  
+IIS 7.0’ın konsolu 6.0 a göre oldukça gelişmiş ve sanki bir hostun
+kontrol panelini andırıyor.  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;"&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[&lt;span
+style="font-family:verdana;font-size:85%;"&gt;![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SYoikjlYdkI/AAAAAAAAACQ/zJ3Lopf4CMo/s320/3.jpg)&lt;/span&gt;](http://3.bp.blogspot.com/_FhRCL5jj9p8/SYoikjlYdkI/AAAAAAAAACQ/zJ3Lopf4CMo/s1600-h/3.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;Resimde görüldüğü gibi IIS
+7.0 eski versiyona göre oldukça gelişmiş özelliklere sahip, Biz
+bunlardan ASP dilinin localde nasıl çalışacağını inceleyeceğiz..  
+İlk olarak Consolumuzdan ASP iconuna tıklıyoruz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[&lt;span
+style="font-family:verdana;font-size:85%;"&gt;![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SYoi9w1H0iI/AAAAAAAAACY/vcJV5JSNkro/s320/4.jpg)&lt;/span&gt;](http://3.bp.blogspot.com/_FhRCL5jj9p8/SYoi9w1H0iI/AAAAAAAAACY/vcJV5JSNkro/s1600-h/4.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;Karşımıza gelen özellikler
+penceresinde bir çok özellik olduğunu göreceksiniz. Ama üzülmeyin
+değiştireceğimiz toplam 2 seçenek mevcut, arzu edenler diğer seçenekleri
+de değiştirebilirler.  
+İlk seçeneğimiz Davranış başlığındaki Üst Yolları Etkinleştir. Bu değer
+normalde false olarak gelir, bunu true olarak değiştiriyoruz ki,
+server.mappath komutu wwwroot dizinimizin üst dizinlerinide görebilsin  
+Örnek : False dersek uygulamamız ilk dizin olarak uygulama dizinimizi
+görür, yani DENEME diye bir sitemiz varsa c:\\DENEME seklinde algılar
+ki, bu isimde bir dizin c:\\ de mevcut olmadığından uygulama hata
+verecektir. Diğer yandan True dersek, uygulama DENEME dizinini
+c:\\inetpup\\wwwroot\\DENEME seklinde görünecek ve uygulamamız sorunsuz
+calışacaktır.  
+Diğer değiştireceğimiz bir seçenek Derleme kısmındaki Hata Ayıklama
+Özellikleri seçeneğidir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span
+style="font-family:verdana;font-size:85%;"&gt;![](http://1.bp.blogspot.com/_FhRCL5jj9p8/SYojszdB2XI/AAAAAAAAACg/YCTUmgAqgFE/s320/5.jpg)Resimde
+de görüldüğü gibi burada da bir çok seçenek mevcut. Eğer Vista ile
+beraber gelen Internet Explorer 7'yi kullanıyorsak, biliyorsunuz ki IE7
+bazı hata mesajlarını tam olarak göstermez (detayını) burada Hataları
+tarayıcıya gönder seçeneğini seçerek gelen hata mesajlarını browser da
+tam olarak gözükmesini sağlıyoruz (Daha sonra IE7 de ufak bir ayar
+yapacağız.)  
+Evet bu iki ve çok zor işlemden sonra IIS 7.0 ile işimiz bitiyor. Asp
+uygulamalarımızı çalıştırmak için şimdide izinleri ayarlayalım.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;IIS kullananlar
+bilirler dizinlerimize yazma izni vermemiz gerekmekte, bunu aynı XP de
+olduğu gibi çalıştığımız klasör üzerinde sağ tıklayarak güvenlik
+menüsünden kullanıcıları ve erişim haklarını full yaparak kullanıma
+açıyoruz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img alt="" src="http://2.bp.blogspot.com/_FhRCL5jj9p8/SYomw4xqTuI/AAAAAAAAADA/F54mEF3Vv8Q/s320/6.jpg" /&gt;&lt;/p&gt;
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Buraya kadar her şey
+tamam, ama bitti mi? Hayır. Şimdi en can alıcı püf noktasına geliyoruz,
+Normalde XP üstünde IIS kurup birde dizinlere izin verince her şey
+çalışıyordu. Vista biraz daha detaylı bu konuda:  
+Windows Explorer’ı açarak  
+C:\\Windows\\ServiceProfiles\\NetworkService\\AppData\\Local\\Temp  
+Bu dizine gidiyoruz ve tüm haklarını (yazma, silme v.s.) kullanıma
+açıyoruz. Evet artık herşeyimiz hazır. Local hostumuzda ASP
+uygulamalarımızı güle güle çalıştırabiliriz…  
+NOT : Tüm bunları yapmadan önce kullanıcı profilinden UAC ‘yi devre dışı
+bırakınız...&lt;/span&gt;
+
+&lt;/div&gt;</summary><category term="IIS"></category><category term="Windows"></category></entry><entry><title>Ubuntu Boot Ekranını Değiştirmek</title><link href="http://www.burakisikli.com/ubuntu-boot-ekranini-degistirmek.html" rel="alternate"></link><published>2009-02-05T00:48:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-05:ubuntu-boot-ekranini-degistirmek.html</id><summary type="html">&lt;p&gt;Ubuntu‘yu yüklediniz fakat boot ekranının ayarlarından memnun
+değilsiniz. Bekleme zamanını değiştirmek istiyorsanız ya da
+varsayılan(default) açılan işletim sistemini değiştirmek istiyorsanız
+Ubuntu’da /boot/grub un altında menu.lst yi değiştirerek bu
+isteklerinizeulaşabilirsiniz. Bunun için Programlardan terminal'e "sudo
+gedit /boot/grub/menu.lst" yazarak bu dosyaya admin olarak erişebilir ve
+istediğiniz değişiklikleri yapabilirsiniz. Dosyayı açtığınızda zaten
+gerekli açıklamalar üstünde yorum olarak yapılmıştır. Eğer olmasını
+istemediğiniz satırlar varsa başına "#" koyarak anında yorum satırı
+haline getirebilirsiniz...&lt;/p&gt;</summary><category term="Boot"></category><category term="Ubuntu"></category></entry><entry><title>SQL Server 2008 Hatası: "Saving changes is not permitted"</title><link href="http://www.burakisikli.com/sql-server-2008-hatasi-saving-changes-is-not-permitted.html" rel="alternate"></link><published>2009-02-04T16:11:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-04:sql-server-2008-hatasi-saving-changes-is-not-permitted.html</id><summary type="html">&lt;p&gt;&lt;a href="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYmkvo9yysI/AAAAAAAAABg/E59Jgxv41Jk/s1600-h/ssms1-thumb.png"&gt;&lt;img alt="" src="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYmkvo9yysI/AAAAAAAAABg/E59Jgxv41Jk/s320/ssms1-thumb.png" /&gt;&lt;/a&gt;
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Eğer SQL Server
+Management Studio 2008 kullanıyorsanız, tabloları oluşturduktan sonra
+herhangi bir tasarım(design) değişikliği yaptığınızda şu hatayı
+alabilirsiniz:&lt;/span&gt;&lt;a href="http://www.danrigsby.com/blog/wp-content/uploads/2008/09/ssms1-thumb.png"&gt;&lt;/a&gt;&lt;br /&gt;
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Değişiklik olduğunda
+hata vermemesi için bir seçeneğin kaldırılması gerekmektedir.&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Bunun için Management
+Studio'dayken Options seçeneğinden Designers seçeneğini
+açıyoruz.&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-family:verdana;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Açılan seçeneklerde
+"Table and Database Designers" seçeneğini buluyoruz. Bu seçeneğe
+girdikten sonra “Prevent saving changes that require table re-creation”
+seçeneğini etkisizleştiriyoruz. Tamam basarak kapatıyoruz.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYmj4c8Y2WI/AAAAAAAAABY/Cq3D2mSsBzM/s1600-h/ssms2-thumb.png"&gt;&lt;span
+style="font-size:85%;"&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYmj4c8Y2WI/AAAAAAAAABY/Cq3D2mSsBzM/s320/ssms2-thumb.png" /&gt;&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;
+&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;</summary><category term="Hata"></category><category term="SQL Server"></category></entry><entry><title>Windows'da hizmetleri silmek</title><link href="http://www.burakisikli.com/windowsta-hizmetler-nasil-silinir.html" rel="alternate"></link><published>2009-02-03T17:37:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-03:windowsta-hizmetler-nasil-silinir.html</id><summary type="html">&lt;p&gt;Denetim Masası'nın Yönetimsel Araçlar bölümüne giderek veya Windows XP
+ise Çalıştır'a, Vista ise Başlat menüsünün arama kutucuğuna services.msc
+yazarak &lt;em&gt;Hizmetler&lt;/em&gt; penceresini açın. Listeden silmek istediğiniz
+hizmeti bulun.&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://2.bp.blogspot.com/_FhRCL5jj9p8/SYhmWJt7a5I/AAAAAAAAABI/tfq_skhxK5w/s1600-h/hizmet_silme.png"&gt;&lt;img alt="" src="http://2.bp.blogspot.com/_FhRCL5jj9p8/SYhmWJt7a5I/AAAAAAAAABI/tfq_skhxK5w/s320/hizmet_silme.png" /&gt;&lt;/a&gt;&lt;span
+style="font-family:verdana;"&gt;Hizmet adına çift
+tıklayarak&lt;/span&gt;&lt;em&gt;Özellikler&lt;/em&gt;&lt;span style="font-family:verdana;"&gt;
+penceresini açın. "Hizmet adı" karşısındaki değeri o hizmeti silecek
+komutta kullanacaksınız.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-family:verdana;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span
+style="font-size:85%;"&gt;&lt;a href="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYhmig0v0yI/AAAAAAAAABQ/cngRl0D1Ji0/s1600-h/hizmet_silme2.png"&gt;&lt;img alt="" src="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYhmig0v0yI/AAAAAAAAABQ/cngRl0D1Ji0/s320/hizmet_silme2.png" /&gt;&lt;/a&gt;&lt;span
+style="font-family:verdana;"&gt;Komut İstemi'ni açın, ancak Vista
+kullanıyorsanız komut istemi simgesine sağ tuşla tıklayıp "Yönetici
+olarak çalıştır"ı seçin. Kullanacağınız komut&lt;/span&gt;&lt;em&gt;sc delete
+hizmet_adı&lt;/em&gt;&lt;span style="font-family:verdana;"&gt; şeklinde
+olacak.&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;sc delete WdiServiceHost&lt;/span&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;Bu sadece bir örnek, "WdiServiceHost
+hizmetini silebilirsiniz" önerisi olarak algılamayın. :) Hizmet adında
+boşluk varsa tırnak içinde yazılması gerekiyor:&lt;/span&gt;&lt;/p&gt;
+&lt;div style="text-align:justify;color:#000000;"&gt;
+
+&gt; &lt;span style="font-size:85%;"&gt;sc delete "Hizmet Adı"&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;&lt;em&gt;Hizmetler&lt;/em&gt; penceresini yenilediğinizde
+hizmetin silinmiş olduğunu göreceksiniz.&lt;/span&gt;&lt;/p&gt;</summary><category term="Hizmet"></category><category term="Windows"></category></entry><entry><title>Blog was opened :)))</title><link href="http://www.burakisikli.com/yayin-hayatina-basladi.html" rel="alternate"></link><published>2009-02-03T16:52:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-03:yayin-hayatina-basladi.html</id><summary type="html">&lt;p&gt;Hello everyone;&lt;br /&gt;
+From now on I write my projects on my blog.&lt;br /&gt;
+Welcome to my blog :)))&lt;/p&gt;</summary></entry><entry><title>About</title><link href="http://www.burakisikli.com/about.html" rel="alternate"></link><published>2008-11-21T19:38:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2008-11-21:about.html</id><summary type="html">&lt;p&gt;This is an example of a WordPress page, you could edit this to put
+information about yourself or your site so readers know where you are
+coming from. You can create as many pages like this one or sub-pages as
+you like and manage all of your content inside of WordPress.&lt;/p&gt;</summary></entry></feed>

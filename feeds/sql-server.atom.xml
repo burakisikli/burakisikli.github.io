@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title></title><link href="http://www.burakisikli.com/" rel="alternate"></link><link href="http://www.burakisikli.com/feeds/sql-server.atom.xml" rel="self"></link><id>http://www.burakisikli.com/</id><updated>2009-04-23T18:40:00+03:00</updated><entry><title>SQL Server ile "İyiki Doğdun :)" Mesajı Göndermek</title><link href="http://www.burakisikli.com/sending-happy-birthday-message-using-sql-server.html" rel="alternate"></link><published>2009-04-23T18:40:00+03:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-04-23:sending-happy-birthday-message-using-sql-server.html</id><summary type="html">&lt;p&gt;Eğer benim gibi unutkan biriyseniz, bu metodu kullanarak bundan böyle
+arkadaşlarınızın doğumgününü unutmayacaksınız.&lt;/p&gt;
+&lt;p&gt;İlk olarak SQL Server Agent Service'i ve Database Mail hizmetlerini
+kullanmayı bilmelisiniz. Bununla ilgili daha önceki yazılarımı okuyarak
+öğrenebilirsiniz.&lt;br /&gt;
+SQL Server Agent Service ile ilgili yazım için
+&lt;a href="http://burakisikli.wordpress.com/2009/03/05/sql-server-agent-service/"&gt;link&lt;/a&gt;
+ve Database Mail ile ilgili yazım için
+&lt;a href="http://burakisikli.wordpress.com/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/"&gt;link&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;SQL Server Agent Service job görev tanımlamaya dayalıdır(job schedule)
+Doğumgününü hatırlamak için kullanacağınız görev şu:&lt;/p&gt;
+&lt;p&gt;[sourcecode language='sql']&lt;/p&gt;
+&lt;p&gt;DECLARE @email nvarchar(50), @birthday date&lt;br /&gt;
+DECLARE emailCursor CURSOR FOR&lt;br /&gt;
+SELECT email, birthday FROM test;&lt;br /&gt;
+OPEN emailCursor;&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email, @birthday&lt;br /&gt;
+WHILE (@@FETCH_STATUS = 0)&lt;br /&gt;
+BEGIN&lt;br /&gt;
+IF(DATEDIFF(DD, DAY(@birthday),DAY(GETDATE()))=0) AND&lt;br /&gt;
+(DATEDIFF(DD, MONTH(@birthday),MONTH(GETDATE()))=0)&lt;br /&gt;
+BEGIN&lt;br /&gt;
+EXEC msdb.dbo.sp_send_dbmail&lt;br /&gt;
+@profile_name='Test',&lt;br /&gt;
+@recipients=@email,&lt;br /&gt;
+@body='Happy birthday to you!...',&lt;br /&gt;
+@body_format='HTML',&lt;br /&gt;
+@subject='Happy Birthday';&lt;br /&gt;
+END&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email, @birthday&lt;br /&gt;
+END&lt;br /&gt;
+CLOSE emailCursor&lt;br /&gt;
+DEALLOCATE emailCursor&lt;br /&gt;
+GO&lt;/p&gt;
+&lt;p&gt;[/sourcecode]&lt;/p&gt;
+&lt;p&gt;Elimizde bir tane tablomuz olacaktır. Bu tabloda en az 3 adet sütun(id,
+email, birthday-dateofbirth) olacaktır. Satır sayısı sınırsızdır. Bu
+tabloyu oluşturduktan sonra, oluşturduğunuz görevi(job) çalıştırmaya
+başlayın(execute).  O arka planda çalışırken herhangi bir kişinin yani
+arkadaşınızın doğumgünü geldiğinde farkına varacak ve ona belirlediğiniz
+doğumgünü mesajını gönderecektir. Hepsi bu :)&lt;/p&gt;</summary><category term="Agent"></category><category term="Agent Service"></category><category term="Birthday"></category><category term="Dogumgunu"></category><category term="E-mail"></category><category term="E-posta"></category><category term="Email"></category><category term="Eposta"></category><category term="SQL Server"></category></entry><entry><title>SQL Server 2008 Kullanılarak E-posta Göndermek</title><link href="http://www.burakisikli.com/sql-server-2008-kullanilarak-e-posta-gondermek.html" rel="alternate"></link><published>2009-02-15T01:56:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:sql-server-2008-kullanilarak-e-posta-gondermek.html</id><summary type="html">&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;SQL Server kullanarak
+e-posta nasıl gönderilecek bunu anlatacağım. SQL Server 2000 mail
+gönderme sistemine sahipti fakat mail gönderebilmek için mutlaka MAPI
+alt yapısına sahip bir sistem hazırlamamız şarttı. Bu yapı aynen SQL
+Server 2005’de de tüm özellikleriyle korunuyor. Ancak gerekli hatta
+olmazsa olmaz diyebileceğimiz geliştirme geldi ve Database Mail isimli
+yeni bir mail gönderme sistemi SQL Server 2005’e eklendi. En önemli
+özelliklerinden biri artık MAPI alt yapısına ihtiyaç duymadan herhangi
+bir SMTP sunucu tanımlanarak gönderim yapılabiliyor. Bunun anlamı gmail
+hesabınızı sisteme tanımlayarak SQL Server 2005 üzerinden mail
+gönderebileceğinizdir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;**Güvenilirlik :**  
+Database Mail, önemli özelliklerinden biri olarak ön plana çıkan Simple
+Mail Transfer Protocol (SMTP) kullanabilme yeteneği ile göz doldurduğu
+kadar mail gönderme işleminin SMTP sayesinde SQL Server’dan ayrılmış
+olması ile güvenilirliği de artırmıştır. Bu sayede mail gönderme işlemi
+sırasında SQL Server 2005 çok daha az kaynak kullanarak performans kaybı
+yaşamayacak, herhangi bir dış kaynaklı sorundan ise etkilenmeyecektir.
+Yine Database Mail sisteminin gelişmiş özelliklerinden biri de SMTP
+sunucusunda oluşan herhangi bir sorunda gönderilecek mailleri beklemeye
+alıp SMTP sunucusundaki sorun giderildikten sonra tekrar
+gönderebilmesidir. Ayrıca bir Database Mail profili birden fazla SMTP
+sunucusu barındırabilir. Böylece kullanım dışı bir SMTP sunucusu varsa
+tanımlı diğer SMTP sunucuları üzerinden mail gönderimi yapılabilir.
+İlginç bir diğer özellik ise HTML formatında mail
+gönderebilmeniz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Kurulum ve Tanımlar :  
+Şimdi biraz Database Mail i yakından tanıyalım ve sonra diğer
+özelliklerine geçelim.&lt;/span&gt;  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdc9h6YE4I/AAAAAAAAAEY/0nw6jOYPiUM/s320/1.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdc9h6YE4I/AAAAAAAAAEY/0nw6jOYPiUM/s1600-h/1.jpg)Object
+Explorer üzerinde görüldüğü gibi Database Mail, Management başlığı
+altına konumlandırılmış. SQL 2000’den aşina olduğumuz MAPI tabanlı SQL
+Mail sistemi ise yine aynı başlık altında Legacy (= miras) isimli alt
+başlık içerisine eklenmiş. Eklendiği yerin ismi gibi gerçekten SQL
+2000’den miras kaldı...&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdb3IRqKVI/AAAAAAAAAEI/3UMrGe2_0iY/s320/2.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdb3IRqKVI/AAAAAAAAAEI/3UMrGe2_0iY/s1600-h/2.jpg)  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Database Mail üzerine
+sağ tuşla kliklediğimizde açılan menüden ulaşabileceğimiz Configure
+Database Mail sihirbazına yine Database Mail üzerine çift tıklayarak da
+ulaşabiliyoruz.&lt;/span&gt;  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Açılan sihirbaz basitçe
+bir profil tanımlayarak bu profil için SMTP sunucuları tanımlamanızı
+kolaylaştırıyor.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;p&gt;
+[![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZddvlFvupI/AAAAAAAAAEg/DDKO-QCjscA/s320/3.1.jpg)](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZddvlFvupI/AAAAAAAAAEg/DDKO-QCjscA/s1600-h/3.1.jpg)
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdd-pUAHxI/AAAAAAAAAEo/pWuiOQR7Zdw/s320/3.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdd-pUAHxI/AAAAAAAAAEo/pWuiOQR7Zdw/s1600-h/3.jpg)
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;En üstteki seçenekle
+devam ettiğimizde profil tanımlaması yapabileceğimiz ve bu profile SMTP
+sunucuları tanımlayabileceğimiz ekran açılıyor. Öncelikle bir profil
+ismi girip açıklama bilgilerini doldurmamız yararlı olacaktır.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdei51sppI/AAAAAAAAAEw/WWb0XFoPqSw/s1600-h/4.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;[![](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdmWxd1B-I/AAAAAAAAAFw/iadjWcZqlOI/s320/7.jpg)](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdmWxd1B-I/AAAAAAAAAFw/iadjWcZqlOI/s1600-h/7.jpg)Profil
+tanımlamalarını yaptıktan sonra ise SMTP accounts: bölümünden Add -&amp;gt;
+New Account tuşu ile SMTP sunucularını ekliyoruz. SMTP sunucularını
+eklerken bir isim verdikten sonra Outlook Express benzeri bir tanımlama
+ekranıyla SMTP sunucu adresini, kullanıcı adı ve şifreyi gerekli
+alanlara giriyoruz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;p&gt;
+[![](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdfiEQYquI/AAAAAAAAAE4/yiaSbys1MLc/s320/5.jpg)](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdfiEQYquI/AAAAAAAAAE4/yiaSbys1MLc/s1600-h/5.jpg)
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Birkaç SMTP sunucusu
+tanımladıktan sonra bunların önceliklerini de seçili sunucunun sırasını
+değiştirerek ayarlayabiliyoruz. Özellikle dikkat edeceğiniz nokta
+tanımlama yaparken Gmail gibi sunucularda "This server requires a secure
+connection(SSL)" işaretli olması gerekmektedir. Bunu öğrenmek için
+kullandığınız sunucunun bu özelliği destekleyip desteklemediğine
+bakmanız gerekmektedir. Eğer bu özelliği destekleyip siz kullanmazsanız
+e-posta göndermede "kullanıcı geçersiz" hatası alırsınız.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+[![](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdgFHYTzrI/AAAAAAAAAFA/m1iDmSRK6Eg/s320/6.jpg)](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdgFHYTzrI/AAAAAAAAAFA/m1iDmSRK6Eg/s1600-h/6.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;İşleme devam ettiğimizde
+aşağıdaki gibi sistem parametrelerini değiştirebileceğimiz bir yönetim
+ekranı açılacaktır. Burada gerekli ayarları da yaptıktan sonra SQL
+Server 2008'in profilimizi oluşturması ve accountları tanımlaması için
+devam edebiliriz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;p&gt;
+[![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdl2UnoUtI/AAAAAAAAAFo/1ejAfxxLulQ/s320/7.jpg)](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdl2UnoUtI/AAAAAAAAAFo/1ejAfxxLulQ/s1600-h/7.jpg)&lt;span
+style="font-family:verdana;font-size:85%;"&gt;Tüm bu işlemlerin ardından
+profilimiz oluşturulacak ve SMTP hesapları bu profille
+ilişkilendirilecektir.  
+&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;**Ölçeklenebilirlik :  
+**Database Mail eş zamanlı olarak ve/veya arka planda çalışarak mail
+gönderme işlemlerini yapar. sp\_send\_dbmail stored procedure
+çağrıldığında Database Mail, Service Broker bekleme listesine bir istek
+sırası ataması yapar. Ardından stored procedure işletilerek dış mail
+sunucusuna istek gönderilir ve mail teslim edilir.  
+Çoklu profil desteği sayesinde birden fazla profil tanımlanabilir ve
+istenilen profil stored procedure parametresiyle belirlenerek mail
+gönderilebilir. Yine aynı şekilde çoklu SMTP hesabı desteğiyle bir
+profile birden fazla SMTP sunucusu tanımlanabilir. SMTP hesapları ve
+profiller birbirlerinden ayrı değerlendirildiği için aynı SMTP hesapları
+farklı profiller için kullanılabilir durumdadır.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Güvenlik :**  
+Öntanımlı olarak Database Mail kullanımı kapalıdır. Bu yüzden Database
+Mail’i kullanabilmek için SQL Server Surface Area Configuration aracı
+kullanılarak Database Mail stored procedure kullanıma açılmalıdır.  
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Ancak daha önceden
+bahsettiğimiz gibi SQL Server 2008'de Surface Area Configuration aracı
+facet altındadır. Policy Management -&amp;gt; Facet -&amp;gt; Surface Area
+Configuration gelip sağ tıklayıp properties seçiyoruz.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdivFq3_FI/AAAAAAAAAFQ/Uc-x0dxwBpE/s1600-h/8.1.jpg"&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdivFq3_FI/AAAAAAAAAFQ/Uc-x0dxwBpE/s320/8.1.jpg" /&gt;&lt;/a&gt;
+&lt;a href="http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdi1rMnhEI/AAAAAAAAAFY/es4kZ9stpRM/s1600-h/8.jpg"&gt;&lt;img alt="" src="http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdi1rMnhEI/AAAAAAAAAFY/es4kZ9stpRM/s320/8.jpg" /&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;div&gt;
+
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Database Mail
+gönderebilmek için kullanıcının DatabaseMailUserRole isimli veritabanı
+kullanıcı tanımına üye olması gerekir. Ayrıca profil güvenliği de
+mevcuttur. Buna göre tanımlayacağınız Database Mail profillerinden
+public olarak ayarlanan profil tüm msdb veritabanı kullanıcıları
+tarafından mail göndermek için kullanılabilecektir. Public olarak
+tanımlanmamış tüm diğer profillere ise ayrıntılı kullanıcı güvenlik
+ayarları tanımlanabilir.  
+Database Mail ile gönderilecek dosya boyutuna sınırlama getirilebilir.
+Bu konuda aktif bir yönetim sistemi bulunuyor. Yine gönderilecek
+dosyalarda uzantı sınırlaması da yapılabilir.&lt;/span&gt;
+
+&lt;/div&gt;
+
+&lt;div&gt;
+
+**Kullanım :**  
+Database Mail kullanımı sp\_send\_dbmail isimli stored procedure
+aracılığıyla yapılabiliyor. Kullanımı xp\_sendmail yapısına benzemekle
+birlikte bir çok ek parametre desteklenmiş. Aşağıda tam bir sytax ve
+örnek bir kullanımı bulunuyor.
+
+&lt;/div&gt;
+
+&lt;p&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdjPeF6NII/AAAAAAAAAFg/wQCk2EzYo1A/s320/9.jpg" /&gt;&lt;/p&gt;
+&lt;p&gt;[sourcecode language='sql']&lt;br /&gt;
+DECLARE @email nvarchar(50)&lt;br /&gt;
+DECLARE emailCursor CURSOR FOR&lt;br /&gt;
+SELECT email FROM deneme;&lt;br /&gt;
+OPEN emailCursor;&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email&lt;br /&gt;
+WHILE (@@FETCH_STATUS = 0)&lt;br /&gt;
+BEGIN&lt;br /&gt;
+EXEC msdb.dbo.sp_send_dbmail@profile_name='deneme',&lt;br /&gt;
+@recipients=@email,@body='deneme',@body_format='HTML',&lt;br /&gt;
+@subject='deneme';&lt;br /&gt;
+FETCH NEXT FROM emailCursor INTO @email&lt;br /&gt;
+END&lt;br /&gt;
+CLOSE emailCursor&lt;br /&gt;
+DEALLOCATE emailCursor&lt;br /&gt;
+GO&lt;br /&gt;
+[/sourcecode]&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Bu kadar basit bir
+olay. Database Mail seçeneğine gelip "Send Test E-mail" tıklayarak
+sistemin çalışıp çalışmadığını kontrol edebilirsiniz...&lt;/span&gt;&lt;/p&gt;</summary><category term="E-mail"></category><category term="E-posta"></category><category term="Email"></category><category term="Eposta"></category><category term="SQL Server"></category></entry><entry><title>SQL Server 2008'de Surface Area Configuration ne oldu?</title><link href="http://www.burakisikli.com/sql-server-2008de-surface-area-configuration-ne-oldu.html" rel="alternate"></link><published>2009-02-15T01:54:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-15:sql-server-2008de-surface-area-configuration-ne-oldu.html</id><summary type="html">&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Artık yok diye duymuş
+olabilirsiniz. Kısmen doğru ama aslında Surface Area Configuration hala
+var. Ama ayrı bir konfigürasyon arayüzü olarak değil. Surface Area
+Configuration'la ilgili olarak yaptığınız işleri artık Policy Based
+Management ile yapıyorsunuz. Policy Based Management'ta Facet diye bir
+kavram geliyor. Facet'ler birer özellik kümesi olarak düşünülebilir.
+Biribiriyle bağlantılı olan özellikleri paketleyen unsurlar. Surface
+area configuration da artık bir facet. Ve Policy Based Management'ın
+sağladığı imkanlar içinde bir imkan.&lt;/span&gt;&lt;/p&gt;</summary><category term="Area"></category><category term="Configuration"></category><category term="SQL Server"></category><category term="Surface"></category></entry><entry><title>SQL Server 2008 Hatası: "Saving changes is not permitted"</title><link href="http://www.burakisikli.com/sql-server-2008-hatasi-saving-changes-is-not-permitted.html" rel="alternate"></link><published>2009-02-04T16:11:00+02:00</published><author><name>burakisikli</name></author><id>tag:www.burakisikli.com,2009-02-04:sql-server-2008-hatasi-saving-changes-is-not-permitted.html</id><summary type="html">&lt;p&gt;&lt;a href="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYmkvo9yysI/AAAAAAAAABg/E59Jgxv41Jk/s1600-h/ssms1-thumb.png"&gt;&lt;img alt="" src="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYmkvo9yysI/AAAAAAAAABg/E59Jgxv41Jk/s320/ssms1-thumb.png" /&gt;&lt;/a&gt;
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Eğer SQL Server
+Management Studio 2008 kullanıyorsanız, tabloları oluşturduktan sonra
+herhangi bir tasarım(design) değişikliği yaptığınızda şu hatayı
+alabilirsiniz:&lt;/span&gt;&lt;a href="http://www.danrigsby.com/blog/wp-content/uploads/2008/09/ssms1-thumb.png"&gt;&lt;/a&gt;&lt;br /&gt;
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Değişiklik olduğunda
+hata vermemesi için bir seçeneğin kaldırılması gerekmektedir.&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-family:verdana;font-size:85%;"&gt;Bunun için Management
+Studio'dayken Options seçeneğinden Designers seçeneğini
+açıyoruz.&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-family:verdana;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-family:verdana;font-size:85%;"&gt;Açılan seçeneklerde
+"Table and Database Designers" seçeneğini buluyoruz. Bu seçeneğe
+girdikten sonra “Prevent saving changes that require table re-creation”
+seçeneğini etkisizleştiriyoruz. Tamam basarak kapatıyoruz.&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYmj4c8Y2WI/AAAAAAAAABY/Cq3D2mSsBzM/s1600-h/ssms2-thumb.png"&gt;&lt;span
+style="font-size:85%;"&gt;&lt;img alt="" src="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYmj4c8Y2WI/AAAAAAAAABY/Cq3D2mSsBzM/s320/ssms2-thumb.png" /&gt;&lt;/span&gt;&lt;/a&gt;&lt;br /&gt;
+&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;
+&lt;p&gt;&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;br /&gt;
+&lt;span style="font-size:85%;"&gt;&lt;br /&gt;
+&lt;/span&gt;&lt;/p&gt;</summary><category term="Hata"></category><category term="SQL Server"></category></entry></feed>
