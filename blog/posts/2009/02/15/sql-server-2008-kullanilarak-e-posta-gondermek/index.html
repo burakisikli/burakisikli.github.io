@@ -306,20 +306,21 @@ sistemin çalışıp çalışmadığını kontrol&nbsp;edebilirsiniz&#8230;</spa
       <hr />
     </div>
 
-        <div class="comments">
-            <h2>Comments !</h2>
-            <div id="disqus_thread"></div>
-            <script type="text/javascript">
-                var disqus_shortname = 'burakisikli-com';
-                var disqus_identifier = 'blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/';
-                var disqus_url = '/blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/';
-                (function() {
-                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
-                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-                })();
-            </script>
-            <noscript>Please enable JavaScript to view the comments.</noscript>
+        <div id="disqus_thread"></div>
+        <script>
+        var disqus_config = function () {
+        this.page.url = '/blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/';
+        this.page.identifier = 'blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/'; 
+        };
+        */
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = '//burakisikli-com.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
         </div>
   </article>
 </div>
@@ -329,8 +330,8 @@ sistemin çalışıp çalışmadığını kontrol&nbsp;edebilirsiniz&#8230;</spa
   <h4>Related posts <small class="pull-right">(<a href="/blog/">View all posts</a>)</small></h4>
     <ul>
       <li><a href="/blog/posts/2009/04/23/sending-happy-birthday-message-using-sql-server/" title="<span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek"><span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek</a></li>
-      <li><a href="/blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/" title="<span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?"><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</a></li>
       <li><a href="/blog/posts/2009/02/04/sql-server-2008-hatasi-saving-changes-is-not-permitted/" title="<span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;"><span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;</a></li>
+      <li><a href="/blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/" title="<span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?"><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</a></li>
       <li><a href="/blog/posts/2009/03/05/sql-server-agent-service/" title="<span class="caps">SQL</span> Server Agent&nbsp;Service"><span class="caps">SQL</span> Server Agent&nbsp;Service</a></li>
     </ul>
   </div>
