@@ -1546,6 +1546,7 @@ body {
     .top-navigation {
       display: inline;
       float: left;
+      margin-right: 8.33333%;
       width: 100%; 
       height: 100px;
       line-height: 10px;} }
