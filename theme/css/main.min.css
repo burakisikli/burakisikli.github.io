@@ -1542,7 +1542,7 @@ body {
     .top-navigation {
       display: inline;
       float: left;
-      line-height: 40px;
+      line-height: 20px;
       width: 100%; } }
   .top-navigation ul {
     margin: 0;
@@ -1554,6 +1554,7 @@ body {
     list-style-type: none;
     border-bottom: 1px solid #dddddd;
     border-bottom: 1px solid fade(#111, 10);
+    line-height: 20px;
     font-size: 16px;
     font-size: 1rem; }
     .top-navigation li:last-child {
