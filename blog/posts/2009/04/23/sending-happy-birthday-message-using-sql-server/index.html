@@ -1,0 +1,174 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+
+  <title><span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek</title>
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="/theme/js/html5shiv.min.js"></script>
+  <script src="/theme/js/respond.min.js"></script>
+<![endif]-->
+
+<script src="/theme/js/modernizr-2.7.1.custom.min.js"></script>
+
+<link rel="stylesheet" href="/theme/css/academicons.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic">
+
+  <link rel="stylesheet" href="/theme/css/main.min.css?cade5d88">
+</head>
+
+<body class="post-index">
+
+<div itemscope itemtype="http://schema.org/Person" class="navigation-wrapper">
+  <!--<div class="site-name">
+    <a href="/"><span itemprop="name">Burak ISIKLI</span></a>
+  </div>-->
+  <div class="top-navigation" align="right">
+    <nav role="navigation" id="site-nav" class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/research/">Research</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div id="main" role="main">
+  <div class="article-author-side">
+<div>
+  <img src="/theme/images/profile.jpg" alt="Burak IŞIKLI" class="bio-photo">
+  <p>Computer scientist living in Istanbul, Turkey. Data scientist at Turkcell, Traveller, Rower, Sailor</p>
+  
+            <a href="https://twitter.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-twitter-square"></i> Twitter
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-github-square"></i> Github
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-linkedin-square"></i> Linkedin
+            </a>
+    <a href=mailto:&#98;&#117;&#114;&#97;&#107;&#46;&#105;&#115;&#105;&#107;&#108;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109; class="author-social" target="_blank">
+    	<i class="fa fa-fw fa-envelope-square"></i> Mail 
+    </a>
+</div>  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      <h1><span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek</h1>
+    </div>
+    <div role="contentinfo">
+      <p class="byline"><strong>
+        <time datetime="2009-04-23">23.04.2009</time></ br></strong></p>
+    </div>
+    <div class="article-wrap">
+      <p>Eğer benim gibi unutkan biriyseniz, bu metodu kullanarak bundan böyle
+arkadaşlarınızın doğumgününü&nbsp;unutmayacaksınız.</p>
+<p>İlk olarak <span class="caps">SQL</span> Server Agent Service&#8217;i ve Database Mail hizmetlerini
+kullanmayı bilmelisiniz. Bununla ilgili daha önceki yazılarımı okuyarak
+öğrenebilirsiniz.<br />
+<span class="caps">SQL</span> Server Agent Service ile ilgili yazım için
+<a href="http://burakisikli.wordpress.com/2009/03/05/sql-server-agent-service/">link</a>
+ve Database Mail ile ilgili yazım için
+<a href="http://burakisikli.wordpress.com/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/">link</a></p>
+<p><span class="caps">SQL</span> Server Agent Service job görev tanımlamaya dayalıdır(job schedule)
+Doğumgününü hatırlamak için kullanacağınız görev&nbsp;şu:</p>
+<div class="highlight"><pre><span></span><span class="k">DECLARE</span> <span class="o">@</span><span class="n">email</span> <span class="n">nvarchar</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="o">@</span><span class="n">birthday</span> <span class="nb">date</span>
+<span class="k">DECLARE</span> <span class="n">emailCursor</span> <span class="k">CURSOR</span> <span class="k">FOR</span>
+<span class="k">SELECT</span> <span class="n">email</span><span class="p">,</span> <span class="n">birthday</span> <span class="k">FROM</span> <span class="n">test</span><span class="p">;</span>
+<span class="k">OPEN</span> <span class="n">emailCursor</span><span class="p">;</span>
+<span class="k">FETCH</span> <span class="k">NEXT</span> <span class="k">FROM</span> <span class="n">emailCursor</span> <span class="k">INTO</span> <span class="o">@</span><span class="n">email</span><span class="p">,</span> <span class="o">@</span><span class="n">birthday</span>
+<span class="n">WHILE</span> <span class="p">(</span><span class="o">@@</span><span class="n">FETCH_STATUS</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="k">BEGIN</span>
+<span class="k">IF</span><span class="p">(</span><span class="n">DATEDIFF</span><span class="p">(</span><span class="n">DD</span><span class="p">,</span> <span class="k">DAY</span><span class="p">(</span><span class="o">@</span><span class="n">birthday</span><span class="p">),</span><span class="k">DAY</span><span class="p">(</span><span class="n">GETDATE</span><span class="p">()))</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="k">AND</span>
+<span class="p">(</span><span class="n">DATEDIFF</span><span class="p">(</span><span class="n">DD</span><span class="p">,</span> <span class="k">MONTH</span><span class="p">(</span><span class="o">@</span><span class="n">birthday</span><span class="p">),</span><span class="k">MONTH</span><span class="p">(</span><span class="n">GETDATE</span><span class="p">()))</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">BEGIN</span>
+<span class="k">EXEC</span> <span class="n">msdb</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sp_send_dbmail</span>
+<span class="o">@</span><span class="n">profile_name</span><span class="o">=</span><span class="s1">&#39;Test&#39;</span><span class="p">,</span>
+<span class="o">@</span><span class="n">recipients</span><span class="o">=@</span><span class="n">email</span><span class="p">,</span>
+<span class="o">@</span><span class="n">body</span><span class="o">=</span><span class="s1">&#39;Happy birthday to you!...&#39;</span><span class="p">,</span>
+<span class="o">@</span><span class="n">body_format</span><span class="o">=</span><span class="s1">&#39;HTML&#39;</span><span class="p">,</span>
+<span class="o">@</span><span class="n">subject</span><span class="o">=</span><span class="s1">&#39;Happy Birthday&#39;</span><span class="p">;</span>
+<span class="k">END</span>
+<span class="k">FETCH</span> <span class="k">NEXT</span> <span class="k">FROM</span> <span class="n">emailCursor</span> <span class="k">INTO</span> <span class="o">@</span><span class="n">email</span><span class="p">,</span> <span class="o">@</span><span class="n">birthday</span>
+<span class="k">END</span>
+<span class="k">CLOSE</span> <span class="n">emailCursor</span>
+<span class="k">DEALLOCATE</span> <span class="n">emailCursor</span>
+<span class="k">GO</span>
+</pre></div>
+
+
+<p>Elimizde bir tane tablomuz olacaktır. Bu tabloda en az 3 adet sütun(id,
+email, birthday-dateofbirth) olacaktır. Satır sayısı sınırsızdır. Bu
+tabloyu oluşturduktan sonra, oluşturduğunuz görevi(job) çalıştırmaya
+başlayın(execute).  O arka planda çalışırken herhangi bir kişinin yani
+arkadaşınızın doğumgünü geldiğinde farkına varacak ve ona belirlediğiniz
+doğumgünü mesajını gönderecektir. Hepsi bu&nbsp;:)</p>
+      <hr />
+    </div>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'blog/posts/2009/04/23/sending-happy-birthday-message-using-sql-server/';
+                var disqus_url = '/blog/posts/2009/04/23/sending-happy-birthday-message-using-sql-server/';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+  </article>
+</div>
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>Related posts <small class="pull-right">(<a href="/blog/">View all posts</a>)</small></h4>
+    <ul>
+      <li><a href="/blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/" title="<span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek"><span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek</a></li>
+      <li><a href="/blog/posts/2009/03/05/sql-server-agent-service/" title="<span class="caps">SQL</span> Server Agent&nbsp;Service"><span class="caps">SQL</span> Server Agent&nbsp;Service</a></li>
+      <li><a href="/blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/" title="<span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?"><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</a></li>
+      <li><a href="/blog/posts/2009/02/04/sql-server-2008-hatasi-saving-changes-is-not-permitted/" title="<span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;"><span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;</a></li>
+    </ul>
+  </div>
+  <footer>
+<p>
+  &copy; 2009-2017 Burak ISIKLI
+</p>  </footer>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="/theme/js/jquery.fitvids.js"></script>
+
+    <script src="/theme/webassets-external/23e78ea5fc089298362d660f35789edb_main.js"></script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55064690-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

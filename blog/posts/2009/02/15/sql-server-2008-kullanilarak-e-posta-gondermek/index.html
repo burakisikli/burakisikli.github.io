@@ -1,0 +1,361 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+
+  <title><span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek</title>
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="/theme/js/html5shiv.min.js"></script>
+  <script src="/theme/js/respond.min.js"></script>
+<![endif]-->
+
+<script src="/theme/js/modernizr-2.7.1.custom.min.js"></script>
+
+<link rel="stylesheet" href="/theme/css/academicons.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic">
+
+  <link rel="stylesheet" href="/theme/css/main.min.css?cade5d88">
+</head>
+
+<body class="post-index">
+
+<div itemscope itemtype="http://schema.org/Person" class="navigation-wrapper">
+  <!--<div class="site-name">
+    <a href="/"><span itemprop="name">Burak ISIKLI</span></a>
+  </div>-->
+  <div class="top-navigation" align="right">
+    <nav role="navigation" id="site-nav" class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/research/">Research</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div id="main" role="main">
+  <div class="article-author-side">
+<div>
+  <img src="/theme/images/profile.jpg" alt="Burak IŞIKLI" class="bio-photo">
+  <p>Computer scientist living in Istanbul, Turkey. Data scientist at Turkcell, Traveller, Rower, Sailor</p>
+  
+            <a href="https://twitter.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-twitter-square"></i> Twitter
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-github-square"></i> Github
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-linkedin-square"></i> Linkedin
+            </a>
+    <a href=mailto:&#98;&#117;&#114;&#97;&#107;&#46;&#105;&#115;&#105;&#107;&#108;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109; class="author-social" target="_blank">
+    	<i class="fa fa-fw fa-envelope-square"></i> Mail 
+    </a>
+</div>  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      <h1><span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek</h1>
+    </div>
+    <div role="contentinfo">
+      <p class="byline"><strong>
+        <time datetime="2009-02-15">15.02.2009</time></ br></strong></p>
+    </div>
+    <div class="article-wrap">
+      <div>
+
+<span style="font-family:verdana;font-size:85%;"><span class="caps">SQL</span> Server kullanarak
+e-posta nasıl gönderilecek bunu anlatacağım. <span class="caps">SQL</span> Server 2000 mail
+gönderme sistemine sahipti fakat mail gönderebilmek için mutlaka <span class="caps">MAPI</span>
+alt yapısına sahip bir sistem hazırlamamız şarttı. Bu yapı aynen <span class="caps">SQL</span>
+Server 2005’de de tüm özellikleriyle korunuyor. Ancak gerekli hatta
+olmazsa olmaz diyebileceğimiz geliştirme geldi ve Database Mail isimli
+yeni bir mail gönderme sistemi <span class="caps">SQL</span> Server 2005’e eklendi. En önemli
+özelliklerinden biri artık <span class="caps">MAPI</span> alt yapısına ihtiyaç duymadan herhangi
+bir <span class="caps">SMTP</span> sunucu tanımlanarak gönderim yapılabiliyor. Bunun anlamı gmail
+hesabınızı sisteme tanımlayarak <span class="caps">SQL</span> Server 2005 üzerinden mail
+gönderebileceğinizdir.</span>
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">**Güvenilirlik :**  
+Database Mail, önemli özelliklerinden biri olarak ön plana çıkan Simple
+Mail Transfer Protocol (<span class="caps">SMTP</span>) kullanabilme yeteneği ile göz doldurduğu
+kadar mail gönderme işleminin <span class="caps">SMTP</span> sayesinde <span class="caps">SQL</span> Server’dan ayrılmış
+olması ile güvenilirliği de artırmıştır. Bu sayede mail gönderme işlemi
+sırasında <span class="caps">SQL</span> Server 2005 çok daha az kaynak kullanarak performans kaybı
+yaşamayacak, herhangi bir dış kaynaklı sorundan ise etkilenmeyecektir.
+Yine Database Mail sisteminin gelişmiş özelliklerinden biri de <span class="caps">SMTP</span>
+sunucusunda oluşan herhangi bir sorunda gönderilecek mailleri beklemeye
+alıp <span class="caps">SMTP</span> sunucusundaki sorun giderildikten sonra tekrar
+gönderebilmesidir. Ayrıca bir Database Mail profili birden fazla <span class="caps">SMTP</span>
+sunucusu barındırabilir. Böylece kullanım dışı bir <span class="caps">SMTP</span> sunucusu varsa
+tanımlı diğer <span class="caps">SMTP</span> sunucuları üzerinden mail gönderimi yapılabilir.
+İlginç bir diğer özellik ise <span class="caps">HTML</span> formatında mail
+gönderebilmeniz.</span>
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">Kurulum ve Tanımlar :  
+Şimdi biraz Database Mail i yakından tanıyalım ve sonra diğer
+özelliklerine geçelim.</span>  
+<span style="font-family:verdana;font-size:85%;">  
+[(http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdc9h6YE4I/<span class="caps">AAAAAAAAAEY</span>/0nw6jOYPiUM/s320/1.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdc9h6YE4I/<span class="caps">AAAAAAAAAEY</span>/0nw6jOYPiUM/s1600-h/1.jpg)Object
+Explorer üzerinde görüldüğü gibi Database Mail, Management başlığı
+altına konumlandırılmış. <span class="caps">SQL</span> 2000’den aşina olduğumuz <span class="caps">MAPI</span> tabanlı <span class="caps">SQL</span>
+Mail sistemi ise yine aynı başlık altında Legacy (= miras) isimli alt
+başlık içerisine eklenmiş. Eklendiği yerin ismi gibi gerçekten <span class="caps">SQL</span>
+2000’den miras kaldı&#8230;</span>
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">  
+</span>
+
+</div>
+
+<div>
+
+[(http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdb3IRqKVI/<span class="caps">AAAAAAAAAEI</span>/3UMrGe2_0iY/s320/2.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdb3IRqKVI/<span class="caps">AAAAAAAAAEI</span>/3UMrGe2_0iY/s1600-h/2.jpg)  
+<span style="font-family:verdana;font-size:85%;">Database Mail üzerine
+sağ tuşla kliklediğimizde açılan menüden ulaşabileceğimiz Configure
+Database Mail sihirbazına yine Database Mail üzerine çift tıklayarak da
+ulaşabiliyoruz.</span>  
+<span style="font-family:verdana;font-size:85%;">Açılan sihirbaz basitçe
+bir profil tanımlayarak bu profil için <span class="caps">SMTP</span> sunucuları tanımlamanızı
+kolaylaştırıyor.</span>
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">  
+</span>
+
+</div>
+
+<div>
+
+<p>
+[![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZddvlFvupI/AAAAAAAAAEg/<span class="caps">DDKO</span>-QCjscA/s320/3.1.jpg)](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZddvlFvupI/AAAAAAAAAEg/<span class="caps">DDKO</span>-QCjscA/s1600-h/3.1.jpg)
+[![](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdd-pUAHxI/AAAAAAAAAEo/pWuiOQR7Zdw/s320/3.jpg)](http://4.bp.blogspot.com/_FhRCL5jj9p8/SZdd-pUAHxI/AAAAAAAAAEo/pWuiOQR7Zdw/s1600-h/3.jpg)
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">En üstteki seçenekle
+devam ettiğimizde profil tanımlaması yapabileceğimiz ve bu profile <span class="caps">SMTP</span>
+sunucuları tanımlayabileceğimiz ekran açılıyor. Öncelikle bir profil
+ismi girip açıklama bilgilerini doldurmamız yararlı olacaktır.</span>
+
+</div>
+
+<div>
+
+[](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdei51sppI/AAAAAAAAAEw/WWb0XFoPqSw/s1600-h/4.jpg)<span
+style="font-family:verdana;font-size:85%;">[![](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdmWxd1B-I/AAAAAAAAAFw/iadjWcZqlOI/s320/7.jpg)](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdmWxd1B-I/AAAAAAAAAFw/iadjWcZqlOI/s1600-h/7.jpg)Profil
+tanımlamalarını yaptıktan sonra ise <span class="caps">SMTP</span> accounts: bölümünden Add -&gt;
+New Account tuşu ile <span class="caps">SMTP</span> sunucularını ekliyoruz. <span class="caps">SMTP</span> sunucularını
+eklerken bir isim verdikten sonra Outlook Express benzeri bir tanımlama
+ekranıyla <span class="caps">SMTP</span> sunucu adresini, kullanıcı adı ve şifreyi gerekli
+alanlara giriyoruz.</span>
+
+</div>
+
+<div>
+
+<p>
+[!(http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdfiEQYquI/<span class="caps">AAAAAAAAAE4</span>/yiaSbys1MLc/s320/5.jpg)](http://2.bp.blogspot.com/_FhRCL5jj9p8/SZdfiEQYquI/<span class="caps">AAAAAAAAAE4</span>/yiaSbys1MLc/s1600-h/5.jpg)
+<span style="font-family:verdana;font-size:85%;">Birkaç <span class="caps">SMTP</span> sunucusu
+tanımladıktan sonra bunların önceliklerini de seçili sunucunun sırasını
+değiştirerek ayarlayabiliyoruz. Özellikle dikkat edeceğiniz nokta
+tanımlama yaparken Gmail gibi sunucularda &#8220;This server requires a secure
+connection(<span class="caps">SSL</span>)&#8221; işaretli olması gerekmektedir. Bunu öğrenmek için
+kullandığınız sunucunun bu özelliği destekleyip desteklemediğine
+bakmanız gerekmektedir. Eğer bu özelliği destekleyip siz kullanmazsanız
+e-posta göndermede &#8220;kullanıcı geçersiz&#8221; hatası alırsınız.</span>
+
+</div>
+
+<div>
+
+[(http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdgFHYTzrI/<span class="caps">AAAAAAAAAFA</span>/m1iDmSRK6Eg/s320/6.jpg)](http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdgFHYTzrI/<span class="caps">AAAAAAAAAFA</span>/m1iDmSRK6Eg/s1600-h/6.jpg)<span
+style="font-family:verdana;font-size:85%;">İşleme devam ettiğimizde
+aşağıdaki gibi sistem parametrelerini değiştirebileceğimiz bir yönetim
+ekranı açılacaktır. Burada gerekli ayarları da yaptıktan sonra <span class="caps">SQL</span>
+Server 2008&#8217;in profilimizi oluşturması ve accountları tanımlaması için
+devam edebiliriz.</span>
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">  
+</span>
+
+</div>
+
+<div>
+
+<p>
+[![](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdl2UnoUtI/AAAAAAAAAFo/1ejAfxxLulQ/s320/7.jpg)](http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdl2UnoUtI/AAAAAAAAAFo/1ejAfxxLulQ/s1600-h/7.jpg)<span
+style="font-family:verdana;font-size:85%;">Tüm bu işlemlerin ardından
+profilimiz oluşturulacak ve <span class="caps">SMTP</span> hesapları bu profille
+ilişkilendirilecektir.  
+</span>
+
+</div>
+
+<div>
+
+<span style="font-family:verdana;font-size:85%;">**Ölçeklenebilirlik :  
+**Database Mail eş zamanlı olarak ve/veya arka planda çalışarak mail
+gönderme işlemlerini yapar. sp\_send\_dbmail stored procedure
+çağrıldığında Database Mail, Service Broker bekleme listesine bir istek
+sırası ataması yapar. Ardından stored procedure işletilerek dış mail
+sunucusuna istek gönderilir ve mail teslim edilir.  
+Çoklu profil desteği sayesinde birden fazla profil tanımlanabilir ve
+istenilen profil stored procedure parametresiyle belirlenerek mail
+gönderilebilir. Yine aynı şekilde çoklu <span class="caps">SMTP</span> hesabı desteğiyle bir
+profile birden fazla <span class="caps">SMTP</span> sunucusu tanımlanabilir. <span class="caps">SMTP</span> hesapları ve
+profiller birbirlerinden ayrı değerlendirildiği için aynı <span class="caps">SMTP</span> hesapları
+farklı profiller için kullanılabilir durumdadır.</span>
+
+</div>
+
+<div>
+
+**Güvenlik :**  
+Öntanımlı olarak Database Mail kullanımı kapalıdır. Bu yüzden Database
+Mail’i kullanabilmek için <span class="caps">SQL</span> Server Surface Area Configuration aracı
+kullanılarak Database Mail stored procedure kullanıma açılmalıdır.  
+<span style="font-family:verdana;font-size:85%;">Ancak daha önceden
+bahsettiğimiz gibi <span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration aracı
+facet altındadır. Policy Management -&gt; Facet -&gt; Surface Area
+Configuration gelip sağ tıklayıp properties seçiyoruz.</span>
+
+</div>
+
+<p><a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdivFq3_FI/AAAAAAAAAFQ/Uc-x0dxwBpE/s1600-h/8.1.jpg">(http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdivFq3_FI/<span class="caps">AAAAAAAAAFQ</span>/Uc-x0dxwBpE/s320/8.1.jpg)</a>
+<a href="http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdi1rMnhEI/AAAAAAAAAFY/es4kZ9stpRM/s1600-h/8.jpg">(http://3.bp.blogspot.com/_FhRCL5jj9p8/SZdi1rMnhEI/<span class="caps">AAAAAAAAAFY</span>/es4kZ9stpRM/s320/8.jpg)</a></p>
+<div>
+
+<span style="font-family:verdana;font-size:85%;">Database Mail
+gönderebilmek için kullanıcının DatabaseMailUserRole isimli veritabanı
+kullanıcı tanımına üye olması gerekir. Ayrıca profil güvenliği de
+mevcuttur. Buna göre tanımlayacağınız Database Mail profillerinden
+public olarak ayarlanan profil tüm msdb veritabanı kullanıcıları
+tarafından mail göndermek için kullanılabilecektir. Public olarak
+tanımlanmamış tüm diğer profillere ise ayrıntılı kullanıcı güvenlik
+ayarları tanımlanabilir.  
+Database Mail ile gönderilecek dosya boyutuna sınırlama getirilebilir.
+Bu konuda aktif bir yönetim sistemi bulunuyor. Yine gönderilecek
+dosyalarda uzantı sınırlaması da yapılabilir.</span>
+
+</div>
+
+<div>
+
+**Kullanım :**  
+Database Mail kullanımı sp\_send\_dbmail isimli stored procedure
+aracılığıyla yapılabiliyor. Kullanımı xp\_sendmail yapısına benzemekle
+birlikte bir çok ek parametre desteklenmiş. Aşağıda tam bir sytax ve
+örnek bir kullanımı bulunuyor.
+
+</div>
+
+<p>(http://1.bp.blogspot.com/_FhRCL5jj9p8/SZdjPeF6NII/AAAAAAAAAFg/wQCk2EzYo1A/s320/9.jpg)</p>
+<p>[sourcecode language=&#8217;sql&#8217;]<br />
+<span class="caps">DECLARE</span> @email nvarchar(50)<br />
+<span class="caps">DECLARE</span> emailCursor <span class="caps">CURSOR</span> <span class="caps">FOR</span><br />
+<span class="caps">SELECT</span> email <span class="caps">FROM</span> deneme;<br />
+<span class="caps">OPEN</span> emailCursor;<br />
+<span class="caps">FETCH</span> <span class="caps">NEXT</span> <span class="caps">FROM</span> emailCursor <span class="caps">INTO</span> @email<br />
+<span class="caps">WHILE</span> (@@FETCH_STATUS = 0)<br />
+<span class="caps">BEGIN</span><br />
+<span class="caps">EXEC</span> msdb.dbo.sp_send_dbmail@profile_name=&#8217;deneme&#8217;,<br />
+@recipients=@email,@body=&#8217;deneme&#8217;,@body_format=&#8217;<span class="caps">HTML</span>&#8217;,<br />
+@subject=&#8217;deneme&#8217;;<br />
+<span class="caps">FETCH</span> <span class="caps">NEXT</span> <span class="caps">FROM</span> emailCursor <span class="caps">INTO</span> @email<br />
+<span class="caps">END</span><br />
+<span class="caps">CLOSE</span> emailCursor<br />
+<span class="caps">DEALLOCATE</span> emailCursor<br />
+<span class="caps">GO</span><br />&nbsp;[/sourcecode]</p>
+<p><span style="font-family:verdana;font-size:85%;">Bu kadar basit bir
+olay. Database Mail seçeneğine gelip &#8220;Send Test E-mail&#8221; tıklayarak
+sistemin çalışıp çalışmadığını kontrol&nbsp;edebilirsiniz&#8230;</span></p>
+      <hr />
+    </div>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/';
+                var disqus_url = '/blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+  </article>
+</div>
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>Related posts <small class="pull-right">(<a href="/blog/">View all posts</a>)</small></h4>
+    <ul>
+      <li><a href="/blog/posts/2009/04/23/sending-happy-birthday-message-using-sql-server/" title="<span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek"><span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek</a></li>
+      <li><a href="/blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/" title="<span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?"><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</a></li>
+      <li><a href="/blog/posts/2009/03/05/sql-server-agent-service/" title="<span class="caps">SQL</span> Server Agent&nbsp;Service"><span class="caps">SQL</span> Server Agent&nbsp;Service</a></li>
+      <li><a href="/blog/posts/2009/02/04/sql-server-2008-hatasi-saving-changes-is-not-permitted/" title="<span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;"><span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;</a></li>
+    </ul>
+  </div>
+  <footer>
+<p>
+  &copy; 2009-2017 Burak ISIKLI
+</p>  </footer>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="/theme/js/jquery.fitvids.js"></script>
+
+    <script src="/theme/webassets-external/23e78ea5fc089298362d660f35789edb_main.js"></script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55064690-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

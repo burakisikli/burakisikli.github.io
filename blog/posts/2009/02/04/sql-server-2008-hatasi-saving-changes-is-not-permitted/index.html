@@ -1,0 +1,160 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+
+  <title><span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;</title>
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="/theme/js/html5shiv.min.js"></script>
+  <script src="/theme/js/respond.min.js"></script>
+<![endif]-->
+
+<script src="/theme/js/modernizr-2.7.1.custom.min.js"></script>
+
+<link rel="stylesheet" href="/theme/css/academicons.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic">
+
+  <link rel="stylesheet" href="/theme/css/main.min.css?cade5d88">
+</head>
+
+<body class="post-index">
+
+<div itemscope itemtype="http://schema.org/Person" class="navigation-wrapper">
+  <!--<div class="site-name">
+    <a href="/"><span itemprop="name">Burak ISIKLI</span></a>
+  </div>-->
+  <div class="top-navigation" align="right">
+    <nav role="navigation" id="site-nav" class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/research/">Research</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div id="main" role="main">
+  <div class="article-author-side">
+<div>
+  <img src="/theme/images/profile.jpg" alt="Burak IŞIKLI" class="bio-photo">
+  <p>Computer scientist living in Istanbul, Turkey. Data scientist at Turkcell, Traveller, Rower, Sailor</p>
+  
+            <a href="https://twitter.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-twitter-square"></i> Twitter
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-github-square"></i> Github
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-linkedin-square"></i> Linkedin
+            </a>
+    <a href=mailto:&#98;&#117;&#114;&#97;&#107;&#46;&#105;&#115;&#105;&#107;&#108;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109; class="author-social" target="_blank">
+    	<i class="fa fa-fw fa-envelope-square"></i> Mail 
+    </a>
+</div>  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      <h1><span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;</h1>
+    </div>
+    <div role="contentinfo">
+      <p class="byline"><strong>
+        <time datetime="2009-02-04">04.02.2009</time></ br></strong></p>
+    </div>
+    <div class="article-wrap">
+      <p><a href="http://4.bp.blogspot.com/_FhRCL5jj9p8/SYmkvo9yysI/AAAAAAAAABg/E59Jgxv41Jk/s1600-h/ssms1-thumb.png">(http://4.bp.blogspot.com/_FhRCL5jj9p8/SYmkvo9yysI/AAAAAAAAABg/E59Jgxv41Jk/s320/ssms1-thumb.png)</a>
+<span style="font-family:verdana;font-size:85%;">Eğer <span class="caps">SQL</span> Server
+Management Studio 2008 kullanıyorsanız, tabloları oluşturduktan sonra
+herhangi bir tasarım(design) değişikliği yaptığınızda şu hatayı
+alabilirsiniz:</span><a href="http://www.danrigsby.com/blog/wp-content/uploads/2008/09/ssms1-thumb.png"></a><br />
+<span style="font-family:verdana;font-size:85%;">Değişiklik olduğunda
+hata vermemesi için bir seçeneğin kaldırılması gerekmektedir.<br />
+</span></p>
+<p><span style="font-family:verdana;font-size:85%;">Bunun için Management
+Studio&#8217;dayken Options seçeneğinden Designers seçeneğini
+açıyoruz.</span><br />
+<span style="font-family:verdana;"><br />
+</span><br />
+<span style="font-family:verdana;font-size:85%;">Açılan seçeneklerde
+&#8220;Table and Database Designers&#8221; seçeneğini buluyoruz. Bu seçeneğe
+girdikten sonra “Prevent saving changes that require table re-creation”
+seçeneğini etkisizleştiriyoruz. Tamam basarak&nbsp;kapatıyoruz.</span></p>
+<p><a href="http://1.bp.blogspot.com/_FhRCL5jj9p8/SYmj4c8Y2WI/AAAAAAAAABY/Cq3D2mSsBzM/s1600-h/ssms2-thumb.png"><span
+style="font-size:85%;">(http://1.bp.blogspot.com/_FhRCL5jj9p8/SYmj4c8Y2WI/<span class="caps">AAAAAAAAABY</span>/Cq3D2mSsBzM/s320/ssms2-thumb.png)</span></a><br />
+<span style="font-size:85%;"><br />
+</span></p>
+<p><span style="font-size:85%;"><br />
+</span><br />
+<span style="font-size:85%;"><br />
+</span><br />
+<span style="font-size:85%;"><br />
+</span></p>
+      <hr />
+    </div>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'blog/posts/2009/02/04/sql-server-2008-hatasi-saving-changes-is-not-permitted/';
+                var disqus_url = '/blog/posts/2009/02/04/sql-server-2008-hatasi-saving-changes-is-not-permitted/';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+  </article>
+</div>
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>Related posts <small class="pull-right">(<a href="/blog/">View all posts</a>)</small></h4>
+    <ul>
+      <li><a href="/blog/posts/2009/02/05/asp-ile-ajax-programlamada-divde-karakter-sorunu/" title="<span class="caps">ASP</span> ile Ajax Programlamada Div&#8217;de Karakter&nbsp;Sorunu"><span class="caps">ASP</span> ile Ajax Programlamada Div&#8217;de Karakter&nbsp;Sorunu</a></li>
+      <li><a href="/blog/posts/2009/04/23/sending-happy-birthday-message-using-sql-server/" title="<span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek"><span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek</a></li>
+      <li><a href="/blog/posts/2009/03/05/sql-server-agent-service/" title="<span class="caps">SQL</span> Server Agent&nbsp;Service"><span class="caps">SQL</span> Server Agent&nbsp;Service</a></li>
+      <li><a href="/blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/" title="<span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?"><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</a></li>
+      <li><a href="/blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/" title="<span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek"><span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek</a></li>
+    </ul>
+  </div>
+  <footer>
+<p>
+  &copy; 2009-2017 Burak ISIKLI
+</p>  </footer>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="/theme/js/jquery.fitvids.js"></script>
+
+    <script src="/theme/webassets-external/23e78ea5fc089298362d660f35789edb_main.js"></script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55064690-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

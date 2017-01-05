@@ -1,0 +1,178 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+
+  <title>Karar Ağaçları(Decision Trees) ile&nbsp;Sınıflandırma-1</title>
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="/theme/js/html5shiv.min.js"></script>
+  <script src="/theme/js/respond.min.js"></script>
+<![endif]-->
+
+<script src="/theme/js/modernizr-2.7.1.custom.min.js"></script>
+
+<link rel="stylesheet" href="/theme/css/academicons.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic">
+
+  <link rel="stylesheet" href="/theme/css/main.min.css?cade5d88">
+</head>
+
+<body class="post-index">
+
+<div itemscope itemtype="http://schema.org/Person" class="navigation-wrapper">
+  <!--<div class="site-name">
+    <a href="/"><span itemprop="name">Burak ISIKLI</span></a>
+  </div>-->
+  <div class="top-navigation" align="right">
+    <nav role="navigation" id="site-nav" class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/research/">Research</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div id="main" role="main">
+  <div class="article-author-side">
+<div>
+  <img src="/theme/images/profile.jpg" alt="Burak IŞIKLI" class="bio-photo">
+  <p>Computer scientist living in Istanbul, Turkey. Data scientist at Turkcell, Traveller, Rower, Sailor</p>
+  
+            <a href="https://twitter.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-twitter-square"></i> Twitter
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-github-square"></i> Github
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-linkedin-square"></i> Linkedin
+            </a>
+    <a href=mailto:&#98;&#117;&#114;&#97;&#107;&#46;&#105;&#115;&#105;&#107;&#108;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109; class="author-social" target="_blank">
+    	<i class="fa fa-fw fa-envelope-square"></i> Mail 
+    </a>
+</div>  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      <h1>Karar Ağaçları(Decision Trees) ile&nbsp;Sınıflandırma-1</h1>
+    </div>
+    <div role="contentinfo">
+      <p class="byline"><strong>
+        <time datetime="2010-08-02">02.08.2010</time></ br></strong></p>
+    </div>
+    <div class="article-wrap">
+      <p>Verinin içerdiği ortak özelliklere göre ayrıştırılması işlemi
+sınıflandırma olarak adlandırılır. En çok bilinen veri madenciliği
+tekniklerinden birisidir. Resim, örüntü tanıma, hastalık tanıları,
+dolandırıcılık tespiti, kalite kontrol çalışmaları ve pazarlama konuları
+sınıflandırma algoritmaları tekniklerinin bolca kullanıldığı alanlardır.
+&#8220;Bayesyen sınıflandırma algoritması&#8221;, &#8220;karar ağaçlarına dayalı
+algoritmalar&#8221;, &#8220;yapay sinir ağları&#8221; temelli algoritmalar ve &#8220;k en yakın
+komşu algoritması&#8221; gibi birçok sınıflandırma algoritmaları vardır. Karar
+ağaçları da bunlardan biridir. Karar ağaçları oluşturmak için temel
+olarak entropiye dayalı algoritmalar, sınıflandırma ve regresyon
+ağaçları, bellek tabanlı sınıflandırma modelleri biçiminde birçok farklı
+yöntem&nbsp;geliştirilmiştir.</p>
+<p>Sınıflandırma bir öğrenme algoritmasına dayanır. Örnek veriler
+kullanılarak eğitme işi yapılır. Burada amaç belirgin 2 veya daha fazla
+sınıfa ayırmaktır. Fatura ödemesini 3 gün sonra yapanlar veya ödemesini
+3 gün içinde yapanlar bu sınıflandırmaya basit bir örnek olarak
+verilebilir. Basit kredi değerlendirmesi için yapılacak işlemler
+şemadaki&nbsp;gibidir:</p>
+<p><img alt="Classification" class="aligncenter
+.size-full wp-image-233" height="446" src="http://burakisikli.files.wordpress.com/2009/09/1.jpg" title="Classification" width="399" /></p>
+<p><strong><img alt="Decision
+Tree" class="alignleft
+.size-medium wp-image-234" height="161" src="http://burakisikli.files.wordpress.com/2009/09/2.jpg?w=300" title="Decision Tree" width="300" />Karar&nbsp;Ağaçları:</strong></p>
+<p>Karar ağaçları akış şemalarına benzeyen yapılardır. Her bir nitelik bir
+düğüm tarafın­dan temsil edilir. Dallar ve yapraklar ağaç yapısının
+elemanlarıdır. En son yapı &#8220;yaprak&#8221;, en üst yapı &#8220;kök&#8221; ve bunların
+arasında kalan yapılar ise &#8220;dal&#8221; olarak&nbsp;isimlendirilir.</p>
+<p>Karar ağaçlarında en önemli sorunlardan birisi herhangi bir ekökten
+itibaren bölümlemenin veya bir başka deyişle dallanmanın hangi kıstasa
+göre yapılacağıdır. Söz konusu algoritmaları:<br />
+Entropiye dayalı algoritmalar (<span class="caps">ID3</span>, C4.5 gibi)<br />
+Sınıflandırma ve regresyon ağaçlan (<span class="caps">CART</span>)<br />
+Bellek tabanlı sınıflandırma&nbsp;algoritmaları</p>
+<p>Karar ağaçları oluşturulurken kullanılan algoritmanın ne olduğu
+önemlidir. Kullanılan algoritmaya göre ağacın şekli değişebilir. Değişik
+ağaç yapıları da farklı sınıflandırma sonuçları ve farklı karar
+kuralları&nbsp;verecektir.</p>
+<div id="_mcePaste"
+style="overflow:hidden;position:absolute;left:-10000px;top:0;width:1px;height:1px;">
+
+<!--[if !mso]&gt; &lt;!  v\:* {behavior:url(#default#VML);} o\:* {behavior:url(#default#VML);} p\:* {behavior:url(#default#VML);} .shape {behavior:url(#default#VML);} v\:textbox {display:none;} -->
+<!--[endif]-->Slide
+4<!--[if !ppt]--><!-- .O  {color:black;   font-size:149%;} a:link     {color:#00A3D6 !important;} a:active    {color:#CCB400 !important;} a:visited   {color:#694F07 !important;} --><!-- .sld    {left:0px !important;   width:6.0in !important;     height:4.5in !important;    font-size:103% !important;} --><!--[endif]-->
+</p>
+<div class="O">
+
+<span style="font-family:Georgia;font-size:27pt;">Karar ağaçları akış
+şemalarına benzeyen yapılardır. Her bir nitelik bir düğüm tarafın­dan
+temsil edilir. Dallar ve yapraklar ağaç yapısının elemanlarıdır. En son
+yapı **&#8221;yaprak&#8221;,** en üst yapı **&#8221;kök&#8221;** ve bunların arasında kalan
+yapılar ise **&#8221;dal&#8221;** olarak isimlendirilir</span>
+
+</div>
+
+</div>
+      <hr />
+    </div>
+
+        <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'blog/posts/2010/08/02/231/';
+                var disqus_url = '/blog/posts/2010/08/02/231/';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+        </div>
+  </article>
+</div>
+
+<div class="footer-wrap">
+  <footer>
+<p>
+  &copy; 2009-2017 Burak ISIKLI
+</p>  </footer>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="/theme/js/jquery.fitvids.js"></script>
+
+    <script src="/theme/webassets-external/23e78ea5fc089298362d660f35789edb_main.js"></script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55064690-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
