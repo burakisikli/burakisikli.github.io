@@ -1547,6 +1547,7 @@ body {
       display: inline;
       float: left;
       width: 100%; 
+      height: 100px;
       line-height: 10px;} }
   .top-navigation ul {
     margin: 0;
