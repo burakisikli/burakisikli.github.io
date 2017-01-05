@@ -1540,6 +1540,8 @@ body {
   @media only screen and (min-width: 86.375em) {
     .top-navigation {
       display: inline;
+      height: 10px;
+      line-height: 10px;
       float: left;
       width: 100%; } }
   .top-navigation ul {
