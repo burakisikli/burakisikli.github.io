@@ -1540,10 +1540,15 @@ body {
   @media only screen and (min-width: 86.375em) {
     .top-navigation {
       display: inline;
-      height: 10px;
-      line-height: 10px;
       float: left;
       width: 100%; } }
+  @media only screen and (max-device-width: 480px) {
+    .top-navigation {
+      display: inline;
+      float: left;
+      width: 100%; 
+      height: 10px;
+      line-height: 10px;} }
   .top-navigation ul {
     margin: 0;
     padding: 0;
@@ -1562,7 +1567,6 @@ body {
       .top-navigation li {
         display: inline;
         margin-right: 25px;
-        line-height: 10px;
         white-space: nowrap;
         border-bottom: 0 solid transparent; } }
     .top-navigation li a {
@@ -1581,7 +1585,6 @@ body {
       @media only screen and (min-width: 37.5em) {
         .top-navigation li a {
           display: inline;
-          line-height: 10px;
           padding: 0; } }
 
 /* Mobile nav menu */
