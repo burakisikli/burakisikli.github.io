@@ -1547,7 +1547,7 @@ body {
       display: inline;
       float: left;
       margin-right: 8.33333%;
-      width: 100%; 
+      width: 90%; 
       height: 100px;
       line-height: 10px;} }
   .top-navigation ul {
@@ -1587,10 +1587,6 @@ body {
         .top-navigation li a {
           display: inline;
           padding: 0; } }
-      @media only screen and (max-device-width: 480px) {
-        .top-navigation li a {
-          display: inline;
-          padding: 1; } }
 
 /* Mobile nav menu */
 .nav ul {
