@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0"><channel><title>Burak IŞIKLI</title><link>http://burakisikli.com/</link><description></description><lastBuildDate>Mon, 02 Aug 2010 21:49:00 +0300</lastBuildDate><item><title>Karar Ağaçları(Decision Trees) ile Sınıflandırma-1</title><link>http://burakisikli.com/blog/posts/2010/08/02/231/</link><description>&lt;p&gt;Verinin içerdiği ortak özelliklere göre ayrıştırılması işlemi
+<rss version="2.0"><channel><title>Burak IŞIKLI</title><link>http://burakisikli.com/</link><description></description><lastBuildDate>Mon, 02 Aug 2010 21:49:00 +0300</lastBuildDate><item><title>Karar Ağaçları(Decision Trees) ile Sınıflandırma-1</title><link>http://burakisikli.com/blog/posts/2010/08/02/karar-agaclari-1/</link><description>&lt;p&gt;Verinin içerdiği ortak özelliklere göre ayrıştırılması işlemi
 sınıflandırma olarak adlandırılır. En çok bilinen veri madenciliği
 tekniklerinden birisidir. Resim, örüntü tanıma, hastalık tanıları,
 dolandırıcılık tespiti, kalite kontrol çalışmaları ve pazarlama konuları
@@ -19,9 +19,8 @@ verilebilir. Basit kredi değerlendirmesi için yapılacak işlemler
 şemadaki&amp;nbsp;gibidir:&lt;/p&gt;
 &lt;p&gt;&lt;img alt="Classification" class="aligncenter
 .size-full wp-image-233" height="446" src="http://burakisikli.files.wordpress.com/2009/09/1.jpg" title="Classification" width="399" /&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;&lt;img alt="Decision
-Tree" class="alignleft
-.size-medium wp-image-234" height="161" src="http://burakisikli.files.wordpress.com/2009/09/2.jpg?w=300" title="Decision Tree" width="300" /&gt;Karar&amp;nbsp;Ağaçları:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="Decision 
+Tree (Karar Ağaçları)" src="http://burakisikli.files.wordpress.com/2009/09/2.jpg?w=300" title="Decision Tree" /&gt;&lt;/p&gt;
 &lt;p&gt;Karar ağaçları akış şemalarına benzeyen yapılardır. Her bir nitelik bir
 düğüm tarafın­dan temsil edilir. Dallar ve yapraklar ağaç yapısının
 elemanlarıdır. En son yapı &amp;#8220;yaprak&amp;#8221;, en üst yapı &amp;#8220;kök&amp;#8221; ve bunların
@@ -53,7 +52,7 @@ yapılar ise **&amp;#8221;dal&amp;#8221;** olarak isimlendirilir&lt;/span&gt;
 
 &lt;/div&gt;
 
-&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">burakisikli</dc:creator><pubDate>Mon, 02 Aug 2010 21:49:00 +0300</pubDate><guid isPermaLink="false">tag:burakisikli.com,2010-08-02:blog/posts/2010/08/02/231/</guid><category>Ağaçları</category><category>Classification</category><category>Decision</category><category>Decision Trees</category><category>Karar</category><category>Karar Ağaçları</category><category>Sınıflandırma</category><category>Trees</category></item><item><title>Paralel Programlama(Hesaplama) Temelleri</title><link>http://burakisikli.com/blog/posts/2010/01/18/paralel-programlamahesaplama-temelleri/</link><description>&lt;p&gt;Paralel hesaplama en basit şekliyle şöyle tarif edebiliriz. Bir problemi
+&lt;/div&gt;</description><dc:creator xmlns:dc="http://purl.org/dc/elements/1.1/">burakisikli</dc:creator><pubDate>Mon, 02 Aug 2010 21:49:00 +0300</pubDate><guid isPermaLink="false">tag:burakisikli.com,2010-08-02:blog/posts/2010/08/02/karar-agaclari-1/</guid><category>Ağaçları</category><category>Classification</category><category>Decision</category><category>Decision Trees</category><category>Karar</category><category>Karar Ağaçları</category><category>Sınıflandırma</category><category>Trees</category></item><item><title>Paralel Programlama(Hesaplama) Temelleri</title><link>http://burakisikli.com/blog/posts/2010/01/18/paralel-programlamahesaplama-temelleri/</link><description>&lt;p&gt;Paralel hesaplama en basit şekliyle şöyle tarif edebiliriz. Bir problemi
 çözmek için kaynaklaı eşzamanlı çoklu olarak kullanmaktır. Örneğin bir
 integrali hesaplamak için iki bilgisayarı veya iki işlemci(çekirdeği)
 kullanarak yapabiliriz. Bu örnekleri çoğaltabiliriz. Fakat paralel

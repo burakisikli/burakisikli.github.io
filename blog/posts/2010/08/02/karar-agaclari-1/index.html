@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 
-  <title><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</title>
+  <title>Karar Ağaçları(Decision Trees) ile&nbsp;Sınıflandırma-1</title>
 
 <!-- http://t.co/dKP3o1e -->
 <meta name="HandheldFriendly" content="True">
@@ -67,22 +67,67 @@
 </div>  </div>
   <article class="post">
     <div class="headline-wrap">
-      <h1><span class="caps">SQL</span> Server 2008&#8217;de Surface Area Configuration ne&nbsp;oldu?</h1>
+      <h1>Karar Ağaçları(Decision Trees) ile&nbsp;Sınıflandırma-1</h1>
     </div>
     <div role="contentinfo">
       <p class="byline"><strong>
-        <time datetime="2009-02-15">15.02.2009</time></ br></strong></p>
+        <time datetime="2010-08-02">02.08.2010</time></ br></strong></p>
     </div>
     <div class="article-wrap">
-      <p><span style="font-family:verdana;font-size:85%;">Artık yok diye duymuş
-olabilirsiniz. Kısmen doğru ama aslında Surface Area Configuration hala
-var. Ama ayrı bir konfigürasyon arayüzü olarak değil. Surface Area
-Configuration&#8217;la ilgili olarak yaptığınız işleri artık Policy Based
-Management ile yapıyorsunuz. Policy Based Management&#8217;ta Facet diye bir
-kavram geliyor. Facet&#8217;ler birer özellik kümesi olarak düşünülebilir.
-Biribiriyle bağlantılı olan özellikleri paketleyen unsurlar. Surface
-area configuration da artık bir facet. Ve Policy Based Management&#8217;ın
-sağladığı imkanlar içinde bir&nbsp;imkan.</span></p>
+      <p>Verinin içerdiği ortak özelliklere göre ayrıştırılması işlemi
+sınıflandırma olarak adlandırılır. En çok bilinen veri madenciliği
+tekniklerinden birisidir. Resim, örüntü tanıma, hastalık tanıları,
+dolandırıcılık tespiti, kalite kontrol çalışmaları ve pazarlama konuları
+sınıflandırma algoritmaları tekniklerinin bolca kullanıldığı alanlardır.
+&#8220;Bayesyen sınıflandırma algoritması&#8221;, &#8220;karar ağaçlarına dayalı
+algoritmalar&#8221;, &#8220;yapay sinir ağları&#8221; temelli algoritmalar ve &#8220;k en yakın
+komşu algoritması&#8221; gibi birçok sınıflandırma algoritmaları vardır. Karar
+ağaçları da bunlardan biridir. Karar ağaçları oluşturmak için temel
+olarak entropiye dayalı algoritmalar, sınıflandırma ve regresyon
+ağaçları, bellek tabanlı sınıflandırma modelleri biçiminde birçok farklı
+yöntem&nbsp;geliştirilmiştir.</p>
+<p>Sınıflandırma bir öğrenme algoritmasına dayanır. Örnek veriler
+kullanılarak eğitme işi yapılır. Burada amaç belirgin 2 veya daha fazla
+sınıfa ayırmaktır. Fatura ödemesini 3 gün sonra yapanlar veya ödemesini
+3 gün içinde yapanlar bu sınıflandırmaya basit bir örnek olarak
+verilebilir. Basit kredi değerlendirmesi için yapılacak işlemler
+şemadaki&nbsp;gibidir:</p>
+<p><img alt="Classification" class="aligncenter
+.size-full wp-image-233" height="446" src="http://burakisikli.files.wordpress.com/2009/09/1.jpg" title="Classification" width="399" /></p>
+<p><img alt="Decision 
+Tree (Karar Ağaçları)" src="http://burakisikli.files.wordpress.com/2009/09/2.jpg?w=300" title="Decision Tree" /></p>
+<p>Karar ağaçları akış şemalarına benzeyen yapılardır. Her bir nitelik bir
+düğüm tarafın­dan temsil edilir. Dallar ve yapraklar ağaç yapısının
+elemanlarıdır. En son yapı &#8220;yaprak&#8221;, en üst yapı &#8220;kök&#8221; ve bunların
+arasında kalan yapılar ise &#8220;dal&#8221; olarak&nbsp;isimlendirilir.</p>
+<p>Karar ağaçlarında en önemli sorunlardan birisi herhangi bir ekökten
+itibaren bölümlemenin veya bir başka deyişle dallanmanın hangi kıstasa
+göre yapılacağıdır. Söz konusu algoritmaları:<br />
+Entropiye dayalı algoritmalar (<span class="caps">ID3</span>, C4.5 gibi)<br />
+Sınıflandırma ve regresyon ağaçlan (<span class="caps">CART</span>)<br />
+Bellek tabanlı sınıflandırma&nbsp;algoritmaları</p>
+<p>Karar ağaçları oluşturulurken kullanılan algoritmanın ne olduğu
+önemlidir. Kullanılan algoritmaya göre ağacın şekli değişebilir. Değişik
+ağaç yapıları da farklı sınıflandırma sonuçları ve farklı karar
+kuralları&nbsp;verecektir.</p>
+<div id="_mcePaste"
+style="overflow:hidden;position:absolute;left:-10000px;top:0;width:1px;height:1px;">
+
+<!--[if !mso]&gt; &lt;!  v\:* {behavior:url(#default#VML);} o\:* {behavior:url(#default#VML);} p\:* {behavior:url(#default#VML);} .shape {behavior:url(#default#VML);} v\:textbox {display:none;} -->
+<!--[endif]-->Slide
+4<!--[if !ppt]--><!-- .O  {color:black;   font-size:149%;} a:link     {color:#00A3D6 !important;} a:active    {color:#CCB400 !important;} a:visited   {color:#694F07 !important;} --><!-- .sld    {left:0px !important;   width:6.0in !important;     height:4.5in !important;    font-size:103% !important;} --><!--[endif]-->
+</p>
+<div class="O">
+
+<span style="font-family:Georgia;font-size:27pt;">Karar ağaçları akış
+şemalarına benzeyen yapılardır. Her bir nitelik bir düğüm tarafın­dan
+temsil edilir. Dallar ve yapraklar ağaç yapısının elemanlarıdır. En son
+yapı **&#8221;yaprak&#8221;,** en üst yapı **&#8221;kök&#8221;** ve bunların arasında kalan
+yapılar ise **&#8221;dal&#8221;** olarak isimlendirilir</span>
+
+</div>
+
+</div>
       <hr />
     </div>
 
@@ -91,8 +136,8 @@ sağladığı imkanlar içinde bir&nbsp;imkan.</span></p>
             <div id="disqus_thread"></div>
             <script type="text/javascript">
                 var disqus_shortname = 'burakisikli-com';
-                var disqus_identifier = 'blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/';
-                var disqus_url = 'http://burakisikli.com/blog/posts/2009/02/15/sql-server-2008de-surface-area-configuration-ne-oldu/';
+                var disqus_identifier = 'blog/posts/2010/08/02/karar-agaclari-1/';
+                var disqus_url = 'http://burakisikli.com/blog/posts/2010/08/02/karar-agaclari-1/';
                 (function() {
                     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
                     dsq.src = '//burakisikli-com.disqus.com/embed.js';
@@ -105,15 +150,6 @@ sağladığı imkanlar içinde bir&nbsp;imkan.</span></p>
 </div>
 
 <div class="footer-wrap">
-  <div class="related-articles">
-  <h4>Related posts <small class="pull-right">(<a href="http://burakisikli.com/blog/">View all posts</a>)</small></h4>
-    <ul>
-      <li><a href="http://burakisikli.com/blog/posts/2009/03/05/sql-server-agent-service/" title="<span class="caps">SQL</span> Server Agent&nbsp;Service"><span class="caps">SQL</span> Server Agent&nbsp;Service</a></li>
-      <li><a href="http://burakisikli.com/blog/posts/2009/02/04/sql-server-2008-hatasi-saving-changes-is-not-permitted/" title="<span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;"><span class="caps">SQL</span> Server 2008 Hatası: &#8220;Saving changes is not&nbsp;permitted&#8221;</a></li>
-      <li><a href="http://burakisikli.com/blog/posts/2009/02/15/sql-server-2008-kullanilarak-e-posta-gondermek/" title="<span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek"><span class="caps">SQL</span> Server 2008 Kullanılarak E-posta&nbsp;Göndermek</a></li>
-      <li><a href="http://burakisikli.com/blog/posts/2009/04/23/sending-happy-birthday-message-using-sql-server/" title="<span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek"><span class="caps">SQL</span> Server ile &#8220;İyiki Doğdun :)&#8221; Mesajı&nbsp;Göndermek</a></li>
-    </ul>
-  </div>
   <footer>
 <p>
   &copy; 2009-2017 Burak ISIKLI
