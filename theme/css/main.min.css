@@ -1554,7 +1554,6 @@ body {
     list-style-type: none;
     border-bottom: 1px solid #dddddd;
     border-bottom: 1px solid fade(#111, 10);
-    line-height: 20px;
     font-size: 16px;
     font-size: 1rem; }
     .top-navigation li:last-child {
