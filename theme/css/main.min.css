@@ -1587,6 +1587,10 @@ body {
         .top-navigation li a {
           display: inline;
           padding: 0; } }
+      @media only screen and (max-device-width: 480px) {
+        .top-navigation li a {
+          display: inline;
+          padding: 1; } }
 
 /* Mobile nav menu */
 .nav ul {
