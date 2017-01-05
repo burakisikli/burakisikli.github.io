@@ -1580,7 +1580,6 @@ body {
       @media only screen and (min-width: 37.5em) {
         .top-navigation li a {
           display: inline;
-          line-height: 20px;
           padding: 0; } }
 
 /* Mobile nav menu */
