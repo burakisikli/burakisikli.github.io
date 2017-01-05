@@ -1535,12 +1535,14 @@ body {
       display: inline;
       float: left;
       width: 100%;
+      line-height: 10px;
       margin-left: 0%;
       margin-right: 0%; } }
   @media only screen and (min-width: 86.375em) {
     .top-navigation {
       display: inline;
       float: left;
+      line-height: 10px;
       width: 100%; } }
   .top-navigation ul {
     margin: 0;
