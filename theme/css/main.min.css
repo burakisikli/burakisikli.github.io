@@ -1547,8 +1547,8 @@ body {
     .top-navigation {
       display: inline;
       float: left;
-      margin-right: 8.33333%;
-      width: 90%;
+      width: 98%;
+      padding: 1px;
       height: 100px;
       line-height: 10px; } }
   .top-navigation ul {
