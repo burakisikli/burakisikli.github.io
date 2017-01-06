@@ -1528,6 +1528,7 @@ body {
   background-image: url(../images/header.jpg);
   background-position: right bottom, left top;
   background-repeat: no-repeat, no-repeat;
+  background-size: cover;
   float: none;
   display: block; }
   @media only screen and (min-width: 37.5em) {
