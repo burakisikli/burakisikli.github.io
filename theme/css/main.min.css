@@ -1548,7 +1548,6 @@ body {
       display: inline;
       float: left;
       width: 98%;
-      padding: 1px;
       height: 100px;
       line-height: 10px; } }
   .top-navigation ul {
@@ -1569,6 +1568,12 @@ body {
       .top-navigation li {
         display: inline;
         margin-right: 25px;
+        white-space: nowrap;
+        border-bottom: 0 solid transparent; } }
+    @media only screen and (max-device-width: 480px) {
+      .top-navigation li {
+        display: inline;
+        margin-right: 0;
         white-space: nowrap;
         border-bottom: 0 solid transparent; } }
     .top-navigation li a {
