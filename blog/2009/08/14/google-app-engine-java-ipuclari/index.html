@@ -1,0 +1,303 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+
+  <title>Google App Engine Java&nbsp;İpuçları</title>
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<link rel="alternate"
+      href="http://burakisikli.com/feeds/all.rss.xml"
+      type="application/rss+xml"
+      title="Blog &mdash; Burak ISIKLI">
+<link rel="alternate"
+      href="http://burakisikli.com/feeds/all.atom.xml"
+      type="application/atom+xml"
+      title="Blog &mdash; Burak ISIKLI">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="http://burakisikli.com/theme/js/html5shiv.min.js"></script>
+  <script src="http://burakisikli.com/theme/js/respond.min.js"></script>
+<![endif]-->
+
+<script src="http://burakisikli.com/theme/js/modernizr-2.7.1.custom.min.js"></script>
+
+<link rel="stylesheet" href="http://burakisikli.com/theme/css/academicons.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700%7CPT+Serif:400,700,400italic">
+
+  <link rel="stylesheet" href="http://burakisikli.com/theme/css/main.min.css?c53038b2">
+</head>
+
+<body class="post-index">
+
+<div itemscope itemtype="http://schema.org/Person" class="navigation-wrapper">
+  <!--<div class="site-name">
+    <a href="/"><span itemprop="name">Burak ISIKLI</span></a>
+  </div>-->
+  <div class="top-navigation" align="right">
+    <nav role="navigation" id="site-nav" class="nav">
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog/">Blog</a></li>
+        <li><a href="/research/">Research</a></li>
+      </ul>
+    </nav>
+  </div>
+</div>
+<div id="main" role="main">
+  <div class="article-author-side">
+<div>
+  <img src="http://burakisikli.com/theme/images/profile.jpg" alt="Burak IŞIKLI" class="bio-photo">
+  <p>Computer scientist living in Istanbul, Turkey. Data scientist at Turkcell, Traveller, Rower, Sailor</p>
+  
+            <a href="https://twitter.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-twitter-square"></i> Twitter
+            </a>
+            <a href="https://github.com/burakisikli" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-github-square"></i> Github
+            </a>
+            <a href="https://www.linkedin.com/in/burakkk" class="author-social" target="_blank">
+                    <i class="fa fa-fw fa-linkedin-square"></i> Linkedin
+            </a>
+    <a href=mailto:&#98;&#117;&#114;&#97;&#107;&#46;&#105;&#115;&#105;&#107;&#108;&#105;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109; class="author-social" target="_blank">
+    	<i class="fa fa-fw fa-envelope-square"></i> Mail 
+    </a>
+</div>  </div>
+  <article class="post">
+    <div class="headline-wrap">
+      <h1>Google App Engine Java&nbsp;İpuçları</h1>
+    </div>
+    <div role="contentinfo">
+      <p class="byline"><strong>
+        <time datetime="2009-08-14">14.08.2009</time></ br></strong></p>
+    </div>
+    <div class="article-wrap">
+      <p>Google, geçtiğimiz günlerde app engine yani uygulama sunucusunu piyasaya sürdü. İlk izlenimlerimin ardından app engine ile ilgili birkaç detay vermek istedim. Yemek tarzındaki kurulumu birçok sitede kurulumun nasıl yapılacağını bulmanız mümkün. Ben de ayrıca java programcıları ve teknolojileri derneği tarafından yayınlanmış sitenin <a href="http://burakisikli.files.wordpress.com/2009/08/google-app-engine.pdf">pdf
+dosyasını</a>&nbsp;veriyorum.</p>
+<p>Kurulumu yapıp örnek bir proje oluşturduktan sonra uygulamanın nasıl
+çalıştığını anlayalım. Öncelikle deploy yapmadan projeniz web&#8217;e atılmaz.
+Bu nedenle de yerel alanda istediğiniz kadar değişiklik yaparken asıl
+sayfanız(belirttiğinizad.appspot.com) herhangi bir değişiklik&nbsp;olmaz.</p>
+<p>Her zaman belirttiğiniz proje isminin servlet&#8217;i oluşturuluyor. Örneğin
+deneme diye proje oluşturuyorsanız servlet&#8217;inizin adı otomatik olarak
+denemeServlet oluyor. Peki bunu nasıl değiştireceğiz? Refactor
+kullanmanız ismini değiştirmek için yeterli gelmiyor. Bunu deneyip
+deploy ederseniz karşınıza boş bir sayfa çıkacaktır. Bildiğiniz üzere bu
+servlet&#8217;imizin bağlı olduğu web.xml dosyası olması gerekiyor. İşte bu
+dosya war klasörünün altındaki web-inf klasöründedir. Aşağıdakine benzer
+bir dosya karşınıza&nbsp;gelecektir.</p>
+<p><strong>web.xml</strong></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;web-app</span> <span class="na">xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>  
+<span class="na">xmlns:web=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd&quot;</span>  
+<span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee  </span>
+<span class="s">http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd&quot;</span> <span class="na">version=</span><span class="s">&quot;2.5&quot;</span><span class="nt">&gt;</span>;  
+<span class="nt">&lt;servlet&gt;</span>  
+<span class="nt">&lt;servlet-name&gt;</span>Deneme<span class="nt">&lt;/servlet-name&gt;</span>  
+<span class="nt">&lt;servlet-class&gt;</span>edu.burakkk.google.app.DenemeServlet<span class="nt">&lt;/servlet-class&gt;</span>  
+<span class="nt">&lt;/servlet&gt;</span>  
+<span class="nt">&lt;servlet-mapping&gt;</span>  
+<span class="nt">&lt;servlet-name&gt;</span>Deneme<span class="nt">&lt;/servlet-name&gt;</span>  
+<span class="nt">&lt;url-pattern&gt;</span>/deneme<span class="nt">&lt;/url-pattern&gt;</span>  
+<span class="nt">&lt;/servlet-mapping&gt;</span>  
+<span class="nt">&lt;welcome-file-list&gt;</span>  
+<span class="nt">&lt;welcome-file&gt;</span>index.html<span class="nt">&lt;/welcome-file&gt;</span>  
+<span class="nt">&lt;/welcome-file-list&gt;</span>  
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Buradan servlet-class ismini de değiştirerek servlet isminde kolayca
+değişiklik yapabilirsiniz. Ayrıca url-pattern ile servletinizin
+çalışacağı uzantıyı da değiştirebilirsiniz. deneme yerine deneme.do
+yapabilirsiniz. Başlangıçta google app engine tarafından oluşturulan
+index.html yerine de welcome-file değiştirerek de kendi istediğiniz
+dosyayı hatta çalıştıracağınız servlet&#8217;i yapabilirsiniz. Bunun anlamı
+xxx.appspot.com sayfasını açtığınızda kendi tarafından oluşturulmuş
+index sayfası yerine sizin sayfanız&nbsp;çıkabilir.</p>
+<p>Eğer uygulama ismini veya versiyonu değiştirmek istiyorsanız aynı
+dizindeki(war/web-inf) appengine-web.xml dosyasından&nbsp;yapacaksınız.</p>
+<p><strong>appengine-web.xml</strong></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;appengine-web-app</span> <span class="na">xmlns=</span><span class="s">&quot;http://appengine.google.com/ns/1.0&quot;</span><span class="nt">&gt;</span>  
+<span class="nt">&lt;application&gt;</span>bisikli<span class="nt">&lt;/application&gt;</span>  
+<span class="nt">&lt;version&gt;</span>1<span class="nt">&lt;/version&gt;</span>
+<span class="c">&lt;!-- Configure java.util.logging --&gt;</span>
+
+<span class="nt">&lt;system-properties&gt;</span>
+<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;java.util.logging.config.file&quot;</span> <span class="na">value=</span><span class="s">&quot;WEB-INF/logging.properties&quot;</span><span class="nt">&gt;&lt;/property&gt;</span>
+<span class="nt">&lt;/system-properties&gt;</span>
+
+<span class="nt">&lt;/appengine-web-app&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Application kısmından uygulama ismini versiyon kısmından da versiyonunu&nbsp;değiştirebilirsiniz.</p>
+<p>Bunları dikkate alarak anasayfamızda gerçek ip&#8217;nizi çıkaran bir servlet&nbsp;yapalım.</p>
+<p>edu.burakkk.google.app isimli paket ipAlma isimli servlet&nbsp;yaratıyoruz.</p>
+<p><strong>ipAlma.java</strong></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="kn">package</span> <span class="nn">edu.burakkk.google.app</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>  
+<span class="kn">import</span> <span class="nn">java.io.PrintWriter</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.servlet.http.</span><span class="err">\</span><span class="o">*;</span>
+
+<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">&quot;serial&quot;</span><span class="o">)</span>  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ipAlma</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doGet</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">resp</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>  
+        <span class="n">resp</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">&quot;text/html&quot;</span><span class="o">);</span>  
+        <span class="n">PrintWriter</span> <span class="n">out</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="na">getWriter</span><span class="o">();</span>  
+        <span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;IP: &quot;</span> <span class="o">+</span> <span class="n">req</span><span class="o">.</span><span class="na">getRemoteHost</span><span class="o">());</span>  
+        <span class="n">out</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>  
+        <span class="n">out</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>  
+    <span class="o">}</span>  
+<span class="o">}</span>
+</pre></div>
+</td></tr></table>
+
+<p><strong>web.xml</strong></p>
+<table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17</pre></div></td><td class="code"><div class="highlight"><pre><span></span><span class="nt">&lt;web-app</span> <span class="na">xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+<span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>  
+<span class="na">xmlns:web=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd&quot;</span>  
+<span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee  </span>
+<span class="s">http://java.sun.com/xml/ns/javaee/web-app\_2\_5.xsd&quot;</span> <span class="na">version=</span><span class="s">&quot;2.5&quot;</span><span class="nt">&gt;</span>;  
+<span class="nt">&lt;servlet&gt;</span>  
+<span class="nt">&lt;servlet-name&gt;</span>ipAlma<span class="nt">&lt;/servlet-name&gt;</span>  
+<span class="nt">&lt;servlet-class&gt;</span>edu.burakkk.google.app.ipAlma<span class="nt">&lt;/servlet-class&gt;</span>  
+<span class="nt">&lt;/servlet&gt;</span>  
+<span class="nt">&lt;servlet-mapping&gt;</span>  
+<span class="nt">&lt;servlet-name&gt;</span>ipAlma<span class="nt">&lt;/servlet-name&gt;</span>  
+<span class="nt">&lt;url-pattern&gt;</span>/ipAlma<span class="nt">&lt;/url-pattern&gt;</span>  
+<span class="nt">&lt;/servlet-mapping&gt;</span>  
+<span class="nt">&lt;welcome-file-list&gt;</span>  
+<span class="nt">&lt;welcome-file&gt;</span>ipAlma<span class="nt">&lt;/welcome-file&gt;</span>  
+<span class="nt">&lt;/welcome-file-list&gt;</span>  
+<span class="nt">&lt;/web-app&gt;</span>
+</pre></div>
+</td></tr></table>
+
+<p>Bu projeyi deploy ettiğinizde anasayfanızda <span class="caps">IP</span>: <span class="caps">XXXXX</span> şeklinde ip&#8217;nizi
+yazan bir web sayfası çıkacaktır. Örnek sayfaya
+<a href="http://bisikli.appspot.com/">http://bisikli.appspot.com/</a>(sizinUygulamaAdınız.appspot.com)
+adresinden ulaşabilirsiniz. Ayrıca aynı sayfaya servlet&#8217;mize
+<a href="http://bisikli.appspot.com/ipAlma">http://bisikli.appspot.com/ipAlma</a> bu adresle de&nbsp;ulaşabiliriz.</p>
+      <hr />
+    </div>
+
+             <div class="comments">
+            <h2>Comments !</h2>
+            <div id="disqus_thread"></div>
+            <script type="text/javascript">
+                var disqus_shortname = 'burakisikli-com';
+                var disqus_identifier = 'blog/2009/08/14/google-app-engine-java-ipuclari/';
+                var disqus_url = 'http://burakisikli.com/blog/2009/08/14/google-app-engine-java-ipuclari/';
+                (function() {
+                    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+                    dsq.src = '//burakisikli-com.disqus.com/embed.js';
+                    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+                })();
+            </script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+            </div> 
+  </article>
+</div>
+
+<div class="footer-wrap">
+  <div class="related-articles">
+  <h4>Related posts <small class="pull-right">(<a href="http://burakisikli.com/blog/">View all posts</a>)</small></h4>
+    <ul>
+      <li><a href="http://burakisikli.com/blog/2009/06/21/java-bean/" title="Java&nbsp;Bean">Java&nbsp;Bean</a></li>
+    </ul>
+  </div>
+  <footer>
+<p>
+  &copy; 2009-2017 Burak ISIKLI
+</p>  </footer>
+</div>
+
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="http://burakisikli.com/theme/js/jquery.fitvids.js"></script>
+
+    <script src="http://burakisikli.com/theme/js/main.min.js?ee74f445"></script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-55064690-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>
