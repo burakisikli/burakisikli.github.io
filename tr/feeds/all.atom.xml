@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>/root</title><link href="/tr/" rel="alternate"></link><link href="/feeds/all.atom.xml" rel="self"></link><id>/tr/</id><updated>2009-06-16T01:30:00+03:00</updated><entry><title>fdsfsdfsd</title><link href="/tr/./blog/2009/06/16/multi-threadedcok-kanalli-programlama/" rel="alternate"></link><published>2009-06-16T01:30:00+03:00</published><updated>2009-06-16T01:30:00+03:00</updated><author><name>burakisikli</name></author><id>tag:None,2009-06-16:/tr/./blog/2009/06/16/multi-threadedcok-kanalli-programlama/</id><summary type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir takım kütüphanelerle eklenmemiştir. Aslında her Java
+programı bir kanalda (thread&amp;#8217;te) çalışır. Örneğin application&amp;#8217;ların main
+method&amp;#8217;unun çalıştırılmasıyla adı &amp;#8216;main&amp;#8217; olan bir ana thread
+çalıştırılır. Ancak tek bir kanal olunca programcı yazdığı kodun bir
+thread&amp;#8217;in içerisinde çalıştığını farketmez.  Thread bize eş zamanlı
+birden fazla işi yapma fırsatını yani multitasking&amp;nbsp;sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thread’in&amp;nbsp;faydaları:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kaynak&amp;nbsp;paylaşımı&lt;/li&gt;
+&lt;li&gt;Daha az bekleme&amp;nbsp;süresi&lt;/li&gt;
+&lt;li&gt;Daha verimli donanım kullanımı(Multiprocessor&amp;nbsp;kullanımı)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni bir thread yaratıldığında biz start komutu vermedikçe thread
+çalışmaya başlamıyor hazır durumda bekliyor. Biz start komutunu
+verdiğimizde çalışmaya başlıyor. Ayrıca thread’i sleep komutu ile belli
+süre bekletebiliyor, stop komutu ile öldürebiliyoruz.  Peki ama thread
+ile multithread arasında ne fark&amp;nbsp;vardır?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="multithread" src="http://burakisikli.files.wordpress.com/2009/06/multithread.jpg?w=300" title="multithread"&gt;{.size-medium
+.wp-image-144 .aligncenter width=&amp;#8221;300&amp;#8221;&amp;nbsp;height=&amp;#8221;179&amp;#8221;}&lt;/p&gt;
+&lt;p&gt;Resimde gördüğümüz gibi threadler aynı kodu, veriyi ve dosyaları
+kullanmasına rağmen farklı register ve stack’leri vardır. Bu sayede aynı
+kod içinde farklı işler yapıp farklı şeyleri hafızada tutabiliyor.
+Java’da thread yaratmanın iki yolu var. Ben implement ederek kullandım.
+Ancak extend ederek de thread yaratılabilir. Thread pool diye bir kavram
+da var. Siz belirli bir thread sayısı veriyorsunuz. Thread pool boşta
+olan thread’i kullandırıyor. Multihreading yaşanabilecek en önemli
+sorunlardan biri, concurrent(eş zamanlılık) ve senkronizasyon sorunu.
+Siz aynı anda hem ekleme hem de silme yapmamınız gerekiyor. Aksi
+takdirde istediğinizi eklemeden hangi elemanı almaya çalışırsanız
+hangisini alacaksınız gibi bir soru karşımıza çıkıyor. Bunu çözmenin 3
+yolu&amp;nbsp;var:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Producer-consumer problemi:&lt;/strong&gt; İşletim sistemleri dersinde
+    öğrendiğimiz aynı mantık üretici-tüketici problemiyle&amp;nbsp;çözebiliriz.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Circular buffer:&lt;/strong&gt; Producer-consumer problemi benzer bir çözüm.
+    Farkı kendiniz bir dizi oluşturuyorsunuz ve kilit kontrolü bu
+    dizide&amp;nbsp;oluyor.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Java collections:&lt;/strong&gt; Kendimiz kilitlerle uğraşmadan bu işi
+    java’ya bırakabiliriz. Java’nın bu konulara kendi çözüm getirdiği
+    collections sınıfını&amp;nbsp;kullanabiliriz.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basit bir thread&amp;nbsp;örneği(ThreadTest.java):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.*&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ThreadTest&lt;/span&gt; &lt;span class="kd"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;Runnable&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;run&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sleep&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Other thread time : &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exception&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;ThreadTest&lt;/span&gt; &lt;span class="n"&gt;test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ThreadTest&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt; &lt;span class="n"&gt;thread&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;start&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Main thread&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Bu programda ekrana &amp;#8220;main thread&amp;#8221; yazdıktan sonra  threadimiz
+başlatılarak 1 saniye aralıklarla tarihi ekrana&amp;nbsp;yazıdırıyor.&lt;/p&gt;</content><category term="dadadada"></category></entry><entry><title>Multi-Threaded(Çok Kanallı) Programlama</title><link href="/tr/./multi-threadedcok-kanalli-programlama-tr.html" rel="alternate"></link><published>2009-06-16T01:30:00+03:00</published><updated>2009-06-16T01:30:00+03:00</updated><author><name>burakisikli</name></author><id>tag:None,2009-06-16:/tr/./multi-threadedcok-kanalli-programlama-tr.html</id><summary type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir takım kütüphanelerle eklenmemiştir. Aslında her Java
+programı bir kanalda (thread&amp;#8217;te) çalışır. Örneğin application&amp;#8217;ların main
+method&amp;#8217;unun çalıştırılmasıyla adı &amp;#8216;main&amp;#8217; olan bir ana thread
+çalıştırılır. Ancak tek bir kanal olunca programcı yazdığı kodun bir
+thread&amp;#8217;in içerisinde çalıştığını farketmez.  Thread bize eş zamanlı
+birden fazla işi yapma fırsatını yani multitasking&amp;nbsp;sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thread’in&amp;nbsp;faydaları:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kaynak&amp;nbsp;paylaşımı&lt;/li&gt;
+&lt;li&gt;Daha az bekleme&amp;nbsp;süresi&lt;/li&gt;
+&lt;li&gt;Daha verimli donanım kullanımı(Multiprocessor&amp;nbsp;kullanımı)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni bir thread yaratıldığında biz start komutu vermedikçe thread
+çalışmaya başlamıyor hazır durumda bekliyor. Biz start komutunu
+verdiğimizde çalışmaya başlıyor. Ayrıca thread’i sleep komutu ile belli
+süre bekletebiliyor, stop komutu ile öldürebiliyoruz.  Peki ama thread
+ile multithread arasında ne fark&amp;nbsp;vardır?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="multithread" src="http://burakisikli.files.wordpress.com/2009/06/multithread.jpg?w=300" title="multithread"&gt;{.size-medium
+.wp-image-144 .aligncenter width=&amp;#8221;300&amp;#8221;&amp;nbsp;height=&amp;#8221;179&amp;#8221;}&lt;/p&gt;
+&lt;p&gt;Resimde gördüğümüz gibi threadler aynı kodu, veriyi ve dosyaları
+kullanmasına rağmen farklı register ve stack’leri vardır. Bu sayede aynı
+kod içinde farklı işler yapıp farklı şeyleri hafızada tutabiliyor.
+Java’da thread yaratmanın iki yolu var. Ben implement ederek kullandım.
+Ancak extend ederek de thread yaratılabilir. Thread pool diye bir kavram
+da var. Siz belirli bir thread sayısı veriyorsunuz. Thread pool boşta
+olan thread’i kullandırıyor. Multihreading yaşanabilecek en önemli
+sorunlardan biri, concurrent(eş zamanlılık) ve senkronizasyon sorunu.
+Siz aynı anda hem ekleme hem de silme yapmamınız gerekiyor. Aksi
+takdirde istediğinizi eklemeden hangi elemanı almaya çalışırsanız
+hangisini alacaksınız gibi bir soru karşımıza çıkıyor. Bunu çözmenin 3
+yolu&amp;nbsp;var:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Producer-consumer problemi:&lt;/strong&gt; İşletim sistemleri dersinde
+    öğrendiğimiz aynı mantık üretici-tüketici problemiyle&amp;nbsp;çözebiliriz.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Circular buffer:&lt;/strong&gt; Producer-consumer problemi benzer bir çözüm.
+    Farkı kendiniz bir dizi oluşturuyorsunuz ve kilit kontrolü bu
+    dizide&amp;nbsp;oluyor.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Java collections:&lt;/strong&gt; Kendimiz kilitlerle uğraşmadan bu işi
+    java’ya bırakabiliriz. Java’nın bu konulara kendi çözüm getirdiği
+    collections sınıfını&amp;nbsp;kullanabiliriz.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basit bir thread&amp;nbsp;örneği(ThreadTest.java):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.*&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ThreadTest&lt;/span&gt; &lt;span class="kd"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;Runnable&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;run&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sleep&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Other thread time : &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exception&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;ThreadTest&lt;/span&gt; &lt;span class="n"&gt;test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ThreadTest&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt; &lt;span class="n"&gt;thread&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;start&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Main thread&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Bu programda ekrana &amp;#8220;main thread&amp;#8221; yazdıktan sonra  threadimiz
+başlatılarak 1 saniye aralıklarla tarihi ekrana&amp;nbsp;yazıdırıyor.&lt;/p&gt;</content><category term="Çok Kanallı"></category><category term="Multi-Thread"></category><category term="Multi-Threaded"></category><category term="Programlama"></category><category term="Thread"></category></entry><entry><title>Multi-Threaded(Çok Kanallı) Programlama</title><link href="/tr/./multi-threadedcok-kanalli-programlama-tr.html" rel="alternate"></link><published>2009-06-16T01:30:00+03:00</published><updated>2009-06-16T01:30:00+03:00</updated><author><name>burakisikli</name></author><id>tag:None,2009-06-16:/tr/./multi-threadedcok-kanalli-programlama-tr.html</id><summary type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir takım kütüphanelerle eklenmemiştir. Aslında her Java
+programı bir kanalda (thread&amp;#8217;te) çalışır. Örneğin application&amp;#8217;ların main
+method&amp;#8217;unun çalıştırılmasıyla adı &amp;#8216;main&amp;#8217; olan bir ana thread
+çalıştırılır. Ancak tek bir kanal olunca programcı yazdığı kodun bir
+thread&amp;#8217;in içerisinde çalıştığını farketmez.  Thread bize eş zamanlı
+birden fazla işi yapma fırsatını yani multitasking&amp;nbsp;sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thread’in&amp;nbsp;faydaları:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kaynak&amp;nbsp;paylaşımı&lt;/li&gt;
+&lt;li&gt;Daha az bekleme&amp;nbsp;süresi&lt;/li&gt;
+&lt;li&gt;Daha verimli donanım kullanımı(Multiprocessor&amp;nbsp;kullanımı)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni bir thread yaratıldığında biz start komutu vermedikçe thread
+çalışmaya başlamıyor hazır durumda bekliyor. Biz start komutunu
+verdiğimizde çalışmaya başlıyor. Ayrıca thread’i sleep komutu ile belli
+süre bekletebiliyor, stop komutu ile öldürebiliyoruz.  Peki ama thread
+ile multithread arasında ne fark&amp;nbsp;vardır?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="multithread" src="http://burakisikli.files.wordpress.com/2009/06/multithread.jpg?w=300" title="multithread"&gt;{.size-medium
+.wp-image-144 .aligncenter width=&amp;#8221;300&amp;#8221;&amp;nbsp;height=&amp;#8221;179&amp;#8221;}&lt;/p&gt;
+&lt;p&gt;Resimde gördüğümüz gibi threadler aynı kodu, veriyi ve dosyaları
+kullanmasına rağmen farklı register ve stack’leri vardır. Bu sayede aynı
+kod içinde farklı işler yapıp farklı şeyleri hafızada tutabiliyor.
+Java’da thread yaratmanın iki yolu var. Ben implement ederek kullandım.
+Ancak extend ederek de thread yaratılabilir. Thread pool diye bir kavram
+da var. Siz belirli bir thread sayısı veriyorsunuz. Thread pool boşta
+olan thread’i kullandırıyor. Multihreading yaşanabilecek en önemli
+sorunlardan biri, concurrent(eş zamanlılık) ve senkronizasyon sorunu.
+Siz aynı anda hem ekleme hem de silme yapmamınız gerekiyor. Aksi
+takdirde istediğinizi eklemeden hangi elemanı almaya çalışırsanız
+hangisini alacaksınız gibi bir soru karşımıza çıkıyor. Bunu çözmenin 3
+yolu&amp;nbsp;var:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Producer-consumer problemi:&lt;/strong&gt; İşletim sistemleri dersinde
+    öğrendiğimiz aynı mantık üretici-tüketici problemiyle&amp;nbsp;çözebiliriz.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Circular buffer:&lt;/strong&gt; Producer-consumer problemi benzer bir çözüm.
+    Farkı kendiniz bir dizi oluşturuyorsunuz ve kilit kontrolü bu
+    dizide&amp;nbsp;oluyor.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Java collections:&lt;/strong&gt; Kendimiz kilitlerle uğraşmadan bu işi
+    java’ya bırakabiliriz. Java’nın bu konulara kendi çözüm getirdiği
+    collections sınıfını&amp;nbsp;kullanabiliriz.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basit bir thread&amp;nbsp;örneği(ThreadTest.java):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.*&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ThreadTest&lt;/span&gt; &lt;span class="kd"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;Runnable&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;run&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sleep&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Other thread time : &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exception&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;ThreadTest&lt;/span&gt; &lt;span class="n"&gt;test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ThreadTest&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt; &lt;span class="n"&gt;thread&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;start&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Main thread&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Bu programda ekrana &amp;#8220;main thread&amp;#8221; yazdıktan sonra  threadimiz
+başlatılarak 1 saniye aralıklarla tarihi ekrana&amp;nbsp;yazıdırıyor.&lt;/p&gt;</content><category term="Çok Kanallı"></category><category term="Multi-Thread"></category><category term="Multi-Threaded"></category><category term="Programlama"></category><category term="Thread"></category></entry><entry><title>fdsfsdfsd</title><link href="/tr/./blog/2009/06/16/multi-threadedcok-kanalli-programlama/" rel="alternate"></link><published>2009-06-16T01:30:00+03:00</published><updated>2009-06-16T01:30:00+03:00</updated><author><name>burakisikli</name></author><id>tag:None,2009-06-16:/tr/./blog/2009/06/16/multi-threadedcok-kanalli-programlama/</id><summary type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir …&lt;/p&gt;</summary><content type="html">&lt;p&gt;Çok Kanallı Programlama (Multi-Threaded Programming), bir programda aynı
+anda birden fazla işin yapılabilmesidir. Yani bir kod parçası bir işlemi
+gerçekleştirirken aynı anda ona paralel olarak bir başka kod parçasının
+çalışması demektir. Birbirine paralel çalışan çalışanlardan her birine
+kanal&amp;nbsp;(thread)&lt;/p&gt;
+&lt;p&gt;Java çok kanallı porgramlamayı temelden desteklemektedir. Yani çok
+kanallılık dile bir takım kütüphanelerle eklenmemiştir. Aslında her Java
+programı bir kanalda (thread&amp;#8217;te) çalışır. Örneğin application&amp;#8217;ların main
+method&amp;#8217;unun çalıştırılmasıyla adı &amp;#8216;main&amp;#8217; olan bir ana thread
+çalıştırılır. Ancak tek bir kanal olunca programcı yazdığı kodun bir
+thread&amp;#8217;in içerisinde çalıştığını farketmez.  Thread bize eş zamanlı
+birden fazla işi yapma fırsatını yani multitasking&amp;nbsp;sağlıyor.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thread’in&amp;nbsp;faydaları:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Kaynak&amp;nbsp;paylaşımı&lt;/li&gt;
+&lt;li&gt;Daha az bekleme&amp;nbsp;süresi&lt;/li&gt;
+&lt;li&gt;Daha verimli donanım kullanımı(Multiprocessor&amp;nbsp;kullanımı)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Yeni bir thread yaratıldığında biz start komutu vermedikçe thread
+çalışmaya başlamıyor hazır durumda bekliyor. Biz start komutunu
+verdiğimizde çalışmaya başlıyor. Ayrıca thread’i sleep komutu ile belli
+süre bekletebiliyor, stop komutu ile öldürebiliyoruz.  Peki ama thread
+ile multithread arasında ne fark&amp;nbsp;vardır?&lt;/p&gt;
+&lt;p&gt;&lt;img alt="multithread" src="http://burakisikli.files.wordpress.com/2009/06/multithread.jpg?w=300" title="multithread"&gt;{.size-medium
+.wp-image-144 .aligncenter width=&amp;#8221;300&amp;#8221;&amp;nbsp;height=&amp;#8221;179&amp;#8221;}&lt;/p&gt;
+&lt;p&gt;Resimde gördüğümüz gibi threadler aynı kodu, veriyi ve dosyaları
+kullanmasına rağmen farklı register ve stack’leri vardır. Bu sayede aynı
+kod içinde farklı işler yapıp farklı şeyleri hafızada tutabiliyor.
+Java’da thread yaratmanın iki yolu var. Ben implement ederek kullandım.
+Ancak extend ederek de thread yaratılabilir. Thread pool diye bir kavram
+da var. Siz belirli bir thread sayısı veriyorsunuz. Thread pool boşta
+olan thread’i kullandırıyor. Multihreading yaşanabilecek en önemli
+sorunlardan biri, concurrent(eş zamanlılık) ve senkronizasyon sorunu.
+Siz aynı anda hem ekleme hem de silme yapmamınız gerekiyor. Aksi
+takdirde istediğinizi eklemeden hangi elemanı almaya çalışırsanız
+hangisini alacaksınız gibi bir soru karşımıza çıkıyor. Bunu çözmenin 3
+yolu&amp;nbsp;var:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Producer-consumer problemi:&lt;/strong&gt; İşletim sistemleri dersinde
+    öğrendiğimiz aynı mantık üretici-tüketici problemiyle&amp;nbsp;çözebiliriz.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Circular buffer:&lt;/strong&gt; Producer-consumer problemi benzer bir çözüm.
+    Farkı kendiniz bir dizi oluşturuyorsunuz ve kilit kontrolü bu
+    dizide&amp;nbsp;oluyor.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Java collections:&lt;/strong&gt; Kendimiz kilitlerle uğraşmadan bu işi
+    java’ya bırakabiliriz. Java’nın bu konulara kendi çözüm getirdiği
+    collections sınıfını&amp;nbsp;kullanabiliriz.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Basit bir thread&amp;nbsp;örneği(ThreadTest.java):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="kn"&gt;import&lt;/span&gt; &lt;span class="nn"&gt;java.util.*&lt;/span&gt;&lt;span class="o"&gt;;&lt;/span&gt;
+
+&lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;class&lt;/span&gt; &lt;span class="nc"&gt;ThreadTest&lt;/span&gt; &lt;span class="kd"&gt;implements&lt;/span&gt; &lt;span class="n"&gt;Runnable&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;run&lt;/span&gt;&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;while&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="kc"&gt;true&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="k"&gt;try&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;sleep&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="mi"&gt;1000&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Other thread time : &amp;quot;&lt;/span&gt; &lt;span class="o"&gt;+&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Date&lt;/span&gt;&lt;span class="o"&gt;());&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt; &lt;span class="k"&gt;catch&lt;/span&gt; &lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;Exception&lt;/span&gt; &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;e&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;printStackTrace&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+
+ &lt;span class="kd"&gt;public&lt;/span&gt; &lt;span class="kd"&gt;static&lt;/span&gt; &lt;span class="kt"&gt;void&lt;/span&gt; &lt;span class="nf"&gt;main&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;String&lt;/span&gt;&lt;span class="o"&gt;[]&lt;/span&gt; &lt;span class="n"&gt;args&lt;/span&gt;&lt;span class="o"&gt;)&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt;
+ &lt;span class="n"&gt;ThreadTest&lt;/span&gt; &lt;span class="n"&gt;test&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;ThreadTest&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;Thread&lt;/span&gt; &lt;span class="n"&gt;thread&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;new&lt;/span&gt; &lt;span class="n"&gt;Thread&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="n"&gt;test&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="n"&gt;thread&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;start&lt;/span&gt;&lt;span class="o"&gt;();&lt;/span&gt;
+ &lt;span class="n"&gt;System&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;out&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="na"&gt;println&lt;/span&gt;&lt;span class="o"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;Main thread&amp;quot;&lt;/span&gt;&lt;span class="o"&gt;);&lt;/span&gt;
+ &lt;span class="o"&gt;}&lt;/span&gt;
+&lt;span class="o"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Bu programda ekrana &amp;#8220;main thread&amp;#8221; yazdıktan sonra  threadimiz
+başlatılarak 1 saniye aralıklarla tarihi ekrana&amp;nbsp;yazıdırıyor.&lt;/p&gt;</content><category term="dadadada"></category></entry></feed>
